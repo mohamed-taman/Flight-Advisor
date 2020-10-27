@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: Flight-Management-Service
+
+  # Database configurations
+  datasource:
+    url: jdbc:h2:mem:flightDB
+  h2:
+    console:
+      enabled: true
+
+# Server configs
+server:
+  port: 8090
+  ## Should be included to show message, if not error message will be empty
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# Application health and information management
+management:
+  info.git:
+    mode: full
+    enabled: true
+  endpoints.web.exposure.include: "*"
+  endpoint:
+    shutdown.enabled: true
+    health.show-details: always
+
+logging.level:
+  org:
+    springframework:
+      web: DEBUG
+    siriusxi:
+      htec:
+        fa: DEBUG
+  web: DEBUG
+  root: INFO
