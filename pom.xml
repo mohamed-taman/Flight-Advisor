@@ -34,6 +34,7 @@
         </developer>
     </developers>
     <!-- End - Flight Advisor API Project Owner -->
+
     <!-- Start - Flight Advisor API source repository -->
     <scm>
         <connection>https://github.com/mohamed-taman/Flight-Advisor.git</connection>
@@ -41,12 +42,20 @@
         <tag>HEAD</tag>
     </scm>
     <!-- End - Flight Advisor API source repository -->
+
     <!-- Start - Flight Advisor API issue management -->
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/mohamed-taman/Flight-Advisor/projects/1</url>
     </issueManagement>
     <!-- End - Flight Advisor API issue management -->
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
 
     <properties>
         <java.version>15</java.version>
@@ -57,7 +66,10 @@
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <maven.surefire.plugin.version>3.0.0-M4</maven.surefire.plugin.version>
         <maven.failsafe.plugin.version>3.0.0-M4</maven.failsafe.plugin.version>
+        <io.jsonwebtoken.version>0.11.2</io.jsonwebtoken.version>
+        <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
         <org.springdoc.version>1.4.8</org.springdoc.version>
+        <lombok.version>1.18.14</lombok.version>
     </properties>
 
     <dependencies>
@@ -77,7 +89,7 @@
         </dependency>
         <!-- End - Database, ORM, and validation dependencies -->
 
-        <!-- Start - Web, REST, OpenAPI, Security dependencies -->
+        <!-- Start - Web, REST, and their OpenAPI dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -96,16 +108,41 @@
             <artifactId>springdoc-openapi-hateoas</artifactId>
             <version>${org.springdoc.version}</version>
         </dependency>
+        <!-- End - Web, REST, and their OpenAPI dependencies -->
+
+        <!-- Start - Security dependencies -->
         <!--		<dependency>-->
         <!--			<groupId>org.springframework.boot</groupId>-->
         <!--			<artifactId>spring-boot-starter-security</artifactId>-->
         <!--		</dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.springdoc</groupId>-->
+<!--            <artifactId>springdoc-openapi-security</artifactId>-->
+<!--            <version>${org.springdoc.version}</version>-->
+<!--        </dependency>-->
+        <!-- Jaxb for xml serialization/deserialization -->
+
+
+        <!-- Start - JWT library for authentication libraries -->
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-security</artifactId>
-            <version>${org.springdoc.version}</version>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${io.jsonwebtoken.version}</version>
         </dependency>
-        <!-- End - Web, REST, OpenAPI, Security dependencies -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${io.jsonwebtoken.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
+            <version>${io.jsonwebtoken.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- Start - JWT library for authentication libraries -->
+        <!-- End - Security dependencies -->
 
         <!-- Start - Development and Ops dependencies, and third parties libraries -->
         <dependency>
@@ -118,10 +155,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <!-- Lombok to automate setter/getter generation -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <!-- Mapper library to automate model transformations -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
         </dependency>
         <!-- End - Development and dependencies Ops, and third parties libraries -->
 
@@ -176,6 +221,18 @@
                     <configuration>
                         <release>${java.version}</release>
                         <compilerArgs>--enable-preview</compilerArgs>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${org.mapstruct.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
                     </configuration>
                 </plugin>
                 <plugin>

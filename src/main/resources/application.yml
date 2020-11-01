@@ -1,13 +1,26 @@
 spring:
   application:
     name: Flight-Management-Service
-
+  mvc:
+    servlet:
+      path: /fa/api/v1
   # Database configurations
   datasource:
-    url: jdbc:h2:mem:flightDB
+    url: jdbc:h2:./target/data/flightDB
+    hikari:
+      initialization-fail-timeout: 60000
+      connection-test-query: SELECT 1
+      maximum-pool-size: 10
+    platform: h2
+    initialization-mode: embedded
   h2:
     console:
       enabled: true
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
 
 # Server configs
 server:
@@ -29,6 +42,9 @@ management:
 
 logging.level:
   org:
+    hibernate:
+      SQL: DEBUG
+      type.descriptor.sql.BasicBinder: TRACE
     springframework:
       web: DEBUG
     siriusxi:
