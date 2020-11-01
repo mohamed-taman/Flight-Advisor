@@ -16,8 +16,7 @@ CREATE TABLE IF NOT EXISTS user
     last_name  VARCHAR(100)            NOT NULL,
     type       ENUM ('ADMIN','CLIENT') NOT NULL DEFAULT 'Client',
     username   VARCHAR(150) UNIQUE     NOT NULL,
-    passkey    VARCHAR(255)            NOT NULL,
-    salt       VARCHAR(100)            NOT NULL
+    passkey    VARCHAR(255)            NOT NULL
 );
 -- End - User table definition
 

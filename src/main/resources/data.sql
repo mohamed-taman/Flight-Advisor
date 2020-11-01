@@ -1,8 +1,7 @@
 ---- Inserting data
 ------ Add an admin user
-INSERT INTO user (user_uuid, first_name, last_name, type, username, passkey, salt)
-VALUES (RANDOM_UUID(), 'Mohamed', 'Taman', 'Admin', 'mohamed.taman@gmail.com', '1234',
-        'bgu76872r38476');
+INSERT INTO USER (user_uuid, first_name, last_name, type, username, passkey)
+VALUES (RANDOM_UUID(), 'Mohamed', 'Taman', 'Admin', 'mohamed.taman@gmail.com', 'WdaRomb/G1aarRv4r7Bqje5hrY3x7z8bGXcvZF29N64mYY3C3YAzDQ==');
 
 ------ Add a country
 INSERT INTO COUNTRY (NAME)

@@ -28,7 +28,7 @@ import static javax.persistence.FetchType.LAZY;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString(exclude = {"userUuid","username", "passkey","salt","comments"})
+@ToString(exclude = {"userUuid","username", "passkey","comments"})
 public class User implements Serializable {
 
   enum Type {
@@ -71,16 +71,10 @@ public class User implements Serializable {
   private String username;
   
   @NonNull
-  @Min(value = 10, message = "Minimum password length is 10.")
-  @Max(value = 60, message = "Password length exceeds.")
+  @Min(value = 10, message = "Minimum password length is 10")
   @Basic(optional = false)
   @Column(nullable = false)
   private String passkey;
-
-  @NonNull
-  @Basic(optional = false, fetch = LAZY)
-  @Column(nullable = false, length = 100)
-  private String salt;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = LAZY)
   private List<Comment> comments;
