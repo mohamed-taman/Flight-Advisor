@@ -51,3 +51,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### macOS related files ###
+.DS_Store
