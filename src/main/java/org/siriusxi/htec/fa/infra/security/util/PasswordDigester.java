@@ -1,4 +1,4 @@
-package org.siriusxi.htec.fa.infra.security;
+package org.siriusxi.htec.fa.infra.security.util;
 
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ import static java.util.Objects.*;
  */
 @Component
 public class PasswordDigester {
-
+  
   /**
    * Generates a salt, hashes the password with this salt, concatenates the salt and the hash, and
    * encodes the result using Base64.
