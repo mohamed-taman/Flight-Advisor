@@ -1,2 +1,2 @@
-# Flight Advisor API
+# Flight Advisor Service
 Flight advisor Service APIs for finding the cheapest flights.

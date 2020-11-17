@@ -8,23 +8,20 @@ import lombok.RequiredArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
-/**
- * @author Mohamed Taman
- * @version 1.0
- **/
 @Embeddable
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class CommentPK implements Serializable {
-    
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private int id;
+public class RolePK implements Serializable {
     
     @NonNull
     @Basic(optional = false)
-    @Column(name = "CITY_ID", nullable = false)
-    private int cityId;
+    @Column(name="USER_ID", nullable = false)
+    private int userId;
+    
+    @NonNull
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private String authority;
+    
 }

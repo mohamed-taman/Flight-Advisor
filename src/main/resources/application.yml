@@ -1,11 +1,10 @@
 spring:
   application:
-    name: Flight-Management-Service
-  mvc:
-    servlet:
-      path: /fa/api/v1
+    name: Flight-Advisor-Service
   # Database configurations
   datasource:
+    data: classpath*:db/data.sql
+    schema: classpath*:db/schema.sql
     url: jdbc:h2:./target/data/flightDB
     hikari:
       initialization-fail-timeout: 60000
@@ -29,6 +28,8 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+  servlet:
+    context-path: /api/v1
 
 # Application health and information management
 management:
@@ -37,7 +38,7 @@ management:
     enabled: true
   endpoints.web.exposure.include: "*"
   endpoint:
-    shutdown.enabled: true
+    shutdown.enabled: false
     health.show-details: always
 
 logging.level:

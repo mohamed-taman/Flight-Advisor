@@ -4,21 +4,40 @@ DROP TABLE IF EXISTS airport;
 DROP TABLE IF EXISTS city_comment;
 DROP TABLE IF EXISTS city;
 DROP TABLE IF EXISTS country;
+DROP TABLE IF EXISTS authority;
 DROP TABLE IF EXISTS user;
 
--- Start - User table definition
+-- Start - Spring Security tables definition
+---- Start - User table definition
 
 CREATE TABLE IF NOT EXISTS user
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
-    user_uuid  UUID UNIQUE             NOT NULL,
-    first_name VARCHAR(100)            NOT NULL,
-    last_name  VARCHAR(100)            NOT NULL,
-    type       ENUM ('ADMIN','CLIENT') NOT NULL DEFAULT 'Client',
-    username   VARCHAR(150) UNIQUE     NOT NULL,
-    passkey    VARCHAR(255)            NOT NULL
+    user_uuid  UUID UNIQUE                    NOT NULL,
+    first_name VARCHAR(100)                   NOT NULL,
+    last_name  VARCHAR(100)                   NOT NULL,
+    username   VARCHAR_IGNORECASE(255) UNIQUE NOT NULL,
+    password   VARCHAR_IGNORECASE(255)        NOT NULL,
+    enabled    BOOLEAN                        NOT NULL
 );
--- End - User table definition
+---- End - User table definition
+
+---- Start - Authorities table definition
+CREATE TABLE IF NOT EXISTS authority
+(
+    user_id   INT NOT NULL,
+    authority ENUM ('ADMIN','CLIENT') NOT NULL,
+
+    CONSTRAINT authority_pk
+        PRIMARY KEY (user_id, authority),
+
+    CONSTRAINT authority_user_fk
+        FOREIGN KEY (user_id)
+            REFERENCES user (id)
+);
+---- End - Authorities table definition
+
+-- End - Spring Security tables definition
 
 -- Start - Country, City, airports, and routes tables definition
 CREATE TABLE IF NOT EXISTS country
@@ -33,6 +52,7 @@ CREATE TABLE IF NOT EXISTS city
     name        VARCHAR(100) NOT NULL,
     description VARCHAR(100) NOT NULL,
     country_id  INT          NOT NULL,
+
     CONSTRAINT city_country_fk
         FOREIGN KEY (country_id)
             REFERENCES country (id)

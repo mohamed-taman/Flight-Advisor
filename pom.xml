@@ -111,17 +111,15 @@
         <!-- End - Web, REST, and their OpenAPI dependencies -->
 
         <!-- Start - Security dependencies -->
-        <!--		<dependency>-->
-        <!--			<groupId>org.springframework.boot</groupId>-->
-        <!--			<artifactId>spring-boot-starter-security</artifactId>-->
-        <!--		</dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springdoc</groupId>-->
-<!--            <artifactId>springdoc-openapi-security</artifactId>-->
-<!--            <version>${org.springdoc.version}</version>-->
-<!--        </dependency>-->
-        <!-- Jaxb for xml serialization/deserialization -->
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-security</artifactId>
+            <version>${org.springdoc.version}</version>
+        </dependency>
 
         <!-- Start - JWT library for authentication libraries -->
         <dependency>
