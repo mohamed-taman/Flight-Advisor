@@ -30,7 +30,7 @@ import static javax.persistence.FetchType.LAZY;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString(exclude = {"userUuid", "username", "password", "comments","enabled"})
+@ToString(exclude = {"userUuid", "username", "password", "comments", "enabled"})
 public class User implements UserDetails, Serializable {
     
     @Serial
@@ -63,18 +63,30 @@ public class User implements UserDetails, Serializable {
     
     @NonNull
     @Basic(optional = false)
-    @Column( nullable = false)
+    @Column(nullable = false)
     private String password;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = LAZY)
     private List<Comment> comments;
     
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID",
-           nullable = false, insertable = false, updatable = false)
+            nullable = false, insertable = false, updatable = false)
     @OneToMany(cascade = CascadeType.ALL, fetch = EAGER)
-    private Set<Role> authorities;
+    private Set<Role> authorities = new HashSet<>();
     
     private boolean enabled = true;
+    
+    public void setAuthorities(Set<Role> roles) {
+        for (Role role : roles) {
+            role.setRolePK(new RolePK(this.getId(), role.getAuthority()));
+            this.authorities.add(role);
+        }
+    }
+    
+    public void setAuthorities(String... authorities) {
+        for (String authority : authorities)
+            this.authorities.add(new Role(new RolePK(this.getId(), authority)));
+    }
     
     public String getFullName() {
         return getFirstName()

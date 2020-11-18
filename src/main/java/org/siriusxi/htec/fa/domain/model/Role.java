@@ -27,4 +27,9 @@ public class Role implements GrantedAuthority {
     @Basic(optional = false)
     @Column(nullable = false, insertable = false, updatable = false)
     private String authority;
+    
+    public Role(RolePK rolePK){
+        setRolePK(rolePK);
+        this.authority = rolePK.getAuthority();
+    }
 }

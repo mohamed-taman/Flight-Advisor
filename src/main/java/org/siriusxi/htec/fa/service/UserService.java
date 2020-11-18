@@ -3,7 +3,6 @@ package org.siriusxi.htec.fa.service;
 import org.siriusxi.htec.fa.domain.dto.UserView;
 import org.siriusxi.htec.fa.domain.dto.request.CreateUserRequest;
 import org.siriusxi.htec.fa.domain.mapper.UserMapper;
-import org.siriusxi.htec.fa.domain.model.Role;
 import org.siriusxi.htec.fa.domain.model.User;
 import org.siriusxi.htec.fa.infra.Utils;
 import org.siriusxi.htec.fa.repository.UserRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
-import java.util.Set;
 
 import static java.lang.String.format;
 import static org.siriusxi.htec.fa.domain.model.Role.CLIENT;
@@ -51,7 +49,14 @@ public class UserService implements UserDetailsService {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setUserUuid(Utils.generateUuid());
+        // Add user
         user = repository.save(user);
+        // Add user authorities
+        user.setAuthorities(CLIENT);
+        // Update user to add authorities
+        repository.save(user);
+        
+        // Return user view
         return userMapper.toUserView(user);
     }
     
