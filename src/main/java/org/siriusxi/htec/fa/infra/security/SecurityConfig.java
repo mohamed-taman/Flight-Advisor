@@ -2,6 +2,7 @@ package org.siriusxi.htec.fa.infra.security;
 
 import lombok.extern.log4j.Log4j2;
 import org.siriusxi.htec.fa.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -23,25 +24,28 @@ import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static org.springframework.security.core.context.SecurityContextHolder.MODE_INHERITABLETHREADLOCAL;
 import static org.springframework.security.core.context.SecurityContextHolder.setStrategyName;
 
+@Log4j2
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         securedEnabled = true,
         jsr250Enabled = true,
         prePostEnabled = true
 )
-@Log4j2
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     private final UserRepository userRepository;
     private final JwtTokenFilter jwtTokenFilter;
+    private final String appVersion;
     
     public SecurityConfig(UserRepository userRepository,
-                          JwtTokenFilter jwtTokenFilter) {
+                          JwtTokenFilter jwtTokenFilter,
+                          @Value("${app.version:v1}") String appVersion) {
         super();
         
         this.userRepository = userRepository;
         this.jwtTokenFilter = jwtTokenFilter;
-        
+        this.appVersion = "/".concat(appVersion);
+    
         // Inherit security context in async function calls
         setStrategyName(MODE_INHERITABLETHREADLOCAL);
     }
@@ -69,8 +73,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         
         // List of Swagger URLs
         var swaggerAuthList = new String[]{
-                "/v3/api-docs/**", "/webjars/**",
-                "/swagger-ui/**", "/swagger-ui.html"};
+                appVersion.concat("/api-docs/**"),
+                "/webjars/**", "/swagger-ui/**",
+                appVersion.concat("/doc/**")};
         
         http
                 // Enable CORS
@@ -94,7 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // Set H2 database console permission
                 .authorizeRequests()
-                .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/db-console/**").permitAll()
                 .and()
                 // This will allow frames with same origin which is much more safe
                 .headers().frameOptions().disable()

@@ -69,7 +69,7 @@
         <io.jsonwebtoken.version>0.11.2</io.jsonwebtoken.version>
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
         <org.springdoc.version>1.4.8</org.springdoc.version>
-        <lombok.version>1.18.14</lombok.version>
+        <lombok.version>1.18.16</lombok.version>
     </properties>
 
     <dependencies>

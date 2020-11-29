@@ -1,3 +1,8 @@
+# Custom application properties
+app:
+  version: 'v1'
+
+# Spring properties
 spring:
   application:
     name: Flight-Advisor-Service
@@ -15,6 +20,7 @@ spring:
   h2:
     console:
       enabled: true
+      path: /db-console
   jpa:
     show-sql: true
     open-in-view: false
@@ -29,7 +35,7 @@ server:
     include-message: always
     include-binding-errors: always
   servlet:
-    context-path: /api/v1
+    context-path: /flight/service/api
 
 # Application health and information management
 management:
@@ -41,15 +47,27 @@ management:
     shutdown.enabled: false
     health.show-details: always
 
+# Logging settings
 logging.level:
   org:
     hibernate:
-      SQL: DEBUG
-      type.descriptor.sql.BasicBinder: TRACE
+      SQL: debug
+      type.descriptor.sql.BasicBinder: trace
     springframework:
-      web: DEBUG
+      web: debug
     siriusxi:
       htec:
-        fa: DEBUG
-  web: DEBUG
-  root: INFO
+        fa: debug
+  web: debug
+  root: info
+
+# OpenAPI (Swagger) settings
+springdoc:
+  # swagger-ui custom path
+  swagger-ui:
+    path: /${app.version}/doc/index.html
+  # /api-docs endpoint custom path
+  api-docs:
+    path: /${app.version}/api-docs
+  # to display the actuator endpoints.
+  show-actuator: false

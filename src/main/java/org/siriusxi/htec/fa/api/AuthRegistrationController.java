@@ -1,5 +1,7 @@
 package org.siriusxi.htec.fa.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.log4j.Log4j2;
 import org.siriusxi.htec.fa.domain.dto.UserView;
 import org.siriusxi.htec.fa.domain.dto.request.AuthRequest;
@@ -28,9 +30,10 @@ import javax.validation.ValidationException;
  * @author Mohamed Taman
  * @version 1.0
  */
+@Log4j2
+@Tag(name = "Authentication")
 @RestController
 @RequestMapping("public")
-@Log4j2
 public class AuthRegistrationController {
     
     private final AuthenticationManager authenticationManager;
@@ -44,7 +47,10 @@ public class AuthRegistrationController {
         this.userService = userService;
         this.userMapper = userMapper;
     }
-    
+    @Operation(description = """
+                             An API call to authenticate user before using the system,
+                             and if successful a valid token is returned.
+                             """)
     @PostMapping(value = "login")
     public ResponseEntity<UserView> authenticate(@RequestBody @Valid AuthRequest request) {
         try {
@@ -66,6 +72,9 @@ public class AuthRegistrationController {
         }
     }
     
+    @Operation(description = """
+                            An API call, to register the user,
+                            to be able to authenticate and use the system.""")
     @PostMapping(value = "register")
     public UserView register(@RequestBody @Valid CreateUserRequest userRequest) {
         
