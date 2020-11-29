@@ -3,7 +3,7 @@ package org.siriusxi.htec.fa.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.log4j.Log4j2;
-import org.siriusxi.htec.fa.domain.dto.UserView;
+import org.siriusxi.htec.fa.domain.dto.response.UserView;
 import org.siriusxi.htec.fa.domain.dto.request.AuthRequest;
 import org.siriusxi.htec.fa.domain.dto.request.CreateUserRequest;
 import org.siriusxi.htec.fa.domain.mapper.UserMapper;
@@ -74,7 +74,8 @@ public class AuthRegistrationController {
     
     @Operation(description = """
                             An API call, to register the user,
-                            to be able to authenticate and use the system.""")
+                            to be able to authenticate and use the system.
+                            """)
     @PostMapping(value = "register")
     public UserView register(@RequestBody @Valid CreateUserRequest userRequest) {
         

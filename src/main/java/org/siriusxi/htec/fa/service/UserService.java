@@ -1,6 +1,6 @@
 package org.siriusxi.htec.fa.service;
 
-import org.siriusxi.htec.fa.domain.dto.UserView;
+import org.siriusxi.htec.fa.domain.dto.response.UserView;
 import org.siriusxi.htec.fa.domain.dto.request.CreateUserRequest;
 import org.siriusxi.htec.fa.domain.mapper.UserMapper;
 import org.siriusxi.htec.fa.domain.model.User;

@@ -1,4 +1,4 @@
-package org.siriusxi.htec.fa.domain.dto;
+package org.siriusxi.htec.fa.domain.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
