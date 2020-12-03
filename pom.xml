@@ -70,6 +70,7 @@
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
         <org.springdoc.version>1.4.8</org.springdoc.version>
         <lombok.version>1.18.16</lombok.version>
+        <opencsv.version>5.3</opencsv.version>
     </properties>
 
     <dependencies>
@@ -165,6 +166,22 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
+        </dependency>
+
+        <!-- library for writing, reading, serializing, deserializing,
+             and/or parsing .csv files! -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${opencsv.version}</version>
+        </dependency>
+
+        <!-- The Commons FileUpload package makes it easy to add robust, high-performance,
+             file upload capability to your servlets and web applications. -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.4</version>
         </dependency>
         <!-- End - Development and dependencies Ops, and third parties libraries -->
 

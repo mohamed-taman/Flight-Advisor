@@ -22,8 +22,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Airport implements Serializable {
     
-    enum Dst {
+    public enum Dst {
         E, A, S, O, Z, N, U
+    }
+    
+    public Airport(Integer airportId) {
+        this.airportId = airportId;
     }
     
     @Serial
@@ -71,7 +75,7 @@ public class Airport implements Serializable {
     private Integer altitude;
     
     @NonNull
-    private Integer timezone;
+    private Float timezone;
     
     @NonNull
     @Basic(optional = false)
@@ -105,8 +109,4 @@ public class Airport implements Serializable {
     @JoinColumn(name = "COUNTRY_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Country country;
-    
-    public Airport(Integer airportId) {
-        this.airportId = airportId;
-    }
 }

@@ -6,6 +6,11 @@ app:
 spring:
   application:
     name: Flight-Advisor-Service
+
+  servlet:
+    multipart:
+      enabled: false
+      max-file-size: 10MB
   # Database configurations
   datasource:
     data: classpath*:db/data.sql
@@ -60,6 +65,7 @@ logging.level:
         fa: debug
   web: debug
   root: info
+
 
 # OpenAPI (Swagger) settings
 springdoc:

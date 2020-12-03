@@ -21,6 +21,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class City implements Serializable {
     
+    public City(Integer id) {
+        this.id = id;
+    }
+    
     @Serial
     private static final long serialVersionUID = 1322727266984495327L;
     
@@ -35,9 +39,8 @@ public class City implements Serializable {
     @Column(nullable = false, length = 100)
     private String name;
     
-    @NonNull
     @Basic(optional = false)
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String description;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "city", fetch = FetchType.LAZY)
@@ -46,6 +49,7 @@ public class City implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "city", fetch = FetchType.LAZY)
     private List<Airport> airports;
     
+    @NonNull
     @JoinColumn(name = "COUNTRY_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Country country;

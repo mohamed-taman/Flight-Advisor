@@ -31,7 +31,8 @@ import javax.validation.ValidationException;
  * @version 1.0
  */
 @Log4j2
-@Tag(name = "Authentication")
+@Tag(name = "Authentication",
+     description = "Set of public APIs, for managing user authentication, and the registration.")
 @RestController
 @RequestMapping("public")
 public class AuthRegistrationController {
