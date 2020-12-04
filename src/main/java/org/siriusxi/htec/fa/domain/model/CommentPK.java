@@ -26,5 +26,5 @@ public class CommentPK implements Serializable {
     @NonNull
     @Basic(optional = false)
     @Column(name = "CITY_ID", nullable = false)
-    private int cityId;
+    private Integer cityId;
 }

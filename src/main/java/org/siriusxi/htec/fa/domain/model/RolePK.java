@@ -17,7 +17,7 @@ public class RolePK implements Serializable {
     @NonNull
     @Basic(optional = false)
     @Column(name="USER_ID", nullable = false)
-    private int userId;
+    private Integer userId;
     
     @NonNull
     @Basic(optional = false)

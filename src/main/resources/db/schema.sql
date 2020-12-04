@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS user
 ---- Start - Authorities table definition
 CREATE TABLE IF NOT EXISTS authority
 (
-    user_id   INT NOT NULL,
+    user_id   INT                     NOT NULL,
     authority ENUM ('ADMIN','CLIENT') NOT NULL,
 
     CONSTRAINT authority_pk
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS city
 (
     id          INT AUTO_INCREMENT PRIMARY KEY,
     name        VARCHAR(100) NOT NULL,
-    description VARCHAR(100) NOT NULL,
+    description VARCHAR(100),
     country_id  INT          NOT NULL,
 
     CONSTRAINT city_country_fk
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS airport
     latitude    DECIMAL(12, 6)                     NOT NULL,
     longitude   DECIMAL(12, 6)                     NOT NULL,
     altitude    INT(6),
-    timezone    INT(2),
+    timezone    DECIMAL(3, 1),
     dst         ENUM ('E','A','S','O','Z','N','U') NOT NULL,
     tz          VARCHAR(50),
     type        VARCHAR(50)                        NOT NULL,

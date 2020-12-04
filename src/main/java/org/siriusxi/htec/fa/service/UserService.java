@@ -1,6 +1,7 @@
 package org.siriusxi.htec.fa.service;
 
-import org.siriusxi.htec.fa.domain.dto.UserView;
+import lombok.extern.log4j.Log4j2;
+import org.siriusxi.htec.fa.domain.dto.response.UserView;
 import org.siriusxi.htec.fa.domain.dto.request.CreateUserRequest;
 import org.siriusxi.htec.fa.domain.mapper.UserMapper;
 import org.siriusxi.htec.fa.domain.model.User;
@@ -18,6 +19,7 @@ import javax.validation.ValidationException;
 import static java.lang.String.format;
 import static org.siriusxi.htec.fa.domain.model.Role.CLIENT;
 
+@Log4j2
 @Service
 public class UserService implements UserDetailsService {
     

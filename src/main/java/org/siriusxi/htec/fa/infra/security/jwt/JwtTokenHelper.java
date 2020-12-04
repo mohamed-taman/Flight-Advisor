@@ -5,6 +5,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.log4j.Log4j2;
 
 import javax.crypto.SecretKey;
+import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Date;
 
@@ -37,7 +38,9 @@ public final class JwtTokenHelper {
                    .setSubject(format("%d,%s", id, username))
                    .setIssuer(JwtConfig.ISSUER)
                    .setIssuedAt(new Date(now))
-                   .setExpiration(new Date(now + JwtConfig.TTL))
+                   .setExpiration(Date.from(ZonedDateTime.now()
+                                 .plusDays(JwtConfig.TOKEN_EXPIRY_DURATION)
+                                 .toInstant()))
                    .signWith(JwtConfig.key(), JwtConfig.SIGNATURE_ALGORITHM)
                    .compact();
     }
@@ -88,7 +91,7 @@ public final class JwtTokenHelper {
                    .parserBuilder()
                    .setSigningKey(JwtConfig.key())
                    .build()
-                   .parseClaimsJws(token)
+                   .parseClaimsJws(token.replace(JwtConfig.TOKEN_PREFIX, ""))
                    .getBody();
     }
     
@@ -144,9 +147,9 @@ public final class JwtTokenHelper {
                 """
                 5s2BCxpNxdI58mAaAllBr/psyu91aCusvXy+kew9ytxQ/zh\
                 RtvcZMxVAjmkq8pVkSMA81+9Y0D4W06qGre+hYg==""";
-        
+        static final String TOKEN_PREFIX = "Bearer ";
         static final String ISSUER = "siriusx.io";
-        static final int TTL = 7 * 24 * 60 * 60 * 1000; // 1 week
+        static final int TOKEN_EXPIRY_DURATION = 7; // In days
         
         static SecretKey key() {
             return Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET));

@@ -21,6 +21,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Country implements Serializable {
     
+    public Country(Integer id) {
+        this.id = id;
+    }
+    
     @Serial
     private static final long serialVersionUID = -9057344199173138205L;
     
