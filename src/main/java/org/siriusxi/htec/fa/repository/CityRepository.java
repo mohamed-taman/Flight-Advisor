@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface CityRepository extends CrudRepository<City, Integer> {
     
     Optional<City> findByCountryAndNameIsLike(Country country, String name);
+    
 }

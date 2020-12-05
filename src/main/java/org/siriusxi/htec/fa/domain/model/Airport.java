@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static javax.persistence.FetchType.*;
+
 /**
  * @author Mohamed Taman
  * @version 1.0
@@ -96,17 +98,17 @@ public class Airport implements Serializable {
     @Column(name = "DATA_SOURCE", nullable = false)
     private String dataSource;
     
-    @OneToMany(mappedBy = "destinationAirport", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "destinationAirport", fetch = LAZY)
     private List<Route> destinationRoutes;
     
-    @OneToMany(mappedBy = "sourceAirport", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "sourceAirport", fetch = LAZY)
     private List<Route> sourceRoutes;
     
     @JoinColumn(name = "CITY_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = LAZY)
     private City city;
     
     @JoinColumn(name = "COUNTRY_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = LAZY)
     private Country country;
 }

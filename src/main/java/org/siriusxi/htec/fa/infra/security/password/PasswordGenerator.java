@@ -17,22 +17,17 @@ import java.security.SecureRandom;
 public final class PasswordGenerator {
     
     
-    private PasswordGenerator() {
-    }
-    
     /**
      * The size of generated passwords
      */
     private static final int SIZE = 8;
-    
     /**
      * The characters composing generated passwords.
      * The generators picks randomly in these characters.
      */
     private static final char[] CHARACTERS =
-            ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_$%?/+=.<>#*")
-                    .toCharArray();
-    
+        ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_$%?/+=.<>#*")
+            .toCharArray();
     private static SecureRandom random;
     
     static {
@@ -43,6 +38,9 @@ public final class PasswordGenerator {
         }
     }
     
+    private PasswordGenerator() {
+    }
+    
     public static String sha1Random() {
         var builder = new StringBuilder(SIZE);
         for (int i = 0; i < SIZE; i++)
@@ -51,8 +49,8 @@ public final class PasswordGenerator {
         return builder.toString();
     }
     
-    public static String bcrypt(String password){
+    public static String bcrypt(String password) {
         return new BCryptPasswordEncoder()
-                       .encode(password);
+            .encode(password);
     }
 }

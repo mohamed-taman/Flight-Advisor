@@ -10,6 +10,10 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.*;
+import static javax.persistence.GenerationType.*;
+
 /**
  * @author Mohamed Taman
  * @version 1.0
@@ -29,7 +33,7 @@ public class City implements Serializable {
     private static final long serialVersionUID = 1322727266984495327L;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Basic(optional = false)
     @Column(nullable = false)
     private Integer id;
@@ -43,14 +47,14 @@ public class City implements Serializable {
     @Column(length = 100)
     private String description;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "city", fetch = FetchType.LAZY)
+    @OneToMany(cascade = ALL, mappedBy = "city", fetch = LAZY)
     private List<Comment> comments;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "city", fetch = FetchType.LAZY)
+    @OneToMany(cascade = ALL, mappedBy = "city", fetch = LAZY)
     private List<Airport> airports;
     
     @NonNull
     @JoinColumn(name = "COUNTRY_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = LAZY)
     private Country country;
 }

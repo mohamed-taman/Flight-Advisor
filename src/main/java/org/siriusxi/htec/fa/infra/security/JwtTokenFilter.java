@@ -49,20 +49,20 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         
         // Get user identity and set it on the spring security context
         var userDetails = userRepository.findByUsername(JwtTokenHelper.getUsername(token))
-                                          .orElse(null);
+            .orElse(null);
         
         var authentication = new UsernamePasswordAuthenticationToken(
-                userDetails, null,
-                userDetails == null ? List.of() : userDetails.getAuthorities()
+            userDetails, null,
+            userDetails == null ? List.of() : userDetails.getAuthorities()
         );
         
         authentication
-                .setDetails(new WebAuthenticationDetailsSource()
-                                    .buildDetails(request));
+            .setDetails(new WebAuthenticationDetailsSource()
+                .buildDetails(request));
         
         SecurityContextHolder
-                .getContext()
-                .setAuthentication(authentication);
+            .getContext()
+            .setAuthentication(authentication);
         chain.doFilter(request, response);
     }
 }

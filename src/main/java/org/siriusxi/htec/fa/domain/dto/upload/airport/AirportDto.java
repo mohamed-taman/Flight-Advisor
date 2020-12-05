@@ -45,7 +45,7 @@ public class AirportDto {
     private short altitude;
     
     @PreAssignmentProcessor(processor = ConvertUnwantedStringsToDefault.class,
-            paramString = "-99.9")
+        paramString = "-99.9")
     @CsvBindByPosition(position = 9)
     private float timezone;
     

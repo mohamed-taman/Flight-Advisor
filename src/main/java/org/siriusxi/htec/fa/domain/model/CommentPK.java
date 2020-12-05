@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
+import static javax.persistence.GenerationType.*;
+
 /**
  * @author Mohamed Taman
  * @version 1.0
@@ -18,7 +20,7 @@ import java.io.Serializable;
 @RequiredArgsConstructor
 public class CommentPK implements Serializable {
     
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Basic(optional = false)
     @Column(nullable = false)
     private int id;

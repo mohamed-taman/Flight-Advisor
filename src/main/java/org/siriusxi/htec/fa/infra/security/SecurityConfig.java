@@ -27,9 +27,9 @@ import static org.springframework.security.core.context.SecurityContextHolder.se
 @Log4j2
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-        securedEnabled = true,
-        jsr250Enabled = true,
-        prePostEnabled = true
+    securedEnabled = true,
+    jsr250Enabled = true,
+    prePostEnabled = true
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.userRepository = userRepository;
         this.jwtTokenFilter = jwtTokenFilter;
         this.appVersion = "/".concat(appVersion);
-    
+        
         // Inherit security context in async function calls
         setStrategyName(MODE_INHERITABLETHREADLOCAL);
     }
@@ -53,13 +53,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(username ->
-                                        userRepository
-                                                .findByUsername(username)
-                                                .orElseThrow(
-                                                        () -> new UsernameNotFoundException(
-                                                                format("User: %s, not found",
-                                                                        username))))
-                .passwordEncoder(passwordEncoder());
+            userRepository
+                .findByUsername(username)
+                .orElseThrow(
+                    () -> new UsernameNotFoundException(
+                        format("User: %s, not found",
+                            username))))
+            .passwordEncoder(passwordEncoder());
     }
     
     // Set password encoding schema
@@ -68,56 +68,57 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
     
+    // Security configurations
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         
         // List of Swagger URLs
         var swaggerAuthList = new String[]{
-                appVersion.concat("/api-docs/**"),
-                "/webjars/**", "/swagger-ui/**",
-                appVersion.concat("/doc/**")};
+            appVersion.concat("/api-docs/**"),
+            "/webjars/**", "/swagger-ui/**",
+            appVersion.concat("/doc/**")};
         
         http
-                // Enable CORS
-                .cors().and()
-                
-                //Disable CSRF
-                .csrf().disable()
-                
-                // Set session management to stateless
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                
-                // Set unauthorized requests exception handler
-                .exceptionHandling()
-                .authenticationEntryPoint(
-                        (request, response, ex) -> {
-                            log.error("Unauthorized request - {}", ex.getMessage());
-                            response.sendError(SC_UNAUTHORIZED, ex.getMessage());
-                        })
-                .and()
-                // Set H2 database console permission
-                .authorizeRequests()
-                .antMatchers("/db-console/**").permitAll()
-                .and()
-                // This will allow frames with same origin which is much more safe
-                .headers().frameOptions().disable()
-                .and()
-                
-                // Set permissions on endpoints
-                .authorizeRequests()
-                .antMatchers("/", "/index.html").permitAll()
-                // Swagger endpoints must be publicly accessible
-                .antMatchers(swaggerAuthList).permitAll()
-                // Our public endpoints
-                .antMatchers("/public/**").permitAll()
-                //Our private endpoints
-                .anyRequest().authenticated()
-                .and()
-                
-                // Add JWT token filter
-                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+            // Enable CORS
+            .cors().and()
+            
+            //Disable CSRF
+            .csrf().disable()
+            
+            // Set session management to stateless
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            
+            // Set unauthorized requests exception handler
+            .exceptionHandling()
+            .authenticationEntryPoint(
+                (request, response, ex) -> {
+                    log.error("Unauthorized request - {}", ex.getMessage());
+                    response.sendError(SC_UNAUTHORIZED, ex.getMessage());
+                })
+            .and()
+            // Set H2 database console permission
+            .authorizeRequests()
+            .antMatchers("/db-console/**").permitAll()
+            .and()
+            // This will allow frames with same origin which is much more safe
+            .headers().frameOptions().disable()
+            .and()
+            
+            // Set permissions on endpoints
+            .authorizeRequests()
+            .antMatchers("/", "/index.html").permitAll()
+            // Swagger endpoints must be publicly accessible
+            .antMatchers(swaggerAuthList).permitAll()
+            // Our public endpoints
+            .antMatchers("/public/**").permitAll()
+            //Our private endpoints
+            .anyRequest().authenticated()
+            .and()
+            
+            // Add JWT token filter
+            .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
     
     // Used by spring security if CORS is enabled.

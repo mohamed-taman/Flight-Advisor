@@ -12,6 +12,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import static java.time.LocalDateTime.*;
+import static javax.persistence.FetchType.*;
+
 /**
  * @author Mohamed Taman
  * @version 1.0
@@ -37,23 +40,23 @@ public class Comment implements Serializable {
     @Basic(optional = false)
     @Column(name = "CREATED_AT", nullable = false)
     @CreatedDate
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt = now();
     
     @Column(name = "UPDATED_ON")
     @LastModifiedDate
     private LocalDateTime updatedOn;
     
     @JoinColumn(
-            name = "CITY_ID",
-            referencedColumnName = "ID",
-            nullable = false,
-            insertable = false,
-            updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+        name = "CITY_ID",
+        referencedColumnName = "ID",
+        nullable = false,
+        insertable = false,
+        updatable = false)
+    @ManyToOne(optional = false, fetch = LAZY)
     private City city;
     
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = LAZY)
     private User user;
     
     public Comment(int cityId, String description) {
@@ -64,9 +67,9 @@ public class Comment implements Serializable {
     @Override
     public String toString() {
         return """
-                Comment{description= "%s", createdAt= %s, \
-                updatedOn= %s, city= "%s", user= %s }"""
-                       .formatted(description, createdAt, updatedOn,
-                                  city.getName(), user.getUserUuid());
+            Comment{description= "%s", createdAt= %s, \
+            updatedOn= %s, city= "%s", user= %s }"""
+            .formatted(description, createdAt, updatedOn,
+                city.getName(), user.getUserUuid());
     }
 }

@@ -1,6 +1,7 @@
 package org.siriusxi.htec.fa.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.log4j.Log4j2;
@@ -11,6 +12,7 @@ import org.siriusxi.htec.fa.domain.dto.response.CityView;
 import org.siriusxi.htec.fa.domain.dto.response.CommentView;
 import org.siriusxi.htec.fa.domain.dto.response.TravelResultView;
 import org.siriusxi.htec.fa.domain.model.Role;
+import org.siriusxi.htec.fa.service.CityMgmtService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -30,6 +32,12 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/cities")
 public class CityController {
+    
+    private final CityMgmtService cityMgmtService;
+    
+    public CityController(CityMgmtService cityMgmtService) {
+        this.cityMgmtService = cityMgmtService;
+    }
     
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @GetMapping
@@ -55,9 +63,7 @@ public class CityController {
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping
     public CityView createCity(@RequestBody @Valid CreateCityRequest request) {
-        return new CityView(request.countryId(), request.name(),
-                request.country(),
-                request.description(), Collections.emptyList());
+        return cityMgmtService.addCity(request);
     }
     
     /*
@@ -67,15 +73,17 @@ public class CityController {
     //Add comment
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping("{id}/comments")
-    public CommentView createComment(@PathVariable int id,
+    public CommentView createComment(@Parameter(description = "City Id") @PathVariable int id,
                                      @RequestBody @Valid CreateUpdateCommentRequest request) {
-        return new CommentView(1, request.description(), "Me", LocalDateTime.now(),null);
+        return new CommentView(1, request.description(), "Me",
+            LocalDateTime.now(), null);
     }
     
     //Delete comment
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @DeleteMapping("{id}/comments/{comment_id}")
-    public void deleteComment(@PathVariable int id,
+    public void deleteComment(@Parameter(description = "City Id") @PathVariable int id,
+                              @Parameter(description = "Comment Id")
                               @PathVariable("comment_id") int commentId) {
         log.info("Comment with Id {} is deleted for city {}", commentId, id);
     }
@@ -83,13 +91,14 @@ public class CityController {
     //update comment
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PutMapping("{id}/comments/{comment_id}")
-    public CommentView updateComment(@PathVariable int id,
-                                     @PathVariable("comment_id") int commentId,
+    public CommentView updateComment(@Parameter(description = "City Id") @PathVariable int id,
+                                     @Parameter(description = "Comment Id") @PathVariable(
+                                         "comment_id") int commentId,
                                      @RequestBody
                                      @Valid CreateUpdateCommentRequest request) {
         return new CommentView(1,
-                request.description(),
-                "Me Updated the comment",
-                LocalDateTime.now().minusDays(1),LocalDateTime.now());
+            request.description(),
+            "Me Updated the comment",
+            LocalDateTime.now().minusDays(1), LocalDateTime.now());
     }
 }

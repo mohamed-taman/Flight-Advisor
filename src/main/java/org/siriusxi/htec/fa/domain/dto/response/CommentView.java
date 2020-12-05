@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.time.LocalDateTime;
 
-@JsonPropertyOrder({"id","description","created_by","created_at","updated_on"})
+@JsonPropertyOrder({"id", "description", "created_by", "created_at", "updated_on"})
 public record CommentView(@JsonProperty int id,
                           @JsonProperty String description,
                           @JsonProperty("created_by") String createdBy,

@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serial;
 
 @Entity
-@Table(name = "AUTHORITY",catalog = "FLIGHTDB", schema = "PUBLIC")
+@Table(name = "AUTHORITY", catalog = "FLIGHTDB", schema = "PUBLIC")
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor
@@ -28,7 +28,7 @@ public class Role implements GrantedAuthority {
     @Column(nullable = false, insertable = false, updatable = false)
     private String authority;
     
-    public Role(RolePK rolePK){
+    public Role(RolePK rolePK) {
         setRolePK(rolePK);
         this.authority = rolePK.getAuthority();
     }

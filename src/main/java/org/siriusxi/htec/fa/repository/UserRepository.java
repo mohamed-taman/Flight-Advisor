@@ -20,8 +20,8 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     <S extends User> List<S> saveAll(Iterable<S> entities);
     
     @Caching(evict = {
-            @CacheEvict(key = "#p0.id"),
-            @CacheEvict(key = "#p0.username")
+        @CacheEvict(key = "#p0.id"),
+        @CacheEvict(key = "#p0.username")
     })
     <S extends User> S save(S entity);
     

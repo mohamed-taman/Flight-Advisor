@@ -45,7 +45,7 @@ import static org.springframework.http.HttpStatus.*;
  *
  * @author Mohamed Taman
  * @version 1.0
- *
+ * <p>
  * TODO: Need to separate saving to Service, and refactor the duplicate code here.
  */
 @Log4j2
@@ -125,21 +125,17 @@ public class FileUploadController {
                         Check if the country is exists, if not save it,
                         then in both cases assign the id to dto.
                          */
-                            countryRepository
-                                .findByNameIsLike(airportDto.getCountry())
-                                .ifPresentOrElse(country -> airportDto.setCountryId(country.getId()),
-                                    () ->
-                                        airportDto
-                                            .setCountryId(countryRepository
-                                                .save(new Country(airportDto.getCountry()))
-                                                .getId()));
+                            String countryName = airportDto.getCountry().trim();
+                            
+                            Country country = countryRepository
+                                .findByNameIsLike(countryName)
+                                .orElseGet(() -> countryRepository
+                                    .save(new Country(countryName)));
                         
                         /*
                         Check if the city is exists, if not save it,
                         then in both cases assign the id to dto.
                          */
-                            Country country = new Country(airportDto.getCountryId());
-                            
                             cityRepository
                                 .findByCountryAndNameIsLike(country, airportDto.getCity())
                                 .ifPresentOrElse(city -> airportDto.setCityId(city.getId()),
@@ -217,7 +213,7 @@ public class FileUploadController {
                         // filter airports doesn't exists
                         .filter(dto ->
                             airportRepository.findById(dto.getSrcAirportId()).isPresent() &&
-                            airportRepository.findById(dto.getDestAirportId()).isPresent())
+                                airportRepository.findById(dto.getDestAirportId()).isPresent())
                         // converting to
                         .map(routeMapper::toRouteModel)
                         // Save to db

@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
@@ -21,12 +22,12 @@ import static javax.persistence.FetchType.LAZY;
  */
 @Entity
 @Table(
-        catalog = "FLIGHTDB",
-        schema = "PUBLIC",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"USER_UUID"}),
-                @UniqueConstraint(columnNames = {"USERNAME"})
-        })
+    catalog = "FLIGHTDB",
+    schema = "PUBLIC",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"USER_UUID"}),
+        @UniqueConstraint(columnNames = {"USERNAME"})
+    })
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -66,12 +67,12 @@ public class User implements UserDetails, Serializable {
     @Column(nullable = false)
     private String password;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = LAZY)
+    @OneToMany(cascade = ALL, mappedBy = "user", fetch = LAZY)
     private List<Comment> comments;
     
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID",
-            nullable = false, insertable = false, updatable = false)
-    @OneToMany(cascade = CascadeType.ALL, fetch = EAGER)
+        nullable = false, insertable = false, updatable = false)
+    @OneToMany(cascade = ALL, fetch = EAGER)
     private Set<Role> authorities = new HashSet<>();
     
     private boolean enabled = true;
@@ -90,8 +91,8 @@ public class User implements UserDetails, Serializable {
     
     public String getFullName() {
         return getFirstName()
-                       .concat(" ")
-                       .concat(getLastName());
+            .concat(" ")
+            .concat(getLastName());
     }
     
     @Override

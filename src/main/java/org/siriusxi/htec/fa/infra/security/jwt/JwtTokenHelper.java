@@ -26,23 +26,23 @@ public final class JwtTokenHelper {
     /**
      * Builds a token fot the user
      *
-     * @param id - the user id
+     * @param id       - the user id
      * @param username the user login username
      * @return a JWT token as a String
      */
     public static String generateAccessToken(Long id, String username) {
         var now = System.currentTimeMillis();
         return Jwts
-                   .builder()
-                   .setId(id.toString())
-                   .setSubject(format("%d,%s", id, username))
-                   .setIssuer(JwtConfig.ISSUER)
-                   .setIssuedAt(new Date(now))
-                   .setExpiration(Date.from(ZonedDateTime.now()
-                                 .plusDays(JwtConfig.TOKEN_EXPIRY_DURATION)
-                                 .toInstant()))
-                   .signWith(JwtConfig.key(), JwtConfig.SIGNATURE_ALGORITHM)
-                   .compact();
+            .builder()
+            .setId(id.toString())
+            .setSubject(format("%d,%s", id, username))
+            .setIssuer(JwtConfig.ISSUER)
+            .setIssuedAt(new Date(now))
+            .setExpiration(Date.from(ZonedDateTime.now()
+                .plusDays(JwtConfig.TOKEN_EXPIRY_DURATION)
+                .toInstant()))
+            .signWith(JwtConfig.key(), JwtConfig.SIGNATURE_ALGORITHM)
+            .compact();
     }
     
     /**
@@ -53,8 +53,8 @@ public final class JwtTokenHelper {
      */
     public static String getUserId(String token) {
         return getClaims(token)
-                       .getSubject()
-                       .split(",")[0];
+            .getSubject()
+            .split(",")[0];
     }
     
     /**
@@ -65,8 +65,8 @@ public final class JwtTokenHelper {
      */
     public static String getUsername(String token) {
         return getClaims(token)
-                       .getSubject()
-                       .split(",")[1];
+            .getSubject()
+            .split(",")[1];
     }
     
     /**
@@ -77,7 +77,7 @@ public final class JwtTokenHelper {
      */
     public static Date tokenExpiredAt(String token) {
         return getClaims(token)
-                       .getExpiration();
+            .getExpiration();
     }
     
     /**
@@ -88,11 +88,11 @@ public final class JwtTokenHelper {
      */
     private static Claims getClaims(String token) {
         return Jwts
-                   .parserBuilder()
-                   .setSigningKey(JwtConfig.key())
-                   .build()
-                   .parseClaimsJws(token.replace(JwtConfig.TOKEN_PREFIX, ""))
-                   .getBody();
+            .parserBuilder()
+            .setSigningKey(JwtConfig.key())
+            .build()
+            .parseClaimsJws(token.replace(JwtConfig.TOKEN_PREFIX, ""))
+            .getBody();
     }
     
     /**
@@ -137,19 +137,17 @@ public final class JwtTokenHelper {
      * jwt configuration interface.
      */
     private static class JwtConfig {
-        private JwtConfig() {
-        }
-        
         static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
-        
         // It should be kept encoded in an environment variable
         static final String SECRET =
-                """
+            """
                 5s2BCxpNxdI58mAaAllBr/psyu91aCusvXy+kew9ytxQ/zh\
                 RtvcZMxVAjmkq8pVkSMA81+9Y0D4W06qGre+hYg==""";
         static final String TOKEN_PREFIX = "Bearer ";
         static final String ISSUER = "siriusx.io";
         static final int TOKEN_EXPIRY_DURATION = 7; // In days
+        private JwtConfig() {
+        }
         
         static SecretKey key() {
             return Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET));

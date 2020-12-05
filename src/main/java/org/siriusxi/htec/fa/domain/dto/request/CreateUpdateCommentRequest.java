@@ -4,5 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotBlank;
 
-public record CreateUpdateCommentRequest(@JsonProperty("description") @NotBlank String description) {
+public record CreateUpdateCommentRequest(
+    @JsonProperty("description") @NotBlank String description) {
 }

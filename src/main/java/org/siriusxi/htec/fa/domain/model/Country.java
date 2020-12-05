@@ -10,6 +10,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.*;
+
 /**
  * @author Mohamed Taman
  * @version 1.0
@@ -39,9 +42,9 @@ public class Country implements Serializable {
     @Column(nullable = false, length = 100)
     private String name;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "country", fetch = FetchType.LAZY)
+    @OneToMany(cascade = ALL, mappedBy = "country", fetch = LAZY)
     private List<Airport> airports;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "country", fetch = FetchType.LAZY)
+    @OneToMany(cascade = ALL, mappedBy = "country", fetch = LAZY)
     private List<City> cities;
 }

@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface CountryRepository extends CrudRepository<Country, Integer> {
-
+    
     Optional<Country> findByNameIsLike(String name);
 }
