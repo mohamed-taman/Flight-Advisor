@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public abstract class UserMapper {
     
     @Autowired
-    PasswordEncoder passwordEncoder;
+    protected PasswordEncoder passwordEncoder;
     
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "comments", ignore = true)
@@ -24,5 +24,5 @@ public abstract class UserMapper {
     @Mapping(target = "userUuid", expression = "java( Utils.generateUuid() )")
     public abstract User toUser(CreateUserRequest request);
     
-    public abstract UserView toUserView(User user);
+    public abstract UserView toView(User user);
 }

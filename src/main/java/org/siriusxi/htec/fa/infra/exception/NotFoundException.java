@@ -1,5 +1,7 @@
 package org.siriusxi.htec.fa.infra.exception;
 
+import static java.lang.String.*;
+
 public class NotFoundException extends RuntimeException {
     
     public NotFoundException(String message) {
@@ -7,10 +9,14 @@ public class NotFoundException extends RuntimeException {
     }
     
     public NotFoundException(Class<?> clazz, long id) {
-        super(String.format("Entity %s with id %d not found", clazz.getSimpleName(), id));
+        super(getFormattedMessage(clazz.getSimpleName(), valueOf(id)));
     }
     
     public NotFoundException(Class<?> clazz, String id) {
-        super(String.format("Entity %s with id %s not found", clazz.getSimpleName(), id));
+        super(getFormattedMessage(clazz.getSimpleName(), id));
+    }
+    
+    private static String getFormattedMessage(String entity, String id) {
+        return format("%s with id %s not found", entity, id );
     }
 }

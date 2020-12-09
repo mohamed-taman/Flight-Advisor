@@ -24,17 +24,17 @@ public final class JwtTokenHelper {
     }
     
     /**
-     * Builds a token fot the user
+     * Generates a token fot the user.
      *
-     * @param id       - the user id
-     * @param username the user login username
-     * @return a JWT token as a String
+     * @param id       of the user.
+     * @param username of the the login user.
+     * @return a valid JWT token.
      */
-    public static String generateAccessToken(Long id, String username) {
+    public static String generateAccessToken(int id, String username) {
         var now = System.currentTimeMillis();
         return Jwts
             .builder()
-            .setId(id.toString())
+            .setId(String.valueOf(id))
             .setSubject(format("%d,%s", id, username))
             .setIssuer(JwtConfig.ISSUER)
             .setIssuedAt(new Date(now))
@@ -46,19 +46,19 @@ public final class JwtTokenHelper {
     }
     
     /**
-     * Extracts the claim from the JWT token
+     * Extracts the User id claim from the JWT token
      *
      * @param token - token to analyze
      * @return the User Id claim contained in the token
      */
-    public static String getUserId(String token) {
-        return getClaims(token)
+    public static int getUserId(String token) {
+        return Integer.parseInt(getClaims(token)
             .getSubject()
-            .split(",")[0];
+            .split(",")[0]);
     }
     
     /**
-     * Extracts the claim from the JWT token
+     * Extracts the username claim from the JWT token
      *
      * @param token - token to analyze
      * @return the Username claim contained in the token
@@ -70,7 +70,7 @@ public final class JwtTokenHelper {
     }
     
     /**
-     * Extracts the claim from the JWT token
+     * Extracts the expiration date claim from the JWT token
      *
      * @param token - token to analyze
      * @return the expiration date claim contained in the token
@@ -81,7 +81,7 @@ public final class JwtTokenHelper {
     }
     
     /**
-     * Extracts the claim from the JWT token
+     * Extracts the claims from the JWT token
      *
      * @param token - token to analyze
      * @return the all claims contained in the token

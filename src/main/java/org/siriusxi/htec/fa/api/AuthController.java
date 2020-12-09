@@ -29,21 +29,23 @@ import javax.validation.ValidationException;
  *
  * @author Mohamed Taman
  * @version 1.0
+ *
+ * FIXME: add refresh token method, change password.
  */
 @Log4j2
 @Tag(name = "Authentication",
     description = "Set of public APIs, for managing user authentication, and the registration.")
 @RestController
 @RequestMapping("public")
-public class AuthRegistrationController {
+public class AuthController {
     
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final UserMapper userMapper;
     
-    public AuthRegistrationController(AuthenticationManager authenticationManager,
-                                      UserService userService,
-                                      UserMapper userMapper) {
+    public AuthController(AuthenticationManager authenticationManager,
+                          UserService userService,
+                          UserMapper userMapper) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.userMapper = userMapper;
@@ -66,9 +68,9 @@ public class AuthRegistrationController {
             return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION,
                     JwtTokenHelper.generateAccessToken(
-                        user.getId().longValue(),
+                        user.getId(),
                         user.getUsername()))
-                .body(userMapper.toUserView(user));
+                .body(userMapper.toView(user));
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

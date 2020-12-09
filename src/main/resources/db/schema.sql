@@ -60,15 +60,12 @@ CREATE TABLE IF NOT EXISTS city
 
 CREATE TABLE IF NOT EXISTS city_comment
 (
-    id          INT AUTO_INCREMENT NOT NULL,
-    city_id     INT                NOT NULL,
-    user_id     INT                NOT NULL,
-    description VARCHAR(1000)      NOT NULL,
-    created_at  DATETIME           NOT NULL DEFAULT now(),
-    updated_on  DATETIME,
-
-    CONSTRAINT city_comment_pk
-        PRIMARY KEY (id, city_id),
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    city_id     INT           NOT NULL,
+    user_id     INT           NOT NULL,
+    description VARCHAR(1000) NOT NULL,
+    created_at  DATETIME      NOT NULL DEFAULT now(),
+    updated_at  DATETIME,
 
     CONSTRAINT comment_city_fk
         FOREIGN KEY (city_id)

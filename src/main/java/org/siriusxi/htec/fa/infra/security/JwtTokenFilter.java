@@ -16,8 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.springframework.util.StringUtils.hasText;
 
 @Component
 @Log4j2
@@ -33,37 +34,53 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
-        // Get authorization header and validate
-        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (isEmpty(header) || !header.startsWith("Bearer ")) {
-            chain.doFilter(request, response);
-            return;
-        }
         
-        // Get jwt token and validate
-        final String token = header.split(" ")[1].trim();
-        if (!JwtTokenHelper.validate(token)) {
+        // Get authorization header and validate
+        var authToken = getJwtTokenIfValid(request
+                                               .getHeader(HttpHeaders.AUTHORIZATION));
+        
+        String token;
+        
+        if (authToken.isEmpty()) {
             chain.doFilter(request, response);
             return;
-        }
+        } else token = authToken.get();
         
         // Get user identity and set it on the spring security context
-        var userDetails = userRepository.findByUsername(JwtTokenHelper.getUsername(token))
-            .orElse(null);
+        var userDetails = userRepository
+                              .findByUsernameIgnoreCase(JwtTokenHelper.getUsername(token))
+                              .orElse(null);
         
         var authentication = new UsernamePasswordAuthenticationToken(
             userDetails, null,
             userDetails == null ? List.of() : userDetails.getAuthorities()
         );
         
-        authentication
-            .setDetails(new WebAuthenticationDetailsSource()
-                .buildDetails(request));
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         
-        SecurityContextHolder
-            .getContext()
-            .setAuthentication(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        
         chain.doFilter(request, response);
+    }
+    
+    /**
+     * This method take a header, and check if it contains authorization value,
+     * if it is exists then validate this token.
+     *
+     * @param header that could contain authorization header
+     * @return JWT token if exists and valid.
+     */
+    private Optional<String> getJwtTokenIfValid(String header) {
+        String token;
+        //check header value is exists
+        if (hasText(header) && header.startsWith("Bearer ")) {
+            // Get jwt token and validate
+            token = header.split(" ")[1].trim();
+            if (JwtTokenHelper.validate(token))
+                return Optional.of(token);
+        }
+        
+        return Optional.empty();
     }
 }
 

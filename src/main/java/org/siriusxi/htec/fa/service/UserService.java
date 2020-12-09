@@ -39,7 +39,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserView create(CreateUserRequest request) {
         
-        if (repository.findByUsername(request.username()).isPresent()) {
+        if (repository.findByUsernameIgnoreCase(request.username()).isPresent()) {
             throw new ValidationException("Username exists!");
         }
     
@@ -51,13 +51,13 @@ public class UserService implements UserDetailsService {
         repository.save(user);
         
         // Return user view
-        return userMapper.toUserView(user);
+        return userMapper.toView(user);
     }
     
     @Override
     public UserDetails loadUserByUsername(String username) {
         return repository
-            .findByUsername(username)
+            .findByUsernameIgnoreCase(username)
             .orElseThrow(
                 () -> new UsernameNotFoundException(
                     format("User with username - %s, not found", username)));

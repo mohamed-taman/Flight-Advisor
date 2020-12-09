@@ -14,5 +14,5 @@ public interface AirportMapper {
     @Mapping(source = "country", target = "countryName")
     @Mapping(source = "cityId", target = "city.id")
     @Mapping(source = "countryId", target = "country.id")
-    Airport toAirportModel(AirportDto airportDto);
+    Airport toModel(AirportDto airportDto);
 }

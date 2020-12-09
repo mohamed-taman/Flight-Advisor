@@ -28,6 +28,7 @@ public class Route implements Serializable {
     @Serial
     private static final long serialVersionUID = 8818845493466966108L;
     
+    //FIXME change to sequence generator instead of IDENTITY strategy so batch insert could work
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)

@@ -13,7 +13,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static java.time.LocalDateTime.*;
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * @author Mohamed Taman
@@ -29,29 +31,26 @@ public class Comment implements Serializable {
     @Serial
     private static final long serialVersionUID = -4628882357786781599L;
     
-    @EmbeddedId
-    protected CommentPK commentPK;
+    @Id
+    @NonNull
+    @GeneratedValue(strategy = IDENTITY)
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private Integer id;
     
     @NonNull
     @Basic(optional = false)
-    @Column(nullable = false, length = 1000)
-    private String description;
+    @Column(name = "DESCRIPTION", nullable = false, length = 1000)
+    private String comment;
     
     @Basic(optional = false)
     @Column(name = "CREATED_AT", nullable = false)
-    @CreatedDate
     private LocalDateTime createdAt = now();
     
-    @Column(name = "UPDATED_ON")
-    @LastModifiedDate
-    private LocalDateTime updatedOn;
+    @Column(name = "UPDATED_AT")
+    private LocalDateTime updatedAt;
     
-    @JoinColumn(
-        name = "CITY_ID",
-        referencedColumnName = "ID",
-        nullable = false,
-        insertable = false,
-        updatable = false)
+    @JoinColumn(name = "CITY_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false, fetch = LAZY)
     private City city;
     
@@ -59,17 +58,11 @@ public class Comment implements Serializable {
     @ManyToOne(optional = false, fetch = LAZY)
     private User user;
     
-    public Comment(int cityId, String description) {
-        this.setCommentPK(new CommentPK(cityId));
-        this.description = description;
-    }
-    
     @Override
     public String toString() {
         return """
-            Comment{description= "%s", createdAt= %s, \
+            Comment{id= %d, comment= %s, createdAt= %s, \
             updatedOn= %s, city= "%s", user= %s }"""
-            .formatted(description, createdAt, updatedOn,
-                city.getName(), user.getUserUuid());
+            .formatted(id, comment, createdAt, updatedAt, city.getName(), user.getUserUuid());
     }
 }

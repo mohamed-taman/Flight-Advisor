@@ -2,6 +2,7 @@ package org.siriusxi.htec.fa.infra.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.extern.log4j.Log4j2;
+import org.siriusxi.htec.fa.infra.exception.NotAllowedException;
 import org.siriusxi.htec.fa.infra.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,16 @@ public class GlobalExceptionHandler {
         
         return ResponseEntity
             .status(HttpStatus.NOT_FOUND)
-            .body(new ApiCallError<>("Not found exception", List.of(ex.getMessage())));
+            .body(new ApiCallError<>("Not found", List.of(ex.getMessage())));
+    }
+    
+    @ExceptionHandler(NotAllowedException.class)
+    public ResponseEntity<ApiCallError<String>> handleNotAllowedException(HttpServletRequest request, NotAllowedException ex) {
+        log.error("NotAllowedException {}\n", request.getRequestURI(), ex);
+        
+        return ResponseEntity
+            .status(HttpStatus.NOT_ACCEPTABLE)
+            .body(new ApiCallError<>("Not Applicable", List.of(ex.getMessage())));
     }
     
     @ExceptionHandler(ValidationException.class)

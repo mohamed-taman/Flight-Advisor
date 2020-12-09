@@ -6,18 +6,22 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.log4j.Log4j2;
 import org.siriusxi.htec.fa.domain.dto.request.CreateCityRequest;
-import org.siriusxi.htec.fa.domain.dto.request.CreateUpdateCommentRequest;
+import org.siriusxi.htec.fa.domain.dto.request.UpSrtCommentRequest;
 import org.siriusxi.htec.fa.domain.dto.request.SearchCityRequest;
 import org.siriusxi.htec.fa.domain.dto.response.CityView;
 import org.siriusxi.htec.fa.domain.dto.response.CommentView;
 import org.siriusxi.htec.fa.domain.dto.response.TravelResultView;
 import org.siriusxi.htec.fa.domain.model.Role;
+import org.siriusxi.htec.fa.domain.model.User;
 import org.siriusxi.htec.fa.service.CityMgmtService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
-import java.time.LocalDateTime;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,6 +30,8 @@ import java.util.List;
  *
  * @author Mohamed Taman
  * @version 1.0
+ *
+ * FIXME: Swagger documentation
  */
 @Log4j2
 @Tag(name = "City Management")
@@ -41,22 +47,17 @@ public class CityController {
     
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @GetMapping
-    public List<CityView> getAllCities(@RequestParam(defaultValue = "0") int commentsLimit) {
-        return Collections.emptyList();
+    public List<CityView> getAllCities(@RequestParam(defaultValue = "0")
+                                           @Min(0) @Max(Integer.MAX_VALUE) int cLimit) {
+        return cityMgmtService.searchCities(new SearchCityRequest(""), cLimit);
     }
     
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping("search")
-    public List<CityView> searchCities(@RequestParam(defaultValue = "0") int commentsLimit,
+    public List<CityView> searchCities(@RequestParam(defaultValue = "0")
+                                           @Min(0) @Max(Integer.MAX_VALUE) int cLimit,
                                        @RequestBody @Valid SearchCityRequest request) {
-        return Collections.emptyList();
-    }
-    
-    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @GetMapping("travel")
-    public List<TravelResultView> travel(@RequestParam String from,
-                                         @RequestParam String to) {
-        return Collections.emptyList();
+        return cityMgmtService.searchCities(request, cLimit);
     }
     
     @RolesAllowed(Role.ADMIN)
@@ -66,6 +67,14 @@ public class CityController {
         return cityMgmtService.addCity(request);
     }
     
+    
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @GetMapping("travel")
+    public List<TravelResultView> travel(@RequestParam @NotBlank String from,
+                                         @RequestParam @NotBlank String to) {
+        return Collections.emptyList();
+    }
+    
     /*
     Comments Management
     */
@@ -73,32 +82,39 @@ public class CityController {
     //Add comment
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping("{id}/comments")
-    public CommentView createComment(@Parameter(description = "City Id") @PathVariable int id,
-                                     @RequestBody @Valid CreateUpdateCommentRequest request) {
-        return new CommentView(1, request.description(), "Me",
-            LocalDateTime.now(), null);
-    }
-    
-    //Delete comment
-    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @DeleteMapping("{id}/comments/{comment_id}")
-    public void deleteComment(@Parameter(description = "City Id") @PathVariable int id,
-                              @Parameter(description = "Comment Id")
-                              @PathVariable("comment_id") int commentId) {
-        log.info("Comment with Id {} is deleted for city {}", commentId, id);
+    public CommentView addComment(@Parameter(description = "City Id")
+                                         @PathVariable(name = "id")
+                                         @Min(1) @Max(Integer.MAX_VALUE) int cityId,
+                                     @RequestBody @Valid UpSrtCommentRequest request) {
+        return cityMgmtService.addComment(getCurrentLoginUser(), cityId, request);
     }
     
     //update comment
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PutMapping("{id}/comments/{comment_id}")
-    public CommentView updateComment(@Parameter(description = "City Id") @PathVariable int id,
-                                     @Parameter(description = "Comment Id") @PathVariable(
-                                         "comment_id") int commentId,
-                                     @RequestBody
-                                     @Valid CreateUpdateCommentRequest request) {
-        return new CommentView(1,
-            request.description(),
-            "Me Updated the comment",
-            LocalDateTime.now().minusDays(1), LocalDateTime.now());
+    public void updateComment(@Parameter(description = "City Id")
+                                         @PathVariable(name = "id")
+                                         @Min(1) @Max(Integer.MAX_VALUE) int cityId,
+                                     @Parameter(description = "Comment Id")
+                                         @PathVariable("comment_id")
+                                         @Min(1) @Max(Integer.MAX_VALUE) int commentId,
+                                     @RequestBody @Valid UpSrtCommentRequest request) {
+        
+        cityMgmtService.updateComment(getCurrentLoginUser(),cityId, commentId,request);
+    }
+    
+    //Delete comment
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @DeleteMapping("{id}/comments/{comment_id}")
+    public void deleteComment(@Parameter(description = "City Id") @PathVariable(name = "id")
+                              @Min(1) @Max(Integer.MAX_VALUE) int cityId,
+                              @Parameter(description = "Comment Id") @PathVariable("comment_id")
+                              @Min(1) @Max(Integer.MAX_VALUE) int commentId) {
+        
+        cityMgmtService.deleteComment(getCurrentLoginUser(),cityId, commentId);
+    }
+    
+    private User getCurrentLoginUser(){
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

@@ -1,5 +1,6 @@
 package org.siriusxi.htec.fa.api;
 
+import com.opencsv.bean.BeanVerifier;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +17,6 @@ import org.siriusxi.htec.fa.domain.dto.upload.route.RouteDto;
 import org.siriusxi.htec.fa.domain.dto.upload.route.verifer.RouteBeanVerifier;
 import org.siriusxi.htec.fa.domain.mapper.AirportMapper;
 import org.siriusxi.htec.fa.domain.mapper.RouteMapper;
-import org.siriusxi.htec.fa.domain.model.City;
 import org.siriusxi.htec.fa.domain.model.Country;
 import org.siriusxi.htec.fa.domain.model.Role;
 import org.siriusxi.htec.fa.repository.AirportRepository;
@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
@@ -45,8 +46,8 @@ import static org.springframework.http.HttpStatus.*;
  *
  * @author Mohamed Taman
  * @version 1.0
- * <p>
- * TODO: Need to separate saving to Service, and refactor the duplicate code here.
+ *
+ * TODO: Improve performance of the file processing.
  */
 @Log4j2
 @Tag(name = "Files Upload Management",
@@ -95,59 +96,33 @@ public class FileUploadController {
         if (file.isEmpty())
             return new ResponseEntity<>("Please upload a valid file.", BAD_REQUEST);
         else {
-            
-            // parse CSV file to create a list of `Airport` objects
-            try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-                
-                // create csv bean reader
-                CsvToBean<AirportDto> csvToAirportBeans = new CsvToBeanBuilder<AirportDto>(reader)
-                    .withType(AirportDto.class)
-                    .withVerifier(new AirportBeanVerifier())
-                    .withIgnoreLeadingWhiteSpace(true)
-                    .build();
-                
+            try {
                 // convert `CsvToBean` object to list of airports
-                List<AirportDto> airports = csvToAirportBeans.parse();
-                
+                List<AirportDto> airports = parseCsvContent(file.getInputStream(),
+                    AirportDto.class, new AirportBeanVerifier());
+                    
                 /*
                  Save All Airports to database after:
                     1. Add countries and cities to database.
-                    2. Add new added city and country ids to model dto.
+                    2. Add new added city and country ids to dto.
                     3. Map Airport Dto to Airport model.
                     4. Return all airports as list to be saved to DB.
                  */
                 airportRepository.saveAll(
                     airports
-                        .stream()
+                        .stream()// Save countries and cities to database
                         .peek(airportDto -> {
-                        
-                        /*
-                        Check if the country is exists, if not save it,
-                        then in both cases assign the id to dto.
-                         */
-                            String countryName = airportDto.getCountry().trim();
                             
                             Country country = countryRepository
-                                .findByNameIsLike(countryName)
-                                .orElseGet(() -> countryRepository
-                                    .save(new Country(countryName)));
-                        
-                        /*
-                        Check if the city is exists, if not save it,
-                        then in both cases assign the id to dto.
-                         */
-                            cityRepository
-                                .findByCountryAndNameIsLike(country, airportDto.getCity())
-                                .ifPresentOrElse(city -> airportDto.setCityId(city.getId()),
-                                    () ->
-                                        airportDto
-                                            .setCityId(cityRepository
-                                                .save(new City(airportDto.getCity(), country))
-                                                .getId()));
+                                .findOrSaveBy(airportDto.getCountry());
+                            airportDto.setCountryId(country.getId());
+                            
+                            airportDto.setCityId(cityRepository.findOrSaveBy(country,
+                                airportDto.getCity()).getId());
                         })
                         // converting to
-                        .map(airportMapper::toAirportModel)
-                        // Then collect then to list
+                        .map(airportMapper::toModel)
+                        // Then collect them to list
                         .collect(Collectors.toList()));
                 
             } catch (Exception ex) {
@@ -190,17 +165,11 @@ public class FileUploadController {
         } else {
             
             // parse CSV file to create a list of `RouteDto` objects
-            try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
-                
-                // create csv bean reader
-                CsvToBean<RouteDto> csvToRouteBeans = new CsvToBeanBuilder<RouteDto>(reader)
-                    .withType(RouteDto.class)
-                    .withVerifier(new RouteBeanVerifier())
-                    .withIgnoreLeadingWhiteSpace(true)
-                    .build();
+            try {
                 
                 // convert `CsvToBean` object to list of routeDto
-                List<RouteDto> routes = csvToRouteBeans.parse();
+                List<RouteDto> routes = parseCsvContent(file.getInputStream(),
+                    RouteDto.class, new RouteBeanVerifier());
                 
                 /*
                  1. Convert to Route model.
@@ -209,14 +178,13 @@ public class FileUploadController {
                 routeRepository
                     .saveAll(routes
                         .stream()
-                        .parallel()
-                        // filter airports doesn't exists
+                        // filter routes doesn't exists
                         .filter(dto ->
                             airportRepository.findById(dto.getSrcAirportId()).isPresent() &&
                                 airportRepository.findById(dto.getDestAirportId()).isPresent())
                         // converting to
-                        .map(routeMapper::toRouteModel)
-                        // Save to db
+                        .map(routeMapper::toModel)
+                        // Then collect them to list
                         .collect(Collectors.toList()));
                 
             } catch (Exception ex) {
@@ -227,5 +195,35 @@ public class FileUploadController {
         }
         
         return new ResponseEntity<>("File uploaded successfully.", OK);
+    }
+    
+    /**
+     * This method is used to convert CSV content from any input stream to a bean list of type T.
+     *
+     * @param content      csv content from input stream.
+     * @param clazz        the bean type class.
+     * @param beanVerifier to verify and exclude unwanted data for a specific bean type.
+     * @param <T>          is the bean type.
+     * @return List of bean type T.
+     * @throws Exception If any data is invalid or problem parsing the content of the input stream.
+     * @since v1.0
+     */
+    private <T> List<T> parseCsvContent(InputStream content, Class<T> clazz,
+                                        BeanVerifier<T> beanVerifier) throws Exception {
+        
+        List<T> dtoList;
+        // parse CSV file to create a list of `TypeDto` objects
+        try (Reader reader = new BufferedReader(new InputStreamReader(content))) {
+            // create csv bean reader
+            CsvToBean<T> csvToBeans = new CsvToBeanBuilder<T>(reader)
+                .withType(clazz)
+                .withVerifier(beanVerifier)
+                .withIgnoreLeadingWhiteSpace(true)
+                .build();
+            
+            // convert `CsvToBean` object to a dto list
+            dtoList = csvToBeans.parse();
+        }
+        return dtoList;
     }
 }

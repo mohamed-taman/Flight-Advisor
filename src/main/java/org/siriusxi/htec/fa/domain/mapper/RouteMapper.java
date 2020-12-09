@@ -13,5 +13,5 @@ public interface RouteMapper {
     @Mapping(source = "destAirportCode", target = "destinationAirportName")
     @Mapping(source = "srcAirportId", target = "sourceAirport.airportId")
     @Mapping(source = "destAirportId", target = "destinationAirport.airportId")
-    Route toRouteModel(RouteDto routeDto);
+    Route toModel(RouteDto routeDto);
 }

@@ -31,6 +31,18 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: none
+    # The SQL dialect makes Hibernate generate better SQL for the chosen database
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        generate_statistics: false
+        # Switching on batch insert
+        # Take the time to group inserts by entity, creating larger batches.
+        order_inserts: true
+        order_updates: true
+        # collect inserts in batches of 100
+        jdbc:
+          size: 100
 
 # Server configs
 server:
@@ -72,6 +84,9 @@ springdoc:
   # swagger-ui custom path
   swagger-ui:
     path: /${app.version}/doc/index.html
+    operationsSorter: alpha
+    tagsSorter: alpha
+    displayRequestDuration: true
   # /api-docs endpoint custom path
   api-docs:
     path: /${app.version}/api-docs

@@ -34,6 +34,10 @@ import static javax.persistence.FetchType.LAZY;
 @ToString(exclude = {"userUuid", "username", "password", "comments", "enabled"})
 public class User implements UserDetails, Serializable {
     
+    public User(Integer id) {
+        this.id = id;
+    }
+    
     @Serial
     private static final long serialVersionUID = 5666668516577592568L;
     

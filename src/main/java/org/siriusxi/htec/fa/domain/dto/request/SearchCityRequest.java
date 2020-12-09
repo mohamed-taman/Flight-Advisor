@@ -1,8 +1,8 @@
 package org.siriusxi.htec.fa.domain.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.NotBlank;
-
-public record SearchCityRequest(@JsonProperty("name") @NotBlank String name) {
+@JsonIgnoreProperties(ignoreUnknown=true)
+public record SearchCityRequest(@JsonProperty("by_name") String name) {
 }
