@@ -16,12 +16,13 @@ spring:
     data: classpath*:db/data.sql
     schema: classpath*:db/schema.sql
     url: jdbc:h2:./target/data/flightDB
+    username: sa
+    platform: h2
+    initialization-mode: always
     hikari:
       initialization-fail-timeout: 60000
       connection-test-query: SELECT 1
       maximum-pool-size: 10
-    platform: h2
-    initialization-mode: embedded
   h2:
     console:
       enabled: true
@@ -87,6 +88,8 @@ springdoc:
     operationsSorter: alpha
     tagsSorter: alpha
     displayRequestDuration: true
+    syntaxHighlight:
+      theme: arta
   # /api-docs endpoint custom path
   api-docs:
     path: /${app.version}/api-docs

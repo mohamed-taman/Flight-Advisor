@@ -91,12 +91,12 @@ public class CityController {
     
     //update comment
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @PutMapping("{id}/comments/{comment_id}")
+    @PutMapping("{id}/comments/{cid}")
     public void updateComment(@Parameter(description = "City Id")
                                          @PathVariable(name = "id")
                                          @Min(1) @Max(Integer.MAX_VALUE) int cityId,
                                      @Parameter(description = "Comment Id")
-                                         @PathVariable("comment_id")
+                                         @PathVariable("cid")
                                          @Min(1) @Max(Integer.MAX_VALUE) int commentId,
                                      @RequestBody @Valid UpSrtCommentRequest request) {
         
@@ -105,10 +105,10 @@ public class CityController {
     
     //Delete comment
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @DeleteMapping("{id}/comments/{comment_id}")
+    @DeleteMapping("{id}/comments/{cid}")
     public void deleteComment(@Parameter(description = "City Id") @PathVariable(name = "id")
                               @Min(1) @Max(Integer.MAX_VALUE) int cityId,
-                              @Parameter(description = "Comment Id") @PathVariable("comment_id")
+                              @Parameter(description = "Comment Id") @PathVariable("cid")
                               @Min(1) @Max(Integer.MAX_VALUE) int commentId) {
         
         cityMgmtService.deleteComment(getCurrentLoginUser(),cityId, commentId);
