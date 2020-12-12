@@ -1,9 +1,6 @@
 package org.siriusxi.htec.fa.domain.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -22,6 +19,7 @@ import static javax.persistence.FetchType.*;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@ToString(exclude = {"airports","cities"})
 public class Country implements Serializable {
     
     public Country(Integer id) {

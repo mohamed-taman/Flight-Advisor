@@ -8,9 +8,8 @@ import org.siriusxi.htec.fa.domain.model.Route;
 @Mapper(componentModel = "spring")
 public interface RouteMapper {
     
-    @Mapping(target = "id", ignore = true)
-    @Mapping(source = "srcAirportCode", target = "sourceAirportName")
-    @Mapping(source = "destAirportCode", target = "destinationAirportName")
+    @Mapping(source = "srcAirportCode", target = "routePK.source")
+    @Mapping(source = "destAirportCode", target = "routePK.destination")
     @Mapping(source = "srcAirportId", target = "sourceAirport.airportId")
     @Mapping(source = "destAirportId", target = "destinationAirport.airportId")
     Route toModel(RouteDto routeDto);

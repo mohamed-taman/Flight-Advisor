@@ -18,3 +18,4 @@ public record CreateUserRequest(@JsonProperty("firstName") @NotBlank String firs
                                 String password,
                                 @JsonProperty("rePassword") @NotBlank String rePassword) {
 }
+

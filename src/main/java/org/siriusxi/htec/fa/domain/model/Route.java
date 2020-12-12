@@ -1,16 +1,12 @@
 package org.siriusxi.htec.fa.domain.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.io.Serial;
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import static javax.persistence.FetchType.*;
 
@@ -28,12 +24,8 @@ public class Route implements Serializable {
     @Serial
     private static final long serialVersionUID = 8818845493466966108L;
     
-    //FIXME change to sequence generator instead of IDENTITY strategy so batch insert could work
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(nullable = false)
-    private Integer id;
+    @EmbeddedId
+    protected RoutePK routePK;
     
     @NonNull
     @Column(name = "AIRLINE_CODE", length = 3)
@@ -42,14 +34,6 @@ public class Route implements Serializable {
     @NonNull
     @Column(name = "AIRLINE_ID")
     private Integer airlineId;
-    
-    @NonNull
-    @Column(name = "SOURCE_AIRPORT", length = 4)
-    private String sourceAirportName;
-    
-    @NonNull
-    @Column(name = "DESTINATION_AIRPORT", length = 4)
-    private String destinationAirportName;
     
     @NonNull
     @Column(name = "CODE_SHARE")
@@ -66,7 +50,7 @@ public class Route implements Serializable {
     @Max(value = 99999)
     @Min(value = 5)
     @Column(precision = 6, scale = 3)
-    private BigDecimal price;
+    private double price;
     
     @JoinColumn(name = "DESTINATION_AIRPORT_ID", referencedColumnName = "AIRPORT_ID")
     @ManyToOne(fetch = LAZY)

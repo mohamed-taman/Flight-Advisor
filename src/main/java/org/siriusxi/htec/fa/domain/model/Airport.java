@@ -1,9 +1,6 @@
 package org.siriusxi.htec.fa.domain.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -22,6 +19,7 @@ import static javax.persistence.FetchType.*;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@ToString(exclude = {"destinationRoutes", "sourceRoutes"})
 public class Airport implements Serializable {
     
     public enum Dst {
@@ -55,11 +53,9 @@ public class Airport implements Serializable {
     @Column(name = "COUNTRY", nullable = false, length = 100)
     private String countryName;
     
-    @NonNull
     @Column(length = 3)
     private String iata;
     
-    @NonNull
     @Column(length = 4)
     private String icao;
     

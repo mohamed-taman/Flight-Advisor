@@ -2,10 +2,13 @@ package org.siriusxi.htec.fa.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.siriusxi.htec.fa.domain.dto.request.CreateCityRequest;
+import org.siriusxi.htec.fa.domain.dto.request.SearchAirportRequest;
 import org.siriusxi.htec.fa.domain.dto.request.SearchCityRequest;
 import org.siriusxi.htec.fa.domain.dto.request.UpSrtCommentRequest;
+import org.siriusxi.htec.fa.domain.dto.response.AirportView;
 import org.siriusxi.htec.fa.domain.dto.response.CityView;
 import org.siriusxi.htec.fa.domain.dto.response.CommentView;
+import org.siriusxi.htec.fa.domain.mapper.AirportMapper;
 import org.siriusxi.htec.fa.domain.mapper.CityMapper;
 import org.siriusxi.htec.fa.domain.mapper.CommentMapper;
 import org.siriusxi.htec.fa.domain.model.City;
@@ -14,9 +17,7 @@ import org.siriusxi.htec.fa.domain.model.Country;
 import org.siriusxi.htec.fa.domain.model.User;
 import org.siriusxi.htec.fa.infra.exception.NotAllowedException;
 import org.siriusxi.htec.fa.infra.exception.NotFoundException;
-import org.siriusxi.htec.fa.repository.CityRepository;
-import org.siriusxi.htec.fa.repository.CommentRepository;
-import org.siriusxi.htec.fa.repository.CountryRepository;
+import org.siriusxi.htec.fa.repository.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,17 +34,22 @@ public class CityMgmtService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
     private final CityMapper cityMapper;
+    private final AirportRepository airportRepository;
+    private final AirportMapper airportMapper ;
     
-    private final String LIKE = "%";
+    private static final String LIKE = "%";
     
-    public CityMgmtService(CityRepository cityRepository, CityMapper cityMapper,
-                           CountryRepository countryRepository,
-                           CommentRepository commentRepository, CommentMapper commentMapper) {
+    public CityMgmtService(CountryRepository countryRepository,
+                           CityRepository cityRepository, CityMapper cityMapper,
+                           CommentRepository commentRepository, CommentMapper commentMapper,
+                           AirportRepository airportRepository, AirportMapper airportMapper) {
         this.cityRepository = cityRepository;
         this.countryRepository = countryRepository;
         this.commentRepository = commentRepository;
         this.cityMapper = cityMapper;
         this.commentMapper = commentMapper;
+        this.airportRepository = airportRepository;
+        this.airportMapper = airportMapper;
     }
     
     @Transactional
@@ -61,7 +67,8 @@ public class CityMgmtService {
             country = countryRepository.findOrSaveBy(cityRequest.country());
         }
         
-        City city = cityRepository.findOrSaveBy(country, cityRequest.name());
+        City city = cityRepository.findOrSaveBy(country, cityRequest.name(),
+            cityRequest.description());
         
         /*
         When we create a new city it doesn't have any comments,
@@ -89,6 +96,17 @@ public class CityMgmtService {
             cities = cityRepository.findByNameIgnoreCaseIsLike(searchWord);
         
         return cityMapper.toViews(cities);
+    }
+    
+    // Airport management
+    
+    public List<AirportView> searchAirports(SearchAirportRequest request, int cityId) {
+        String searchWord = LIKE.concat(request.name()).concat(LIKE);
+        return airportMapper
+                   .toView(airportRepository
+                               .findAirportsByCityAndNameIgnoreCaseIsLike(
+                                   new City(cityId),
+                                   searchWord));
     }
     
     // City Comments management

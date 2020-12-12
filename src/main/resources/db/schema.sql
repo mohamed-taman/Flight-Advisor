@@ -122,7 +122,6 @@ COMMENT ON COLUMN airport.data_source IS 'Source of this data.';
 
 CREATE TABLE IF NOT EXISTS route
 (
-    id                     INT AUTO_INCREMENT PRIMARY KEY,
     airline_code           VARCHAR(3),
     airline_id             INT(5),
     source_airport         VARCHAR(4),
@@ -133,6 +132,10 @@ CREATE TABLE IF NOT EXISTS route
     stops                  INT(3),
     equipment              VARCHAR(100),
     price                  DECIMAL(6, 3),
+
+
+    CONSTRAINT route_pk
+        PRIMARY KEY (source_airport, destination_airport),
 
     CONSTRAINT route_source_airport_fk
         FOREIGN KEY (source_airport_id)

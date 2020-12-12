@@ -6,14 +6,17 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.log4j.Log4j2;
 import org.siriusxi.htec.fa.domain.dto.request.CreateCityRequest;
+import org.siriusxi.htec.fa.domain.dto.request.SearchAirportRequest;
 import org.siriusxi.htec.fa.domain.dto.request.UpSrtCommentRequest;
 import org.siriusxi.htec.fa.domain.dto.request.SearchCityRequest;
+import org.siriusxi.htec.fa.domain.dto.response.AirportView;
 import org.siriusxi.htec.fa.domain.dto.response.CityView;
 import org.siriusxi.htec.fa.domain.dto.response.CommentView;
-import org.siriusxi.htec.fa.domain.dto.response.TravelResultView;
+import org.siriusxi.htec.fa.domain.dto.response.TripView;
 import org.siriusxi.htec.fa.domain.model.Role;
 import org.siriusxi.htec.fa.domain.model.User;
 import org.siriusxi.htec.fa.service.CityMgmtService;
+import org.siriusxi.htec.fa.service.TravelService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +24,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import java.util.Collections;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -40,9 +42,11 @@ import java.util.List;
 public class CityController {
     
     private final CityMgmtService cityMgmtService;
+    private final TravelService travelService;
     
-    public CityController(CityMgmtService cityMgmtService) {
+    public CityController(CityMgmtService cityMgmtService, TravelService travelService) {
         this.cityMgmtService = cityMgmtService;
+        this.travelService = travelService;
     }
     
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
@@ -70,13 +74,37 @@ public class CityController {
     
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @GetMapping("travel")
-    public List<TravelResultView> travel(@RequestParam @NotBlank String from,
-                                         @RequestParam @NotBlank String to) {
-        return Collections.emptyList();
+    public List<TripView> travel(@RequestParam @Size(min = 3) String from,
+                                 @RequestParam @Size(min = 3) String to) {
+        
+        if(from.isBlank() || to.isBlank())
+            throw new IllegalArgumentException("""
+                Neither source nor destination airport codes can be empty! \
+                Please try with other valid values.
+                """);
+    
+        if(from.trim().equals(to.trim()))
+            throw new IllegalArgumentException(String.format(
+                "You are traveling from and to the same destination [%s]",to));
+        
+        return travelService
+                   .travel(from.trim().toUpperCase(), to.trim().toUpperCase());
     }
     
+     /*
+       Airport Management
+    */
+     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+     @PostMapping("{id}/airports")
+     public List<AirportView> searchAirports(@Parameter(description = "City Id")
+                                               @PathVariable(name = "id")
+                                               @Min(1) @Max(Integer.MAX_VALUE) int cityId,
+                                             @RequestBody @Valid SearchAirportRequest request) {
+         return cityMgmtService.searchAirports(request, cityId);
+     }
+     
     /*
-    Comments Management
+       Comments Management
     */
     
     //Add comment

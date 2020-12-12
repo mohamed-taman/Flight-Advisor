@@ -16,3 +16,4 @@ public record CreateCityRequest(
     @JsonProperty("country_id") @PositiveOrZero int countryId,
     @JsonProperty("description") @NotBlank String description) {
 }
+

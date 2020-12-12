@@ -28,7 +28,7 @@ spring:
       enabled: true
       path: /db-console
   jpa:
-    show-sql: true
+    show-sql: false
     open-in-view: false
     hibernate:
       ddl-auto: none
@@ -36,7 +36,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
-        generate_statistics: false
+        generate_statistics: true
         # Switching on batch insert
         # Take the time to group inserts by entity, creating larger batches.
         order_inserts: true
@@ -69,9 +69,10 @@ management:
 logging.level:
   org:
     hibernate:
-      SQL: debug
+      SQL: off
       type.descriptor.sql.BasicBinder: trace
     springframework:
+      cache: trace
       web: debug
     siriusxi:
       htec:

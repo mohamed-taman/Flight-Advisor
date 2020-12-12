@@ -47,5 +47,5 @@ public class RouteDto {
     private String equipment;
     
     @CsvBindByPosition(position = 9)
-    private BigDecimal price;
+    private double price;
 }

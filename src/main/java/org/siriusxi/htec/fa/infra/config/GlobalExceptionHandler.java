@@ -22,43 +22,77 @@ import java.util.*;
 public class GlobalExceptionHandler {
     
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ApiCallError<String>> handleNotFoundException(HttpServletRequest request, NotFoundException ex) {
+    public ResponseEntity<ApiCallError<String>> handleNotFoundException(
+        HttpServletRequest request,
+        NotFoundException ex) {
+        
         log.error("NotFoundException {}\n", request.getRequestURI(), ex);
         
         return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(new ApiCallError<>("Not found", List.of(ex.getMessage())));
+                   .status(HttpStatus.NOT_FOUND)
+                   .body(new ApiCallError<>("Not found", List.of(ex.getMessage())));
     }
     
     @ExceptionHandler(NotAllowedException.class)
-    public ResponseEntity<ApiCallError<String>> handleNotAllowedException(HttpServletRequest request, NotAllowedException ex) {
+    public ResponseEntity<ApiCallError<String>>
+    handleNotAllowedException(HttpServletRequest request,
+                              NotAllowedException ex) {
+        
         log.error("NotAllowedException {}\n", request.getRequestURI(), ex);
         
         return ResponseEntity
-            .status(HttpStatus.NOT_ACCEPTABLE)
-            .body(new ApiCallError<>("Not Applicable", List.of(ex.getMessage())));
+                   .status(HttpStatus.NOT_ACCEPTABLE)
+                   .body(new ApiCallError<>("Not Applicable", List.of(ex.getMessage())));
     }
     
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiCallError<String>>
+    handleIllegalArgumentException(HttpServletRequest request,
+                              IllegalArgumentException ex) {
+        
+        log.error("IllegalArgumentException {} \n\n {}",
+            request.getRequestURI(), ex.getMessage());
+        
+        return ResponseEntity
+                   .badRequest()
+                   .body(new ApiCallError<>(
+                       "Illegal Arguments",
+                       List.of(ex.getMessage())));
+    }
+    
+    
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ApiCallError<String>> handleValidationException(HttpServletRequest request, ValidationException ex) {
+    public ResponseEntity<ApiCallError<String>>
+    handleValidationException(HttpServletRequest request,
+                              ValidationException ex) {
+        
         log.error("ValidationException {}\n", request.getRequestURI(), ex);
         
         return ResponseEntity
-            .badRequest()
-            .body(new ApiCallError<>("Validation exception", List.of(ex.getMessage())));
+                   .badRequest()
+                   .body(new ApiCallError<>(
+                       "Validation exception",
+                       List.of(ex.getMessage())));
     }
     
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ApiCallError<String>> handleMissingServletRequestParameterException(HttpServletRequest request, MissingServletRequestParameterException ex) {
+    public ResponseEntity<ApiCallError<String>>
+    handleMissingServletRequestParameterException(HttpServletRequest request,
+                                                  MissingServletRequestParameterException ex) {
+        
         log.error("handleMissingServletRequestParameterException {}\n", request.getRequestURI(), ex);
         
         return ResponseEntity
-            .badRequest()
-            .body(new ApiCallError<>("Missing request parameter", List.of(Objects.requireNonNull(ex.getMessage()))));
+                   .badRequest()
+                   .body(new ApiCallError<>("Missing request parameter",
+                       List.of(Objects.requireNonNull(ex.getMessage()))));
     }
     
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ApiCallError<Map<String, String>>> handleMethodArgumentTypeMismatchException(HttpServletRequest request, MethodArgumentTypeMismatchException ex) {
+    public ResponseEntity<ApiCallError<Map<String, String>>>
+    handleMethodArgumentTypeMismatchException(HttpServletRequest request,
+                                              MethodArgumentTypeMismatchException ex) {
+        
         log.error("handleMethodArgumentTypeMismatchException {}\n", request.getRequestURI(), ex);
         
         Map<String, String> details = new HashMap<>();
@@ -67,12 +101,17 @@ public class GlobalExceptionHandler {
         details.put("errorMessage", ex.getMessage());
         
         return ResponseEntity
-            .badRequest()
-            .body(new ApiCallError<>("Method argument type mismatch", List.of(details)));
+                   .badRequest()
+                   .body(new ApiCallError<>(
+                       "Method argument type mismatch",
+                       List.of(details)));
     }
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiCallError<Map<String, String>>> handleMethodArgumentNotValidException(HttpServletRequest request, MethodArgumentNotValidException ex) {
+    public ResponseEntity<ApiCallError<Map<String, String>>>
+    handleMethodArgumentNotValidException(HttpServletRequest request,
+                                          MethodArgumentNotValidException ex) {
+        
         log.error("handleMethodArgumentNotValidException {}\n", request.getRequestURI(), ex);
         
         List<Map<String, String>> details = new ArrayList<>();
@@ -88,27 +127,34 @@ public class GlobalExceptionHandler {
             });
         
         return ResponseEntity
-            .badRequest()
-            .body(new ApiCallError<>("Method argument validation failed", details));
+                   .badRequest()
+                   .body(new ApiCallError<>(
+                       "Method argument validation failed",
+                       details));
     }
     
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiCallError<String>> handleAccessDeniedException(HttpServletRequest request,
-                                                                            AccessDeniedException ex) {
+    public ResponseEntity<ApiCallError<String>>
+    handleAccessDeniedException(HttpServletRequest request, AccessDeniedException ex) {
+        
         log.error("handleAccessDeniedException {}\n", request.getRequestURI(), ex);
         
         return ResponseEntity
-            .status(HttpStatus.FORBIDDEN)
-            .body(new ApiCallError<>("Access denied!", List.of(ex.getMessage())));
+                   .status(HttpStatus.FORBIDDEN)
+                   .body(new ApiCallError<>("Access denied!", List.of(ex.getMessage())));
     }
     
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiCallError<String>> handleInternalServerError(HttpServletRequest request, Exception ex) {
+    public ResponseEntity<ApiCallError<String>>
+    handleInternalServerError(HttpServletRequest request, Exception ex) {
+        
         log.error("handleInternalServerError {}\n", request.getRequestURI(), ex);
         
         return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(new ApiCallError<>("Internal server error", List.of(ex.getMessage())));
+                   .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                   .body(new ApiCallError<>(
+                       "Internal server error",
+                       List.of(ex.getMessage())));
     }
 }
 

@@ -1,9 +1,6 @@
 package org.siriusxi.htec.fa.domain.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -23,10 +20,16 @@ import static javax.persistence.GenerationType.*;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@ToString(exclude = {"airports","country", "comments"})
 public class City implements Serializable {
     
     public City(Integer id) {
         this.id = id;
+    }
+    
+    public City(String name, String description, Country country) {
+        this(name, country);
+        this.description = description;
     }
     
     @Serial
