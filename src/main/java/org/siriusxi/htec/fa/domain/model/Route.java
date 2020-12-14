@@ -18,7 +18,6 @@ import static javax.persistence.FetchType.*;
 @Table(catalog = "FLIGHTDB", schema = "PUBLIC")
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class Route implements Serializable {
     
     @Serial
@@ -27,26 +26,20 @@ public class Route implements Serializable {
     @EmbeddedId
     protected RoutePK routePK;
     
-    @NonNull
     @Column(name = "AIRLINE_CODE", length = 3)
     private String airlineCode;
     
-    @NonNull
     @Column(name = "AIRLINE_ID")
     private Integer airlineId;
     
-    @NonNull
     @Column(name = "CODE_SHARE")
     private Boolean codeShare;
     
-    @NonNull
     private Integer stops;
     
-    @NonNull
     @Column(length = 100)
     private String equipment;
     
-    @NonNull
     @Max(value = 99999)
     @Min(value = 5)
     @Column(precision = 6, scale = 3)

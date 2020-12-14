@@ -77,7 +77,7 @@ public class FileUploadController {
         this.airportMapper = airportMapper;
     }
     
-    @Operation(summary = "Upload flights airports file.",
+    @Operation(summary = "Upload file that contains flights airports.",
         security = {@SecurityRequirement(name = "bearer-key")},
         responses = {
             @ApiResponse(responseCode = "200",
@@ -135,7 +135,7 @@ public class FileUploadController {
         return new ResponseEntity<>("File uploaded successfully.", OK);
     }
     
-    @Operation(summary = "Upload flights routes file.",
+    @Operation(summary = "Upload file that contains flights routes.",
         security = {@SecurityRequirement(name = "bearer-key")},
         responses = {
             @ApiResponse(responseCode = "200",

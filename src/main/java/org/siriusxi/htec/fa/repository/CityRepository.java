@@ -24,7 +24,6 @@ public interface CityRepository extends CrudRepository<City, Integer> {
      * @param country of the city.
      * @return the found or saved country.
      */
-    @Cacheable
     default City findOrSaveBy(Country country, String name, String description) {
         return findByCountryAndNameIgnoreCaseIsLike(country, name.trim())
             .orElseGet(() -> save(new City(name, description, country)));

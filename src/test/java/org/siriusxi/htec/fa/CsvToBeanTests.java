@@ -22,7 +22,7 @@ class CsvToBeanTests {
     @Test
     void parseRoutesCSVFileToBeans() {
         
-        try (Reader fileReader = new FileReader("./src/test/resources/routes.txt")) {
+        try (Reader fileReader = new FileReader("./data/routes.txt")) {
             
             CsvToBean<RouteDto> csvToRouteBeans = new CsvToBeanBuilder<RouteDto>(fileReader)
                 .withType(RouteDto.class)
@@ -43,7 +43,7 @@ class CsvToBeanTests {
     @Test
     void parseAirportsCSVFileToBeans() {
         
-        try (Reader fileReader = new FileReader("./src/test/resources/airports.txt")) {
+        try (Reader fileReader = new FileReader("./data/airports.txt")) {
             
             CsvToBean<AirportDto> csvToAirportBeans = new CsvToBeanBuilder<AirportDto>(fileReader)
                 .withType(AirportDto.class)

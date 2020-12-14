@@ -14,7 +14,10 @@ import org.siriusxi.htec.fa.domain.dto.response.CityView;
 import org.siriusxi.htec.fa.domain.dto.response.CommentView;
 import org.siriusxi.htec.fa.domain.dto.response.TripView;
 import org.siriusxi.htec.fa.domain.model.Role;
+import org.siriusxi.htec.fa.domain.model.Route;
+import org.siriusxi.htec.fa.domain.model.RoutePK;
 import org.siriusxi.htec.fa.domain.model.User;
+import org.siriusxi.htec.fa.repository.RouteRepository;
 import org.siriusxi.htec.fa.service.CityMgmtService;
 import org.siriusxi.htec.fa.service.TravelService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,10 +46,13 @@ public class CityController {
     
     private final CityMgmtService cityMgmtService;
     private final TravelService travelService;
+    private final RouteRepository routeRepository;
     
-    public CityController(CityMgmtService cityMgmtService, TravelService travelService) {
+    public CityController(CityMgmtService cityMgmtService, TravelService travelService,
+                          RouteRepository routeRepository) {
         this.cityMgmtService = cityMgmtService;
         this.travelService = travelService;
+        this.routeRepository = routeRepository;
     }
     
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})

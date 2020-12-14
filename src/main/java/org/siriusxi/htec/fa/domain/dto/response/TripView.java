@@ -7,9 +7,19 @@ import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
-public record TripView(@JsonProperty AirportView start,
-                       @JsonInclude(NON_NULL)
-                       @JsonProperty List<AirportView> through,
-                       @JsonProperty AirportView end,
-                       @JsonProperty double cost) {
+public record TripView(
+    @JsonProperty AirportView start,
+    @JsonInclude(NON_NULL)
+    @JsonProperty List<AirportView> through,
+    @JsonProperty AirportView end,
+    @JsonProperty Price price,
+    @JsonProperty Distance distance) {
+    
+    public record Price(
+        @JsonProperty double total,
+        @JsonProperty String currency) { }
+    
+    public record Distance(
+        @JsonProperty double total,
+        @JsonProperty String in) { }
 }

@@ -58,13 +58,13 @@ VALUES (111111111, 'XXX Airport', 1, 1, 'Goroka 11111', 'Papua New Guinea 11', '
 INSERT INTO AIRPORT( AIRPORT_ID, NAME, CITY_ID, COUNTRY_ID, CITY, COUNTRY, IATA
                    , ICAO, LATITUDE, LONGITUDE, ALTITUDE, TIMEZONE, DST, TZ, TYPE, DATA_SOURCE)
 VALUES (222222222, 'YYY Airport', 1, 1, 'Goroka 22222', 'Papua New Guinea 22', 'YYY', 'YYYA',
-        -6.081689834590001, 145.391998291, 5282, 10, 'U', 'Pacific/Port_Moresby', 'airport',
+        76.5311965942, -68.7032012939, 5282, 10, 'U', 'Pacific/Port_Moresby', 'airport',
         'OurAirports');
 
 INSERT INTO AIRPORT( AIRPORT_ID, NAME, CITY_ID, COUNTRY_ID, CITY, COUNTRY, IATA
                    , ICAO, LATITUDE, LONGITUDE, ALTITUDE, TIMEZONE, DST, TZ, TYPE, DATA_SOURCE)
 VALUES (333333333, 'ZZZ Airport', 1, 1, 'Goroka 33333', 'Papua New Guinea 33', 'ZZZ', 'ZZZA',
-        -6.081689834590001, 145.391998291, 5282, 10, 'U', 'Pacific/Port_Moresby', 'airport',
+        61.1604995728, -45.4259986877, 5282, 10, 'U', 'Pacific/Port_Moresby', 'airport',
         'OurAirports');
 
 ------ Add routes
