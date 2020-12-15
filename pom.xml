@@ -12,7 +12,7 @@
 
     <groupId>org.siriusxi.htec</groupId>
     <artifactId>flight-advisor</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>Flight Advisor API</name>
     <description>Flight Advisor API Spring Boot based Application.</description>
     <packaging>jar</packaging>

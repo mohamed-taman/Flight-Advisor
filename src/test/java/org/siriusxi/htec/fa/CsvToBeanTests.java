@@ -19,7 +19,7 @@ import java.util.List;
 class CsvToBeanTests {
     
     @SneakyThrows
-    @Test
+    //@Test
     void parseRoutesCSVFileToBeans() {
         
         try (Reader fileReader = new FileReader("./data/routes.txt")) {
@@ -40,7 +40,7 @@ class CsvToBeanTests {
     }
     
     @SneakyThrows
-    @Test
+   // @Test
     void parseAirportsCSVFileToBeans() {
         
         try (Reader fileReader = new FileReader("./data/airports.txt")) {

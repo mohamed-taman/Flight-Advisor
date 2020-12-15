@@ -15,7 +15,7 @@ spring:
   datasource:
     data: classpath*:db/data.sql
     schema: classpath*:db/schema.sql
-    url: jdbc:h2:./target/data/flightDB
+    url: jdbc:h2:./db/flightDB
     username: sa
     platform: h2
     initialization-mode: always
@@ -28,7 +28,7 @@ spring:
       enabled: true
       path: /db-console
   jpa:
-    show-sql: false
+    show-sql: true
     open-in-view: false
     hibernate:
       ddl-auto: none
@@ -69,7 +69,7 @@ management:
 logging.level:
   org:
     hibernate:
-      SQL: off
+      SQL: debug
       type.descriptor.sql.BasicBinder: trace
     springframework:
       cache: trace

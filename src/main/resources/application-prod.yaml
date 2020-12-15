@@ -1,0 +1,27 @@
+# Production profile
+spring:
+  jmx:
+    enabled: false
+  # Database configurations
+  datasource:
+    data: classpath*:db/prod/data.sql
+    password: Admin1234
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        generate_statistics: false
+
+logging.level:
+  org:
+    hibernate:
+      SQL: info
+      type.descriptor.sql.BasicBinder: info
+    springframework:
+      cache: info
+      web: info
+    siriusxi:
+      htec:
+        fa: info
+  web: info
+  root: info
