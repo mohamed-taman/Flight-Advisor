@@ -127,6 +127,7 @@ Congratulations, Flight Advisor Application is Up & Running :)
 You can play and test `Flight Advisor` APIs throughout its **OpenAPI** interface. 
 1. Go to landing page at the following URL [http://localhost:8090/flight/service/api/](http://localhost:8090/flight/service/api/).
 2. follow the link on the page and you should see the following:
+
 ![System APIs](docs/images/SystemAPI.png)
 
 #### System Behaviour
@@ -135,7 +136,7 @@ You can play and test `Flight Advisor` APIs throughout its **OpenAPI** interface
      2. On successful login, the response will contain authorization token, copy it.
      3. Click on Authorize button and past it in the only field out there `value` then click `Authorize` button.
      4. Now all lock are closed and you can use the secured APIs.
-2. If you are new client and want to access the system you need first to register through `/public/register` endpoint. Then follow previous point **1.1**.
+2. If you are new client and want to access the system you need first to register through `/public/register` endpoint. Then follow previous point **1.i**.
 3. When uploading Airports file, countries and cities will be created automatically.
 4. All search parameters are case insensitive, and system use like search by default.
 5. To add city you need a country, so from **country management** section you can search for the country you want.
@@ -185,6 +186,7 @@ You can access database through it online console from the following URL [http:/
 - JDBC URL: `jdbc:h2:./db/flightDB`
 - user: `sa`
 - password: `Admin1234`
+
 ![System DB](docs/images/SystemDB.png)
 
 Hit test, and it should show a green bar for successful settings. So hit **Connect** button and explore all data.
