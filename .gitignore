@@ -21,6 +21,7 @@
 hs_err_pid*
 
 HELP.md
+db/
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
