@@ -1,4 +1,4 @@
-# Flight Advisor Service ![GitHub release (latest by date)](https://img.shields.io/github/v/release/mohamed-taman/Flight-Advisor) [![Release Codename](https://img.shields.io/badge/codename-Advisor-yellow.svg)](https://github.com/mohamed-taman/Flight-Advisor/releases) [![Twitter Follow](https://img.shields.io/twitter/follow/_tamanm?label=follow%20me&style=social)](https://twitter.com/_tamanm)
+# Flight Advisor Service ![GitHub release (latest by date)](https://img.shields.io/github/v/release/mohamed-taman/Flight-Advisor) [![Release Codename](https://img.shields.io/badge/codename-Advisor-yellow.svg)](https://github.com/mohamed-taman/Flight-Advisor/releases) [![BCH compliance](https://bettercodehub.com/edge/badge/mohamed-taman/Flight-Advisor?branch=main)](https://bettercodehub.com/) [![Twitter Follow](https://img.shields.io/twitter/follow/_tamanm?label=follow%20me&style=social)](https://twitter.com/_tamanm)
 
 Flight advisor Service is a set of APIs for primarily finding the cheapest flight from city A to city B based on price, returning all the trip information alongside the distance.
 
