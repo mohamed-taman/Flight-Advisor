@@ -34,6 +34,7 @@
     "@ng-bootstrap/ng-bootstrap": "^8.0.0",
     "@popperjs/core": "^2.6.0",
     "bootstrap": "^4.5.0",
+    "build": "^0.1.4",
     "jquery": "^3.5.1",
     "ngx-bootstrap-icons": "^1.3.1",
     "popper.js": "^1.16.1",
