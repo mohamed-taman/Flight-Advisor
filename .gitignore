@@ -1,4 +1,46 @@
+## Frontend files and folders
+### -------------------------
+# compiled output
+dist
+tmp
+out-tsc
+# Only exists if Bazel was run
+bazel-out
 
+# dependencies
+node_modules
+
+# profiling files
+chrome-profiler-events*.json
+speed-measure-plugin*.json
+
+# IDEs and editors
+.c9/
+*.launch
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+## -----------------------------------
+
+##  Backend files and folders
+### -------------------------
 ## Drawio source files ##
 *.drawio
 
@@ -50,8 +92,6 @@ target/
 /.nb-gradle/
 build/
 
-### VS Code ###
-.vscode/
-
-### macOS related files ###
+### macOS & MS Windows related files ###
 .DS_Store
+Thumbs.db
