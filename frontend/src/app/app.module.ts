@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+
+// Import application routing logic
 import { AppRoutingModule } from './app-routing.module';
 
 // Import our Root application
 import { AppComponent } from './app.component';
-
-// Load all the bootstrap UI components to be available for the application
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // load all the icons to be available for the application
 import {IconsModule} from './icons/icons.module';
@@ -15,7 +14,6 @@ import {IconsModule} from './icons/icons.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule,
     IconsModule
   ],
   declarations: [
