@@ -1,4 +1,5 @@
-# Custom application properties
+# Development profile
+## Custom application properties
 app:
   version: 'v1'
 
@@ -15,7 +16,7 @@ spring:
   datasource:
     data: classpath*:db/data.sql
     schema: classpath*:db/schema.sql
-    url: jdbc:h2:./db/flightDB
+    url: jdbc:h2:./target/db/flightDB
     username: sa
     platform: h2
     initialization-mode: always

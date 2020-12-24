@@ -11,7 +11,6 @@ import org.siriusxi.htec.fa.domain.model.User;
 import org.siriusxi.htec.fa.infra.security.jwt.JwtTokenHelper;
 import org.siriusxi.htec.fa.service.UserService;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,9 +19,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
+
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 /**
  * Authentication controller used to handle users authentication.
@@ -72,7 +73,7 @@ public class AuthController {
                         user.getUsername()))
                 .body(userMapper.toView(user));
         } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new HttpClientErrorException(UNAUTHORIZED, UNAUTHORIZED.getReasonPhrase());
         }
     }
     
@@ -83,9 +84,6 @@ public class AuthController {
     @PostMapping(value = "register")
     public UserView register(@RequestBody @Valid CreateUserRequest userRequest) {
         
-        if (!userRequest.password().equals(userRequest.rePassword())) {
-            throw new ValidationException("Passwords doesn't match!");
-        }
         log.debug("User information to be created: {}", userRequest);
         return userService.create(userRequest);
     }

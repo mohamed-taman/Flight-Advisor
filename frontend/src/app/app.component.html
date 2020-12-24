@@ -1,4 +1,28 @@
-<div class="container">
-  <span>{{ title }} app is running!</span>
+<!-- nav -->
+<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="user">
+  <div class="navbar-nav">
+    <a class="nav-item nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+    <a class="nav-item nav-link" routerLink="/travel" routerLinkActive="active">travel</a>
+    <a class="nav-item nav-link" routerLink="/cities" routerLinkActive="active">Cities</a>
+    <a class="nav-item nav-link" routerLink="/upload" routerLinkActive="active">Upload</a>
+    <a class="nav-item nav-link" routerLink="/profile" routerLinkActive="active">profile</a>
+    <a class="nav-item nav-link" (click)="logout()">Logout</a>
+  </div>
+</nav>
+<!-- main app container -->
+<div class="app-container container" [ngClass]="{ 'bg-light': user }">
+  <h3 class="text-center mt-4">{{ title }} is up & running!</h3>
+  <alert></alert>
   <router-outlet></router-outlet>
+</div>
+
+<!-- credits -->
+<div class="text-center mt-4">
+  <p>
+    <a
+      href="https://github.com/mohamed-taman" target="_top">Mohamed Taman GitHub</a>
+  </p>
+  <p>
+    <a href="https://twitter.com/_tamanm" target="_top">Mohamed Taman on Twitter</a>
+  </p>
 </div>

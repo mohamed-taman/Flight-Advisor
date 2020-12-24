@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -142,6 +143,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                    .status(HttpStatus.FORBIDDEN)
                    .body(new ApiCallError<>("Access denied!", List.of(ex.getMessage())));
+    }
+    
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<ApiCallError<String>>
+    handleUnauthorizedException(HttpServletRequest request, HttpClientErrorException ex) {
+        
+        log.error("handleUnauthorizedException {}\n", request.getRequestURI(), ex);
+        
+        return ResponseEntity
+                   .status(HttpStatus.UNAUTHORIZED)
+                   .body(new ApiCallError<>("Unauthorized Access, check your credentials!",
+                       List.of(ex.getMessage() != null ? ex.getMessage() : "")));
     }
     
     @ExceptionHandler(Exception.class)
