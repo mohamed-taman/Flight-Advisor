@@ -68,7 +68,7 @@
         <maven.failsafe.plugin.version>3.0.0-M4</maven.failsafe.plugin.version>
         <io.jsonwebtoken.version>0.11.2</io.jsonwebtoken.version>
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
-        <org.springdoc.version>1.5.1</org.springdoc.version>
+        <org.springdoc.version>1.5.2</org.springdoc.version>
         <lombok.version>1.18.16</lombok.version>
         <opencsv.version>5.3</opencsv.version>
     </properties>
