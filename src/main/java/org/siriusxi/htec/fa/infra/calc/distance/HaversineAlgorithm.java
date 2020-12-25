@@ -1,4 +1,4 @@
-package org.siriusxi.htec.fa.infra.calc.distance.impl;
+package org.siriusxi.htec.fa.infra.calc.distance;
 
 import org.siriusxi.htec.fa.infra.calc.distance.DistanceAlgorithm;
 import org.siriusxi.htec.fa.infra.calc.distance.MeasureType;
@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNullElse;
  * @author Mohamed Taman
  * @since v0.4
  */
-public class HaversineAlgorithm implements DistanceAlgorithm {
+public final class HaversineAlgorithm implements DistanceAlgorithm {
     
     /**
      * {@inheritDoc}
