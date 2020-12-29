@@ -11,8 +11,10 @@ import {AccountService, AlertService} from '@app/services';
 })
 export class RegisterComponent implements OnInit {
     form?: FormGroup;
-    loading = false;
-    submitted = false;
+    loading: boolean = false;
+    submitted: boolean = false;
+    passwordHidden: boolean = false;
+
 
     constructor(
         private formBuilder: FormBuilder,
@@ -23,17 +25,17 @@ export class RegisterComponent implements OnInit {
     ) {
     }
 
+    // convenience getter for easy access to form fields
+    get f() {
+        return this.form!.controls;
+    }
+
     ngOnInit() {
         this.form = this.formBuilder
             .group({
                 firstName: [''], lastName: [''],
                 username: [''], password: ['']
             });
-    }
-
-    // convenience getter for easy access to form fields
-    get f() {
-        return this.form!.controls;
     }
 
     onSubmit() {
@@ -48,6 +50,7 @@ export class RegisterComponent implements OnInit {
         }
 
         this.loading = true;
+
         this.accountService.register(this.form!.value)
             .pipe(first())
             .subscribe({
@@ -62,5 +65,12 @@ export class RegisterComponent implements OnInit {
                     this.loading = false;
                 }
             });
+    }
+
+    /**
+     * This method is used to show password and hide it again
+     */
+    togglePasswordView() {
+        this.passwordHidden = !this.passwordHidden;
     }
 }

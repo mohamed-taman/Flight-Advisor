@@ -52,7 +52,7 @@ import static org.springframework.http.HttpStatus.*;
 @Log4j2
 @Tag(name = "Files Upload Management",
     description = """
-        A set of API calls, used to feed the system with data
+        A set of authorized file management APIs, used to feed the system with data
         files like airports and routes.""")
 @RolesAllowed(Role.ADMIN)
 @RestController

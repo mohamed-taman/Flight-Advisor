@@ -111,7 +111,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             
             // Set permissions on endpoints
             .authorizeRequests()
+            //Enable root
             .antMatchers("/", "/index.html").permitAll()
+            //Enables images
+            .antMatchers("/assets/**").permitAll()
             // Swagger endpoints must be publicly accessible
             .antMatchers(swaggerAuthList).permitAll()
             // Our public endpoints

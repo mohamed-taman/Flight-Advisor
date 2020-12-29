@@ -1,6 +1,11 @@
 a { cursor: pointer }
 
 .app-container {
-  min-height: 420px;
+  min-height: 520px;
   overflow: hidden;
+}
+
+/* under title horizontal line */
+hr {
+    width: 50%;
 }

@@ -26,7 +26,8 @@ import java.util.Set;
  * FIXME: Swagger documentation
  */
 @Log4j2
-@Tag(name = "Country Management")
+@Tag(name = "Country Management",
+    description = "A set of authorized APIs, for getting and managing system countries.")
 @RolesAllowed(Role.ADMIN)
 @RestController
 @RequestMapping("v1/countries")

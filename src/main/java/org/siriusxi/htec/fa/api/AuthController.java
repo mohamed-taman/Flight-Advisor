@@ -35,7 +35,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
  */
 @Log4j2
 @Tag(name = "Authentication",
-    description = "Set of public APIs, for managing user authentication, and the registration.")
+    description = "A set of public APIs, for managing user authentication, and the registration.")
 @RestController
 @RequestMapping("public")
 public class AuthController {

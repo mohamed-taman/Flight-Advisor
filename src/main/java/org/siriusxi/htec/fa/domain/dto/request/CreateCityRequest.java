@@ -9,11 +9,11 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-@JsonPropertyOrder({"name", "country", "country_id", "description"})
+@JsonPropertyOrder({"name", "country", "countryId", "description"})
 public record CreateCityRequest(
     @JsonProperty("name") @NotBlank @Size(min = 5, max = 100) String name,
     @JsonProperty("country") @Size(min = 5, max = 100) String country,
-    @JsonProperty("country_id") @PositiveOrZero int countryId,
+    @JsonProperty("countryId") @PositiveOrZero int countryId,
     @JsonProperty("description") @NotBlank String description) {
 }
 
