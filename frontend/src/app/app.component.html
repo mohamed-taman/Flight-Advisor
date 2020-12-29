@@ -1,28 +1,88 @@
-<!-- nav -->
-<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="user">
-  <div class="navbar-nav">
-    <a class="nav-item nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-    <a class="nav-item nav-link" routerLink="/travel" routerLinkActive="active">travel</a>
-    <a class="nav-item nav-link" routerLink="/cities" routerLinkActive="active">Cities</a>
-    <a class="nav-item nav-link" routerLink="/upload" routerLinkActive="active">Upload</a>
-    <a class="nav-item nav-link" routerLink="/profile" routerLinkActive="active">profile</a>
-    <a class="nav-item nav-link" (click)="logout()">Logout</a>
-  </div>
+<!-- System navigation bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" *ngIf="user">
+    <!--  Brand -->
+
+    <img alt="Flight brand logo" src="../assets/images/flight.png" width="40px"
+         height="40px">
+    <a class="navbar-brand pl-2" routerLink="/">FA</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <!--  Main menu items -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" routerLink="/" routerLinkActive="active"
+                   [routerLinkActiveOptions]="{exact: true}">Home
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Cities
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" routerLink="/cities/search" routerLinkActive="active">Search</a>
+                    <a class="dropdown-item" routerLink="/cities/add" routerLinkActive="active">
+                        Add</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Comments</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/travel" routerLinkActive="active">Travel</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/upload" routerLinkActive="active">Upload</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/account/profile" routerLinkActive="active">Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" (click)="logout()">Logout</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="From"
+                   aria-label="Search">
+            <input class="form-control mr-sm-2" type="search" placeholder="To"
+                   aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Find flight</button>
+        </form>
+    </div>
 </nav>
+
 <!-- main app container -->
 <div class="app-container container" [ngClass]="{ 'bg-light': user }">
-  <h3 class="text-center mt-4">{{ title }} is up & running!</h3>
-  <alert></alert>
-  <router-outlet></router-outlet>
+    <h3 class="text-center mt-4">
+        <img alt="Flight brand logo" src="../assets/images/ticket.png" width="75px"
+             height="45px" class="pr-2"/>
+        Welcome to {{title }}!
+    </h3>
+    <hr/>
+    <alert></alert>
+    <router-outlet></router-outlet>
 </div>
 
 <!-- credits -->
-<div class="text-center mt-4">
-  <p>
-    <a
-      href="https://github.com/mohamed-taman" target="_top">Mohamed Taman GitHub</a>
-  </p>
-  <p>
-    <a href="https://twitter.com/_tamanm" target="_top">Mohamed Taman on Twitter</a>
-  </p>
-</div>
+<br/>
+<ul class="nav justify-content-center">
+    <li class="nav-item">
+        <a class="nav-link" href="https://github.com/mohamed-taman" target="_blank">Mohamed Taman
+            &nbsp;<i-bs name="github" width="1rem" height="1rem"></i-bs>
+        </a>
+    </li>
+    <li class="nav-item">
+        <span class="nav-link">|</span>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="https://twitter.com/_tamanm" target="_blank">Mohamed Taman on
+            &nbsp;<i-bs name="twitter" width="1rem" height="1rem"></i-bs>
+        </a>
+    </li>
+</ul>

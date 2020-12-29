@@ -1,38 +1,54 @@
 <div class="card">
     <h4 class="card-header">Please sign in</h4>
     <div class="card-body">
-        <form [formGroup]="form!" (ngSubmit)="onSubmit()">
+        <form (ngSubmit)="onSubmit()" [formGroup]="form!">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input id="username" type="email" email formControlName="username"
-                       required autofocus class="form-control"
-                       [ngClass]="{'is-invalid': submitted && f.username.errors }"/>
-                <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                    <div *ngIf="f.username.errors.required">Username is required</div>
-                    <div *ngIf="f.username.errors.email">Enter a valid email address</div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="envelope-username-addon">
+                            <i-bs name="envelope-fill" width="1.2rem" height="1.2rem"></i-bs>
+                        </span>
+                    </div>
+                    <input [ngClass]="{'is-invalid': submitted && f.username.errors }" autofocus
+                           class="form-control" email
+                           formControlName="username" id="username" required
+                           placeholder="example@mail.com"
+                           type="email"/>
+                    <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                        <div *ngIf="f.username.errors.required">Username is required</div>
+                        <div *ngIf="f.username.errors.email">Enter a valid email address</div>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input id="password" type="password" required formControlName="password"
-                       class="form-control"
-                       [ngClass]="{
-        'is-invalid': submitted && f.password.errors }"/>
-                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                    <div *ngIf="f.password.errors.required">Password is required</div>
+                <div class="input-group mb-3">
+                <input [ngClass]="{'is-invalid': submitted && f.password.errors }"
+                       class="form-control" formControlName="password" id="password"
+                       required [type]="passwordHidden ? 'text' : 'password'"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="login-show-pass-addon"
+                              (click)="togglePasswordView()">
+                            <i-bs [name]="passwordHidden ? 'eye' : 'eye-slash'" width="1.2rem"
+                                  height="1.2rem"></i-bs>
+                        </span>
+                    </div>
+                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                        <div *ngIf="f.password.errors.required">Password is required</div>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="remember_me"></label>
-                <input type="checkbox" id="remember_me" value="remember-me"/> &nbsp; Remember me
-
+            <div class="form-group form-check">
+                <input id="remember_me" type="checkbox" class="form-check-input"/>
+                <label for="remember_me" class="form-check-label">Remember me!</label>
             </div>
             <div class="form-group">
                 <button [disabled]="loading" class="btn btn-primary">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                     Login
                 </button>
-                <a routerLink="../register" class="btn btn-link">Register</a>
+                <a class="btn btn-link" routerLink="../register">Register</a>
             </div>
         </form>
     </div>

@@ -1,56 +1,79 @@
 <div class="card">
     <h4 class="card-header">Register</h4>
     <div class="card-body">
-        <form [formGroup]="form!" (ngSubmit)="onSubmit()">
+        <form (ngSubmit)="onSubmit()" [formGroup]="form!">
             <div class="form-group">
                 <label for="firstName">First Name</label>
-                <input id="firstName" type="text" required autofocus formControlName="firstName"
-                       class="form-control"
-                       [ngClass]="{'is-invalid': submitted && f.firstName.errors }"/>
+                <input [ngClass]="{'is-invalid': submitted && f.firstName.errors }" autofocus
+                       class="form-control" formControlName="firstName" id="firstName" required
+                       type="text"/>
                 <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
                     <div *ngIf="f.firstName.errors.required">First Name is required</div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="lastName">Last Name</label>
-                <input id="lastName" type="text" required formControlName="lastName"
-                       class="form-control"
-                       [ngClass]="{
-        'is-invalid': submitted && f.lastName.errors }"/>
+                <input [ngClass]="{
+        'is-invalid': submitted && f.lastName.errors }" class="form-control"
+                       formControlName="lastName" id="lastName"
+                       required
+                       type="text"/>
                 <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
                     <div *ngIf="f.lastName.errors.required">Last Name is required</div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input id="username" type="email" required email formControlName="username"
-                       class="form-control"
-                       [ngClass]="{
-        'is-invalid': submitted && f.username.errors }"/>
-                <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                    <div *ngIf="f.username.errors.required">Username is required</div>
-                    <div *ngIf="f.username.errors.email">Enter a valid email address</div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="envelope-username-addon">
+                            <i-bs name="envelope-fill" width="1.2rem" height="1.2rem"></i-bs>
+                        </span>
+                    </div>
+                    <input [ngClass]="{'is-invalid': submitted && f.username.errors }"
+                           class="form-control" email formControlName="username" id="username"
+                           required
+                           type="email"/>
+                    <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                        <div *ngIf="f.username.errors.required">Username is required</div>
+                        <div *ngIf="f.username.errors.email">Enter a valid email address</div>
+                    </div>
                 </div>
+                <small id="emailHelp" class="form-text text-muted">
+                    We'll never share your email with anyone else.
+                </small>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input id="password" type="password" required minlength="8"
-                       formControlName="password"
-                       class="form-control"
-                       [ngClass]="{'is-invalid': submitted && f.password.errors }"/>
-                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                    <div *ngIf="f.password.errors.required">Password is required</div>
-                    <div *ngIf="f.password.errors.minlength">Password must be at least 8
-                        characters
+                <div class="input-group">
+                    <input [ngClass]="{'is-invalid': submitted && f.password.errors }"
+                           class="form-control" formControlName="password" id="password"
+                           minlength="8"
+                           required [type]="passwordHidden ? 'text' : 'password'"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="reg-show-pass-addon"
+                              (click)="togglePasswordView()">
+                            <i-bs [name]="passwordHidden ? 'eye' : 'eye-slash'" width="1.2rem"
+                                  height="1.2rem"></i-bs>
+                        </span>
+                    </div>
+                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                        <div *ngIf="f.password.errors.required">Password is required</div>
+                        <div *ngIf="f.password.errors.minlength">Password must be at least 8
+                            characters
+                        </div>
                     </div>
                 </div>
+                <small id="passwordHelpInline" class="form-text text-muted">
+                    Must be 8-20 characters long.
+                </small>
             </div>
             <div class="form-group">
                 <button [disabled]="loading" class="btn btn-primary">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                     Register
                 </button>
-                <a routerLink="../login" class="btn btn-link">Cancel</a>
+                <a class="btn btn-link" routerLink="../login">Cancel</a>
             </div>
         </form>
     </div>
