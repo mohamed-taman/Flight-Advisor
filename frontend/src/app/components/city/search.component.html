@@ -4,16 +4,15 @@
         <div class="col">
             <form class="form-inline justify-content-end" id="search"
                   (ngSubmit)="onSubmit()" [formGroup]="form!">
-                <label class="sr-only" for="byCityName">City name</label>
-                <input type="text" class="form-control mb-2 mr-sm-2" id="byCityName"
-                       formControlName="byCityName"
+                <label class="sr-only" for="byName">City name</label>
+                <input type="text" class="form-control mb-2 mr-sm-2" id="byName"
+                       formControlName="byName"
                        placeholder="By city name">
 
                 <label class="sr-only" for="commentsLimit"># of comments</label>
                 <div class="input-group">
                     <input type="number" max="30"
                            (keyup)="chickCommentsLimit(f.commentsLimit.value)"
-                           [ngClass]="{'is-invalid': submitted && f.commentsLimit.errors }"
                            class="form-control mb-2 mr-sm-2" id="commentsLimit"
                            placeholder="Comments limit" formControlName="commentsLimit"/>
                 </div>

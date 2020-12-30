@@ -77,9 +77,10 @@ export class ErrorInterceptor implements HttpInterceptor {
     private static getErrorDetails(details: ErrorDetail[]): string {
         let detailMessage: string = "";
 
-        details.forEach((detail) => {
-            detailMessage += `("${detail.field}": ${detail.errorMessage})`;
-        });
+        if (details)
+            details.forEach((detail) => {
+                detailMessage += `("${detail.field}": ${detail.errorMessage})`;
+            });
 
         return detailMessage;
     }
@@ -89,7 +90,7 @@ export class ErrorDetail {
     field: string;
     errorMessage: string;
 
-    constructor(field: string, errorMessage: string){
+    constructor(field: string, errorMessage: string) {
         this.field = field;
         this.errorMessage = errorMessage;
     }

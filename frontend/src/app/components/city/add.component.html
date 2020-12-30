@@ -45,9 +45,9 @@
                     <select [ngClass]="{'is-invalid': submitted && f.countryId.errors &&
                     byCountryId}" class="form-control" formControlName="countryId" id="countryId">
                         <option value="" selected>-- Select Country --</option>
-                        <option *ngFor="let country of countries"
-                                value="{{country.getId()}}">{{country.getId() +
-                        "- "+ country.getName() }}</option>
+                        <option *ngFor="let country of countries" value="{{country.id}}">
+                            {{country.id + "- "+ country.name }}
+                        </option>
                     </select>
                     <div *ngIf="submitted && f.countryId.errors && byCountryId"
                          class="invalid-feedback">

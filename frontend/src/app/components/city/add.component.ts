@@ -14,6 +14,7 @@ export class AddComponent implements OnInit {
     loading: boolean = false;
     submitted: boolean = false;
     byCountryId: boolean = true;
+    private finalCountries: Country[] = [];
 
     constructor(private formBuilder: FormBuilder,
                 private cityService: CityService,
@@ -30,25 +31,27 @@ export class AddComponent implements OnInit {
         this.form = this.formBuilder
             .group({
                 name: [''], countryChoice: ['1'],
-                countryName: [''], countryId: ['',Validators.required],
+                countryName: [''], countryId: ['', Validators.required],
                 description: ['']
             });
+
+        this.loadCountries();
     }
 
-    onCountryChoiceChange(){
-            if (this.f.countryChoice.value === '1') {
-                this.byCountryId = true;
-                this.f.countryName.clearValidators();
-                this.f.countryName.reset("");
-                this.f.countryId.setValidators(Validators.required);
-                this.f.countryId.updateValueAndValidity();
-            } else {
-                this.byCountryId = false;
-                this.f.countryId.clearValidators();
-                this.f.countryId.reset("");
-                this.f.countryName.setValidators(Validators.required);
-                this.f.countryName.updateValueAndValidity();
-            }
+    onCountryChoiceChange() {
+        if (this.f.countryChoice.value === '1') {
+            this.byCountryId = true;
+            this.f.countryName.clearValidators();
+            this.f.countryName.reset("");
+            this.f.countryId.setValidators(Validators.required);
+            this.f.countryId.updateValueAndValidity();
+        } else {
+            this.byCountryId = false;
+            this.f.countryId.clearValidators();
+            this.f.countryId.reset("");
+            this.f.countryName.setValidators(Validators.required);
+            this.f.countryName.updateValueAndValidity();
+        }
     }
 
     onSubmit() {
@@ -65,20 +68,18 @@ export class AddComponent implements OnInit {
         this.loading = true;
 
         let city: City = new City(
-            this.f.name.value,
-            this.f.description.value,
-            this.byCountryId? this.f.countryId.value : 0,
-            !this.byCountryId? this.f.countryName.value : "");
-
-        console.log(city);
+            this.f.name.value, this.f.description.value,
+            this.byCountryId ? this.f.countryId.value : 0,
+            !this.byCountryId ? this.f.countryName.value : "");
 
         this.cityService.create(city)
             .pipe(first())
             .subscribe({
-                next: city => {
-                    console.log(city);
-                    this.alertService.success(`City (${city}) added Successfully.`,
+                next: (city: City) => {
+                    console.log( city.toString());
+                    this.alertService.success(` ${city.toString()} added Successfully.`,
                         {keepAfterRouteChange: true});
+                    this.loadCountries();
                 },
                 error: err => {
                     this.alertService.error(err);
@@ -88,7 +89,20 @@ export class AddComponent implements OnInit {
         this.loading = false;
     }
 
+    private loadCountries() {
+        this.countryService.getCountries()
+            .pipe(first())
+            .subscribe({
+                next: (countries) => {
+                    this.finalCountries = countries;
+                },
+                error: error => {
+                    this.alertService.error(error);
+                }
+            });
+    }
+
     get countries(): Country[] {
-        return this.countryService.getCountries();
+        return this.finalCountries;
     }
 }

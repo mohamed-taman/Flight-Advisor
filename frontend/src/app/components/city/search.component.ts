@@ -26,7 +26,7 @@ export class SearchComponent implements OnInit {
 
     ngOnInit(): void {
         this.form = this.formBuilder
-            .group({byCityName: [''], commentsLimit: ['']});
+            .group({byName: [''], commentsLimit: ['']});
     }
 
     onSubmit() {
@@ -47,7 +47,6 @@ export class SearchComponent implements OnInit {
             .pipe(first())
             .subscribe({
                 next: (cities) => {
-                    console.log(cities);
                     this.cities = cities;
                     this.alertService.success('Search was Successfully',
                         {autoClose: true});
