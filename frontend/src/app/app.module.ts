@@ -16,8 +16,7 @@ import {ErrorInterceptor, IconsModule, JwtInterceptor} from '@app/helpers';
 // Application Modules
 import {
     AccountModule, AlertComponent, CityModule,
-    CommentComponent, HomeComponent,
-    TravelComponent, UploadComponent} from '@app/components';
+    HomeComponent, TravelComponent, UploadComponent} from '@app/components';
 
 @NgModule({
     imports: [
@@ -32,7 +31,6 @@ import {
         AppComponent,
         HomeComponent,
         UploadComponent,
-        CommentComponent,
         AlertComponent,
         TravelComponent,
     ],

@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {AlertService, CityService} from "@app/services";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AlertService, CityService, SessionService} from "@app/services";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {first} from "rxjs/operators";
 import {City} from "@app/models";
@@ -8,15 +8,17 @@ import {City} from "@app/models";
     templateUrl: './search.component.html',
     styleUrls: ['./search.component.css']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
     form?: FormGroup;
+    addForm?: FormGroup;
     loading: boolean = false;
     submitted: boolean = false;
     cities: City[] = [];
 
     constructor(private formBuilder: FormBuilder,
                 private cityService: CityService,
-                private alertService: AlertService) {
+                private alertService: AlertService,
+                private session: SessionService) {
     }
 
     // convenience getter for easy access to form fields
@@ -24,12 +26,42 @@ export class SearchComponent implements OnInit {
         return this.form!.controls;
     }
 
+    get af() {
+        return this.addForm!.controls;
+    }
+
     ngOnInit(): void {
         this.form = this.formBuilder
             .group({byName: [''], commentsLimit: ['']});
+
+        this.addForm = this.formBuilder
+            .group({description: ['']});
     }
 
-    onSubmit() {
+    ngOnDestroy(): void {
+        this.session.remove("cityId");
+
+    }
+
+    private search(): void {
+
+        this.loading = true;
+
+        this.cityService.search(this.form!.value)
+            .pipe(first())
+            .subscribe({
+                next: (cities) => {
+                    this.cities = cities;
+                },
+                error: error => {
+                    this.alertService.error(error, {autoClose: true});
+                }
+            });
+
+        this.loading = false;
+    }
+
+    onSearchSubmit() {
 
         this.submitted = true;
 
@@ -41,25 +73,47 @@ export class SearchComponent implements OnInit {
             return;
         }
 
-        this.loading = true;
+        this.search();
+        this.submitted = false;
+    }
 
-        this.cityService.search(this.form!.value)
-            .pipe(first())
+    onAdd(cityId: number): void {
+        this.session.put("cityId", cityId);
+    }
+
+    addComment(): void {
+
+        this.submitted = true;
+
+        // reset alerts on submit
+        this.alertService.clear();
+
+        // stop here if form is invalid
+        if (this.addForm!.invalid) {
+            return;
+        }
+
+        this.cityService.addComment(this.session.get("cityId"), this.af.description.value)
             .subscribe({
-                next: (cities) => {
-                    this.cities = cities;
-                    this.alertService.success('Search was Successfully',
+                next: () => {
+                    this.alertService.info("Comment added successfully",
                         {autoClose: true});
+
+                    this.search();
                 },
                 error: error => {
                     this.alertService.error(error, {autoClose: true});
                 }
             });
 
-        this.loading = false;
+        this.submitted = false;
     }
 
-    chickCommentsLimit(value: number): boolean {
+    onShow(city: City): void {
+        this.session.put("city", city);
+    }
+
+    checkCommentsLimitInput(value: number): boolean {
         if (value > 30) {
             this.f.commentsLimit.setValue(30);
             return false;

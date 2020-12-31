@@ -29,7 +29,6 @@ public interface CommentMapper {
     Comment toUpdateModel(UpSrtCommentRequest request, int commentId, User user, City city);
     
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "city", source = "city.name")
     @Mapping(target = "by", source = "user.fullName")
     CommentView toView(Comment comment);
     

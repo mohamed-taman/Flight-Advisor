@@ -6,18 +6,22 @@ import {CityRoutingModule} from './city-routing.module';
 import {LayoutComponent} from './layout.component';
 import {AddComponent} from './add.component';
 import {SearchComponent} from './search.component';
+import {ShowCommentsComponent} from './show-comments.component';
+import {IconsModule} from "@app/helpers";
 
 @NgModule({
     imports: [
         CommonModule,
         CityRoutingModule,
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
+        IconsModule
     ],
     declarations: [
         LayoutComponent,
         AddComponent,
-        SearchComponent
+        SearchComponent,
+        ShowCommentsComponent
     ]
 })
 export class CityModule {

@@ -8,9 +8,8 @@ import java.time.LocalDateTime;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
-@JsonPropertyOrder({"id", "city", "comment", "by", "createdAt", "updatedAt"})
+@JsonPropertyOrder({"id", "comment", "by", "createdAt", "updatedAt"})
 public record CommentView(@JsonProperty int id,
-                          @JsonProperty String city,
                           @JsonProperty String comment,
                           @JsonProperty String by,
                           @JsonProperty("createdAt") LocalDateTime createdAt,

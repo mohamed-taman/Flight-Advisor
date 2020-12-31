@@ -76,7 +76,6 @@ export class AddComponent implements OnInit {
             .pipe(first())
             .subscribe({
                 next: (city: City) => {
-                    console.log( city.toString());
                     this.alertService.success(` ${city.toString()} added Successfully.`,
                         {keepAfterRouteChange: true});
                     this.loadCountries();
@@ -94,7 +93,8 @@ export class AddComponent implements OnInit {
             .pipe(first())
             .subscribe({
                 next: (countries) => {
-                    this.finalCountries = countries;
+                    if (countries)
+                        this.finalCountries = countries;
                 },
                 error: error => {
                     this.alertService.error(error);
