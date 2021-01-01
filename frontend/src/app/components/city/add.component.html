@@ -7,16 +7,17 @@
         <div class="card-body">
             <form (ngSubmit)="onSubmit()" [formGroup]="form!">
                 <div class="form-group">
-                    <label for="name">Name</label>
-                    <input [ngClass]="{'is-invalid': submitted && f.name.errors }"
+                    <input [ngClass]="{'is-invalid': submitted && f.name.errors }" aria-label="name"
                            type="text" class="form-control" formControlName="name" id="name"
-                           autofocus required/>
+                           autofocus required placeholder="City name"/>
                     <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                         <div *ngIf="f.name.errors.required">Name is required</div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="mb-2">Country entry option:</div>
+                    <fieldset>
+                        <legend class="col-form-label">Country option:</legend>
+                    <div class="mb-2"></div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" id="byCountry" checked
                                (change)="onCountryChoiceChange()"
@@ -29,10 +30,10 @@
                                formControlName="countryChoice" name="countryChoice" value="2">
                         <label class="form-check-label" for="byName">Enter country name</label>
                     </div>
+                    </fieldset>
                 </div>
                 <div class="form-group" *ngIf="!byCountryId">
-                    <label for="countryName">Country Name</label>
-                    <input type="text"
+                    <input type="text" aria-label="countryName" placeholder="Country Name"
                            [ngClass]="{'is-invalid': submitted && f.countryName.errors &&
                            !byCountryId}" class="form-control" formControlName="countryName"
                            id="countryName">
@@ -42,10 +43,9 @@
                     </div>
                 </div>
                 <div class="form-group" *ngIf="byCountryId">
-                    <label for="countryId">Country</label>
                     <select [ngClass]="{'is-invalid': submitted && f.countryId.errors &&
-                    byCountryId}" class="form-control" formControlName="countryId" id="countryId">
-                        <option value="" selected>-- Select Country --</option>
+                    byCountryId}" aria-label="countryId" class="form-control" formControlName="countryId" id="countryId">
+                        <option value="" selected>Choose a country...</option>
                         <option *ngFor="let country of countries" value="{{country.id}}">
                             {{country.id + "- " + country.name }}
                         </option>
@@ -56,9 +56,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="description">Description</label>
                     <textarea [ngClass]="{'is-invalid': submitted && f.description.errors }"
                               class="form-control" formControlName="description"
+                              aria-label="description" placeholder="Description"
                               id="description" rows="3" required></textarea>
                     <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
                         <div *ngIf="f.description.errors.required">Description is required</div>
@@ -75,9 +75,9 @@
                     <div class="col-auto">
                         <button type="reset" class="btn btn-outline-primary">Reset</button>
                     </div>
-                    <div class="col-lg text-right">
+                    <div class="col text-right">
                         <button type="button" class="btn btn-secondary" routerLink="../search">
-                            Search Cities
+                            Search cities
                         </button>
                     </div>
                 </div>

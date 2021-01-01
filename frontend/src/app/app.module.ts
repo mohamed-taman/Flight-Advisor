@@ -4,6 +4,9 @@ import {BrowserModule} from '@angular/platform-browser';
 // Import Http modules, and should be loaded after browser module
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 
+// Import Reactive modules for all modules
+import {ReactiveFormsModule} from "@angular/forms";
+
 // Import application routing logic
 import {AppRoutingModule} from '@app/app-routing.module';
 
@@ -18,6 +21,7 @@ import {
     AccountModule, AlertComponent, CityModule,
     HomeComponent, TravelComponent, UploadComponent} from '@app/components';
 
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -25,7 +29,8 @@ import {
         AppRoutingModule,
         IconsModule,
         AccountModule,
-        CityModule
+        CityModule,
+        ReactiveFormsModule,
     ],
     declarations: [
         AppComponent,
