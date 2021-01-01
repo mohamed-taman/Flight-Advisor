@@ -50,15 +50,16 @@
                             <i-bs name="geo-alt-fill" width="1.2rem" height="1.2rem"></i-bs>
                             </span>
                         </div>
-                    <input list="flyingFromList" id="flyingFrom" name="flyingFrom"
-                           formControlName="flyingFrom" placeholder="Flying from"
-                           class="form-control border-dark border-left-0"
-                           aria-label="Leaving from"
-                           required autofocus [ngClass]="{'is-invalid': isSubmitted &&
+                        <input list="flyingFromList" id="flyingFrom" name="flyingFrom"
+                               formControlName="flyingFrom" placeholder="Flying from"
+                               class="form-control border-dark border-left-0"
+                               aria-label="Leaving from"
+                               required autofocus [ngClass]="{'is-invalid': isSubmitted &&
                     f.flyingFrom.errors }"/>
-                    <div *ngIf="isSubmitted && f.flyingFrom.errors" class="invalid-feedback">
-                        <div *ngIf="f.flyingFrom.errors.required">Select flying from airport.</div>
-                    </div>
+                        <div *ngIf="isSubmitted && f.flyingFrom.errors" class="invalid-feedback">
+                            <div *ngIf="f.flyingFrom.errors.required">Select flying from airport.
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <datalist id="flyingFromList">
@@ -77,14 +78,15 @@
                             <i-bs name="geo-alt-fill" width="1.2rem" height="1.2rem"></i-bs>
                             </span>
                         </div>
-                    <input list="flyingToList" id="flyingTo" name="flyingTo"
-                           placeholder="Going to"
-                           class="form-control border-dark border-left-0 mr-2" aria-label="Going to"
-                           formControlName="flyingTo" required
-                           [ngClass]="{'is-invalid': isSubmitted && f.flyingTo.errors }"/>
-                    <div *ngIf="isSubmitted && f.flyingTo.errors" class="invalid-feedback">
-                        <div *ngIf="f.flyingTo.errors.required">Select flying to airport.</div>
-                    </div>
+                        <input list="flyingToList" id="flyingTo" name="flyingTo"
+                               placeholder="Going to"
+                               class="form-control border-dark border-left-0 mr-2"
+                               aria-label="Going to"
+                               formControlName="flyingTo" required
+                               [ngClass]="{'is-invalid': isSubmitted && f.flyingTo.errors }"/>
+                        <div *ngIf="isSubmitted && f.flyingTo.errors" class="invalid-feedback">
+                            <div *ngIf="f.flyingTo.errors.required">Select flying to airport.</div>
+                        </div>
                     </div>
                 </div>
                 <datalist id="flyingToList">

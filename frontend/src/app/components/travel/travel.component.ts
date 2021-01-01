@@ -22,7 +22,7 @@ export class TravelComponent implements OnInit {
     ngOnInit(): void {
         this.searchForm = this.formBuilder.group({
             flyingFrom: [''], flyingTo: [''],
-            fromDate: [(new Date()).toISOString().substring(0,10)], toDate: ['']
+            fromDate: [(new Date()).toISOString().substring(0, 10)], toDate: ['']
         })
     }
 
