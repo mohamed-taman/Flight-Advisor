@@ -27,10 +27,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" routerLink="/cities/search" routerLinkActive="active">Search</a>
-                    <a class="dropdown-item" routerLink="/cities/add" routerLinkActive="active">
-                        Add</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Comments</a>
+                    <a class="dropdown-item" routerLink="/cities/add" routerLinkActive="active">Add</a>
                 </div>
             </li>
             <li class="nav-item">
@@ -47,11 +44,12 @@
                 <a class="nav-link" (click)="logout()">Logout</a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="From"
+        <form [formGroup]="travelForm!" class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" name="travelingFrom" formControlName="travelingFrom"
+                    type="search" placeholder="Traveling from..."
                    aria-label="Search">
-            <input class="form-control mr-sm-2" type="search" placeholder="To"
-                   aria-label="Search">
+            <input class="form-control mr-sm-2" type="search" placeholder="Going to..."
+                   aria-label="Search" name="goingTo" formControlName="goingTo">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Find flight</button>
         </form>
     </div>

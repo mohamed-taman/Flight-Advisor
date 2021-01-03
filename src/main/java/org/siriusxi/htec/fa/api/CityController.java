@@ -33,7 +33,6 @@ import java.util.List;
  * @author Mohamed Taman
  * @version 1.0
  *
- * FIXME: Swagger documentation
  */
 @Log4j2
 @Tag(name = "City Management",
@@ -50,14 +49,18 @@ public class CityController {
         this.travelService = travelService;
     }
     
-    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @Operation( summary="Get all cities.",
+        description= "Get city or all cities. You can limit the # of returned comments.",
+        security = {@SecurityRequirement(name = "bearer-key")})
     @GetMapping
     public List<CityView> getAllCities(@RequestParam(defaultValue = "0")
                                            @Min(0) @Max(Integer.MAX_VALUE) int cLimit) {
         return cityMgmtService.searchCities(new SearchCityRequest(""), cLimit);
     }
     
-    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @Operation(  summary="Search all cities by name.",
+        description = "Find city or all cities by name. You can limit the # of returned comments.",
+        security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping("search")
     public List<CityView> searchCities(@RequestParam(defaultValue = "0")
                                            @Min(0) @Max(Integer.MAX_VALUE) int cLimit,
@@ -66,14 +69,24 @@ public class CityController {
     }
     
     @RolesAllowed(Role.ADMIN)
-    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @Operation(  summary="Add a new city.",
+        description="""
+                        Add a new city to the system.
+                        - Note that you can add country to city either:
+                          1. by its id if it is already exist in the system, or
+                          2. by country name if not exist, then the system will \
+                             creat the country and attach it to the city.
+                        """,
+        security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping
     public CityView createCity(@RequestBody @Valid CreateCityRequest request) {
         return cityMgmtService.addCity(request);
     }
     
     
-    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @Operation( summary="Exited! and wanna travel.",
+        description="Find the cheapest trip from source country to a destination country.",
+        security = {@SecurityRequirement(name = "bearer-key")})
     @GetMapping("travel")
     public List<TripView> travel(@RequestParam @Size(min = 3) String from,
                                  @RequestParam @Size(min = 3) String to) {
@@ -95,7 +108,9 @@ public class CityController {
      /*
        Airport Management
     */
-     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+     @Operation(  summary="Find city airports.",
+         description="Find all airports for a specific city.",
+         security = {@SecurityRequirement(name = "bearer-key")})
      @PostMapping("{id}/airports")
      public List<AirportView> searchAirports(@Parameter(description = "City Id")
                                                @PathVariable(name = "id")
@@ -103,13 +118,25 @@ public class CityController {
                                              @RequestBody @Valid SearchAirportRequest request) {
          return cityMgmtService.searchAirports(request, cityId);
      }
+    
+    @Operation( summary="Get all airports by a any name.",
+        description="Find all airports by airport, city or country name.",
+        security ={@SecurityRequirement(name = "bearer-key")})
+    @GetMapping("/airports")
+    public List<AirportView> searchForCityOrCountryAirports(
+        @Parameter(description = "Airport, city or country name")
+        @RequestParam @Size(min = 1) String name) {
+        return travelService.findAirportsForCityOrCountry(name);
+    }
      
     /*
        Comments Management
     */
     
     //Add comment
-    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @Operation( summary="Add a city comment.",
+        description = "Wanna add a comment to a city you have visited.",
+        security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping("{id}/comments")
     public CommentView addComment(@Parameter(description = "City Id")
                                          @PathVariable(name = "id")
@@ -119,7 +146,9 @@ public class CityController {
     }
     
     //update comment
-    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @Operation( summary="Update my city comment.",
+        description = "Wanna change your comment to a city you have visited.",
+        security = {@SecurityRequirement(name = "bearer-key")})
     @PutMapping("{id}/comments/{cid}")
     public void updateComment(@Parameter(description = "City Id")
                                          @PathVariable(name = "id")
@@ -133,7 +162,9 @@ public class CityController {
     }
     
     //Delete comment
-    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @Operation( summary="Delete my city comment.",
+        description = "Changed your mind, don't like your comment then delete it.",
+        security = {@SecurityRequirement(name = "bearer-key")})
     @DeleteMapping("{id}/comments/{cid}")
     public void deleteComment(@Parameter(description = "City Id") @PathVariable(name = "id")
                               @Min(1) @Max(Integer.MAX_VALUE) int cityId,

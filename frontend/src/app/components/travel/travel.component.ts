@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {AlertService, CityService} from "@app/services";
+import {Airport} from "@app/models/Airport";
+import {Utils} from "@app/helpers";
+import {Trip} from "@app/models";
 
 @Component({
     selector: 'app-travel',
@@ -12,7 +15,11 @@ export class TravelComponent implements OnInit {
     isRoundTrip: boolean = true;
     isSubmitted: boolean = false;
     isSearching: boolean = false;
+    trips: Trip[] = [];
     searchForm?: FormGroup;
+    airports: Airport[] = [];
+    isSearchingFromAirports: boolean = false;
+    isSearchingToAirports: boolean = false;
 
     constructor(private formBuilder: FormBuilder,
                 private cityService: CityService,
@@ -31,6 +38,31 @@ export class TravelComponent implements OnInit {
         return this.searchForm!.controls;
     }
 
+    onKeypress(event: any): void {
+        if (!event.key) return;
+
+        if ((event.key.length == 1 ||
+            event.key == 'Backspace' ||
+            event.key == 'Delete') &&
+            event.target.value.length >= 3) {
+            this.searchAirports(event.target.name, event.target.value);
+        }
+    }
+
+    onSelect(id: number): void {
+        if (this.f.flyingFrom.value == this.f.flyingTo.value)
+            switch (id) {
+                case 1: {
+                    this.f.flyingFrom.setValue(this.f.flyingTo.value);
+                    this.f.flyingTo.setValue("")
+                    break;
+                }
+                case 2: {
+                    this.f.flyingTo.setValue("");
+                }
+            }
+    }
+
     onSubmit(): void {
 
         this.isSubmitted = true;
@@ -41,22 +73,47 @@ export class TravelComponent implements OnInit {
         // stop here if form is invalid
         if (this.searchForm!.invalid) return;
 
-        console.log(this.searchForm!.value);
-
         this.searchTrips(this.f.flyingFrom.value, this.f.flyingTo.value);
 
     }
 
     private searchTrips(flyingFrom: string, flyingTo: string): void {
 
-        console.log(flyingFrom, flyingTo);
         this.isSearching = true;
 
-        setTimeout(() => {
-                console.log("Searching for flights");
-                this.isSearching = false;
-            },
-            3000);
+        this.cityService.travel(flyingFrom, flyingTo)
+            .subscribe({
+                next: (trips: Trip[]) => {
+                    this.trips = trips;
+                    this.isSearching = false;
+                },
+                error: err => {
+                    this.alertService.error(err);
+                    this.isSearching = false;
+                }
+            });
     }
 
+    private searchAirports(target: string, value: string): void {
+        Utils.clear(this.airports);
+
+        if (target == "flyingFrom")
+            this.isSearchingFromAirports = true;
+        else
+            this.isSearchingToAirports = true;
+
+        this.cityService.searchAirports(value)
+            .subscribe({
+                next: (airports: Airport[]) => {
+                    this.airports = airports;
+                    this.isSearchingFromAirports = false;
+                    this.isSearchingToAirports = false;
+                },
+                error: err => {
+                    this.alertService.error(err);
+                    this.isSearchingFromAirports = false;
+                    this.isSearchingToAirports = false;
+                }
+            });
+    }
 }

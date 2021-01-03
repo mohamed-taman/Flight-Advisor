@@ -28,12 +28,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
 import java.util.stream.Collectors;
 
-import static java.lang.Double.*;
+import static java.lang.Double.parseDouble;
 import static java.util.Objects.requireNonNull;
-import static org.siriusxi.htec.fa.infra.calc.distance.DistanceAlgorithm.*;
+import static org.siriusxi.htec.fa.infra.calc.distance.DistanceAlgorithm.getAlgorithm;
 
 /**
  * Travel Service class is the core of travel calculations from city A to City B.
@@ -53,15 +52,14 @@ import static org.siriusxi.htec.fa.infra.calc.distance.DistanceAlgorithm.*;
  *     <li>Trip Distance calculation is performed by method
  *     <code>findShortestPath(String from, String to)</code>
  *     using <Strong>Orthodromic Algorithm</Strong>.</li>
- *</ul>
+ * </ul>
  * <p>The cache is used here for improving the response time when same cities provided by search
  * again. Cache name is <strong>travels</strong>.
  * </p>
  *
- * @see DistanceAlgorithm
  * @author Mohamed Taman
+ * @see DistanceAlgorithm
  * @since v0.4
- *
  */
 @Log4j2
 @Service
@@ -77,7 +75,8 @@ public class TravelService {
     private record FinalTrip(String start,
                              List<String> through,
                              String end,
-                             double totalCost) { }
+                             double totalCost) {
+    }
     
     public TravelService(RouteRepository routeRepository,
                          AirportRepository airportRepository,
@@ -118,7 +117,7 @@ public class TravelService {
                                  .ifPresent(airports::add));
             // Get destination
             airportRepository.findByCode(trip.end()).ifPresent(airports::add);
-    
+            
             var allDest = new ArrayList<>(trip.through());
             allDest.add(trip.end());
             
@@ -134,9 +133,9 @@ public class TravelService {
                 airports.getFirst(),
                 airports.getLast(),
                 airports
-                    .subList(1, airports.size() -1)
+                    .subList(1, airports.size() - 1)
                     .stream()
-                    .map(airport -> airportMapper.toTripView(airport,0))
+                    .map(airport -> airportMapper.toTripView(airport, 0))
                     .collect(Collectors.toList()),
                 // Calculate final price
                 routeRepository.getTripCost(routePKs),
@@ -153,23 +152,23 @@ public class TravelService {
     
     private double calculateDistance(Route route) {
         return orthodromicAlgorithm
-                          .calculate(
-                              new Point(
-                                  route.getSourceAirport().getLatitude().doubleValue(),
-                                  route.getSourceAirport().getLongitude().doubleValue()),
-                              new Point(
-                                  route.getDestinationAirport().getLatitude().doubleValue(),
-                                  route.getDestinationAirport().getLongitude().doubleValue()),
-                              MeasureType.KILOMETER);
+                   .calculate(
+                       new Point(
+                           route.getSourceAirport().getLatitude().doubleValue(),
+                           route.getSourceAirport().getLongitude().doubleValue()),
+                       new Point(
+                           route.getDestinationAirport().getLatitude().doubleValue(),
+                           route.getDestinationAirport().getLongitude().doubleValue()),
+                       MeasureType.KILOMETER);
     }
     
     private TripView newTripView(Airport src, Airport dest,
                                  List<AirportView> through,
                                  double cost, double distance) {
         return new TripView(
-            airportMapper.toTripView(src,0), through,
-            airportMapper.toTripView(dest,0),
-            new TripView.Price(cost,"US"),
+            airportMapper.toTripView(src, 0), through,
+            airportMapper.toTripView(dest, 0),
+            new TripView.Price(cost, "US"),
             new TripView.Distance(parseDouble(formater.format(distance)), "KM"));
     }
     
@@ -213,7 +212,7 @@ public class TravelService {
     }
     
     private static FinalTrip getTrip(Algorithm<Double, String,
-                                               WeightedNode<Double, String, Double>>
+                                                  WeightedNode<Double, String, Double>>
                                          .SearchResult result) {
         
         var paths = result.getOptimalPaths().get(0);
@@ -222,9 +221,15 @@ public class TravelService {
         // calculate final cost
         return new FinalTrip(
             paths.get(0),
-            lastIndex != 0? paths.subList(1, lastIndex): Collections.emptyList(),
+            lastIndex != 0 ? paths.subList(1, lastIndex) : Collections.emptyList(),
             paths.get(lastIndex),
             result.getGoalNode().getCost());
     }
     
+    public List<AirportView> findAirportsForCityOrCountry(String name){
+        return airportMapper
+                   .toView(airportRepository
+                               .findAirportsByCityOrCountryName(name.toLowerCase()));
+    }
+
 }
