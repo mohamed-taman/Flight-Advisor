@@ -1,9 +1,5 @@
 package org.siriusxi.htec.fa.infra.calc.distance;
 
-import org.siriusxi.htec.fa.infra.calc.distance.DistanceAlgorithm;
-import org.siriusxi.htec.fa.infra.calc.distance.MeasureType;
-import org.siriusxi.htec.fa.infra.calc.distance.Point;
-
 import static java.lang.Math.asin;
 import static java.lang.Math.cos;
 import static java.lang.Math.pow;
