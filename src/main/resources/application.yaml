@@ -14,12 +14,8 @@ spring:
       max-file-size: 10MB
   # Database configurations
   datasource:
-    data: classpath*:db/data.sql
-    schema: classpath*:db/schema.sql
     url: jdbc:h2:./target/db/flightDB
     username: sa
-    platform: h2
-    initialization-mode: always
     hikari:
       initialization-fail-timeout: 60000
       connection-test-query: SELECT 1
@@ -45,6 +41,12 @@ spring:
         # collect inserts in batches of 100
         jdbc:
           size: 100
+  sql:
+    init:
+      data-locations: classpath*:db/data.sql
+      schema-locations: classpath*:db/schema.sql
+      platform: h2
+      mode: always
 
 # Server configs
 server:

@@ -7,7 +7,6 @@ spring:
     enabled: false
   # Database configurations
   datasource:
-    data: classpath*:db/prod/data.sql
     url: jdbc:h2:./db/flightDB
     password: Admin1234
   jpa:
@@ -15,6 +14,9 @@ spring:
     properties:
       hibernate:
         generate_statistics: false
+  sql:
+    init:
+      data-locations: classpath*:db/prod/data.sql
 
 logging.level:
   org:
