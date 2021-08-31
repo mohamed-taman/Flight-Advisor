@@ -13,9 +13,8 @@ public record CreateUserRequest(@JsonProperty("firstName") @NotBlank String firs
                                 @JsonProperty("username") @NotBlank @Email String username,
                                 @JsonProperty("password")
                                 @NotBlank
-                                @Size(min = 10, max = 25,
-                                    message = "Password minimum length is 10.")
-                                String password,
-                                @JsonProperty("rePassword") @NotBlank String rePassword) {
+                                @Size(min = 8, max = 25,
+                                    message = "Password minimum length is 8.")
+                                String password) {
 }
 

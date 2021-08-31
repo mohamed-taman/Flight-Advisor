@@ -1,0 +1,126 @@
+<div class="container pt-2 pb-2 bg-white shadow rounded-lg" style="width:88%">
+    <form name="searchForm" (ngSubmit)="onSubmit()" [formGroup]="searchForm!">
+        <div class="row mb-2">
+            <div class="col">
+                <div class="lead display-5">
+                    <img alt="Travel" src="../../../assets/images/around-the-globe.png"
+                         width="56px" height="56px"/>
+                    <strong>
+                        Where would you like to travel...
+                    </strong>
+                </div>
+                <hr/>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col d-flex justify-content-start">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-outline-primary rounded border-0 mr-3 active">
+                        <input type="radio" name="directions" id="roundTrip" checked
+                               (change)="isRoundTrip = true"/> Roundtrip
+                    </label>
+                    <label class="btn btn-outline-primary rounded border-0">
+                        <input type="radio" name="directions" id="oneWay"
+                               (change)="isRoundTrip = false"/> One-way
+                    </label>
+                </div>
+            </div>
+            <div class="col d-flex justify-content-end">
+                <select class="btn btn-link" aria-label="travelers">
+                    <option value="1" selected> 1 traveler</option>
+                    <option value="2">2 travelers</option>
+                    <option value="3">3 travelers</option>
+                    <option value="4">4 travelers</option>
+                </select>
+
+                <select class="btn btn-link" aria-label="tripClass">
+                    <option value="1" selected>Economy</option>
+                    <option value="2">Premium economy</option>
+                    <option value="3">Business class</option>
+                    <option value="4">First class</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row mb-3">
+            <div class="col">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-transparent border-dark">
+                            <span *ngIf="isSearchingFromAirports"
+                                  class="spinner-border spinner-border-sm"
+                                  role="status" aria-hidden="true"></span>
+                                <i-bs *ngIf="!isSearchingFromAirports" name="geo-alt-fill"
+                                      width="1.2rem" height="1.2rem"></i-bs>
+                            </span>
+                        </div>
+                        <input list="flyingFromList" id="flyingFrom" name="flyingFrom"
+                               formControlName="flyingFrom" placeholder="Flying from"
+                               class="form-control border-dark border-left-0"
+                               aria-label="Leaving from" (keyup)="onKeypress($event)"
+                               required autofocus (change)="onSelect(1)"
+                               [ngClass]="{'is-invalid': isSubmitted &&f.flyingFrom.errors }"/>
+                        <div *ngIf="isSubmitted && f.flyingFrom.errors" class="invalid-feedback">
+                            <div *ngIf="f.flyingFrom.errors.required">Select flying from airport.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <datalist id="flyingFromList">
+                    <option *ngFor="let airport of airports"
+                            value="{{airport.iata}}">{{airport.airport}}, {{airport.city}},
+                        {{airport.country}}</option>
+                </datalist>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-transparent border-dark">
+                           <span *ngIf="isSearchingToAirports"
+                                 class="spinner-border spinner-border-sm"
+                                 role="status" aria-hidden="true"></span>
+                                <i-bs *ngIf="!isSearchingToAirports" name="geo-alt-fill"
+                                      width="1.2rem" height="1.2rem"></i-bs>
+                            </span>
+                        </div>
+                        <input list="flyingToList" id="flyingTo" name="flyingTo"
+                               placeholder="Going to" formControlName="flyingTo" required
+                               class="form-control border-dark border-left-0 mr-2"
+                               aria-label="Going to" (keyup)="onKeypress($event)"
+                               (change)="onSelect(2)"
+                               [ngClass]="{'is-invalid': isSubmitted && f.flyingTo.errors }"/>
+                        <div *ngIf="isSubmitted && f.flyingTo.errors" class="invalid-feedback">
+                            <div *ngIf="f.flyingTo.errors.required">Select flying to airport.</div>
+                        </div>
+                    </div>
+                </div>
+                <datalist id="flyingToList">
+                    <option *ngFor="let airport of airports"
+                            value="{{airport.iata}}">{{airport.airport}}, {{airport.city}},
+                        {{airport.country}}</option>
+                </datalist>
+            </div>
+            <div class="col">
+                <input type="date" class="form-control border-dark" id="fromDate"
+                       aria-label="fromDate" placeholder="Departing" formControlName="fromDate"
+                       min="{{today | date:'yyyy-MM-dd'}}"/>
+            </div>
+            <div class="col" *ngIf="isRoundTrip">
+                <input type="date" class="form-control border-dark" id="toDate"
+                       aria-label="toDate" placeholder="Returning" formControlName="toDate"
+                       min="{{today | date:'yyyy-MM-dd'}}"/>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col d-flex justify-content-center">
+                <button class="btn btn-primary btn-lg" [ngClass]="isSearching ? 'w-auto' :'w-25'"
+                        type="submit" [disabled]="isSearching">
+                <span *ngIf="isSearching" class="spinner-grow spinner-grow" role="status"
+                      aria-hidden="true"></span>
+                    {{ isSearching ? "Searching for flights..." : "Search" }}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

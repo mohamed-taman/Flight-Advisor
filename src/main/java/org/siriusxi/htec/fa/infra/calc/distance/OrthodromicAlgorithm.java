@@ -1,8 +1,4 @@
-package org.siriusxi.htec.fa.infra.calc.distance.impl;
-
-import org.siriusxi.htec.fa.infra.calc.distance.DistanceAlgorithm;
-import org.siriusxi.htec.fa.infra.calc.distance.MeasureType;
-import org.siriusxi.htec.fa.infra.calc.distance.Point;
+package org.siriusxi.htec.fa.infra.calc.distance;
 
 import static java.lang.Math.asin;
 import static java.lang.Math.cos;
@@ -25,7 +21,7 @@ import static java.util.Objects.requireNonNullElse;
  * @author Mohamed Taman
  * @since v0.4
  */
- public class OrthodromicAlgorithm implements DistanceAlgorithm {
+ public final class OrthodromicAlgorithm implements DistanceAlgorithm {
     
     /**
      * {@inheritDoc}

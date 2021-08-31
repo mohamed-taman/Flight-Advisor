@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.0</version>
+        <version>2.6.0-M2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>org.siriusxi.htec</groupId>
     <artifactId>flight-advisor</artifactId>
-    <version>1.0</version>
+    <version>2.0</version>
     <name>Flight Advisor API</name>
     <description>Flight Advisor API Spring Boot based Application.</description>
     <packaging>jar</packaging>
@@ -58,19 +58,21 @@
     </licenses>
 
     <properties>
-        <java.version>15</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!--  Dependencies versions properties  -->
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
-        <maven.surefire.plugin.version>3.0.0-M4</maven.surefire.plugin.version>
-        <maven.failsafe.plugin.version>3.0.0-M4</maven.failsafe.plugin.version>
+        <maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
+        <maven.failsafe.plugin.version>3.0.0-M5</maven.failsafe.plugin.version>
         <io.jsonwebtoken.version>0.11.2</io.jsonwebtoken.version>
-        <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
-        <org.springdoc.version>1.5.1</org.springdoc.version>
-        <lombok.version>1.18.16</lombok.version>
-        <opencsv.version>5.3</opencsv.version>
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <org.springdoc.version>1.5.10</org.springdoc.version>
+        <lombok.version>1.18.20</lombok.version>
+        <opencsv.version>5.5</opencsv.version>
+        <hipster-core.version>1.0.1</hipster-core.version>
+        <commons-fileupload.version>1.4</commons-fileupload.version>
     </properties>
 
     <dependencies>
@@ -190,14 +192,14 @@
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.4</version>
+            <version>${commons-fileupload.version}</version>
         </dependency>
 
         <!-- Add hipster-core instead of hipster-all for basic functionality. -->
         <dependency>
             <groupId>es.usc.citius.hipster</groupId>
             <artifactId>hipster-core</artifactId>
-            <version>1.0.1</version>
+            <version>${hipster-core.version}</version>
         </dependency>
         <!-- End - Development and dependencies Ops, and third parties libraries -->
 
@@ -293,6 +295,17 @@
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
             <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -300,6 +313,17 @@
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
             <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </pluginRepository>
     </pluginRepositories>
 

@@ -1,0 +1,113 @@
+<div class="container mt-5">
+    <div class="row align-items-center">
+        <div class="col">
+            <h5>
+                <i-bs name="chat-right-quote" style="color: gray" width="1.5rem"
+                      height="1.5rem"></i-bs>
+                What people says about {{city?.name}}!
+            </h5>
+        </div>
+        <div class="col text-lg-right">
+            <a routerLink="../search" class="btn btn-outline-dark">Back to Search</a>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col">
+            <table class="table table-striped">
+                <caption>{{city.comments?.length}} comment(s)
+                </caption>
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Comment</th>
+                    <th scope="col">By</th>
+                    <th scope="col">Created at</th>
+                    <th scope="col">Updated at</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="col-auto text-center" colspan="6" *ngIf="city.comments?.length == 0">
+                        <p class="lead">No more comments, back to search cities to add comments.</p>
+                    </td>
+                </tr>
+                <tr *ngFor="let comment of city.comments; let i = index">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ comment.comment }}</td>
+                    <td>{{ comment.by }}</td>
+                    <td>{{ comment.createdAt | date: 'short' }}</td>
+                    <td>{{ comment.updatedAt | date: 'short' }}</td>
+                    <td class="text-right">
+                        <button class="btn btn-primary btn-sm mr-2" data-toggle="modal"
+                                data-target="#updateComment"
+                                (click)="onUpdate(comment.id, comment.comment)">Update
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm"
+                                (click)="deleteComment(comment.id)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <nav aria-label="City Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1"
+                           aria-disabled="true">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Update Comment Modal -->
+<div class="modal fade" id="updateComment" data-backdrop="static" data-keyboard="false"
+     tabindex="-1"
+     aria-labelledby="updateCommentLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateCommentLabel">Update Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="commentForm" [formGroup]="form!">
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" formControlName="description"
+                                  id="description" name="description" rows="3"
+                                  [ngClass]="{'is-invalid': submitted && f.description.errors}"
+                                  required></textarea>
+                        <div *ngIf="f.description.errors" class="invalid-feedback">
+                            <div *ngIf="f.description.errors.required">Description is
+                                required.
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            (click)="updateComment()" [disabled]="f.description.errors ||
+                            f.description.value == ''">
+                        Update
+                    </button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
