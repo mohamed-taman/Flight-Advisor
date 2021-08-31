@@ -6,5 +6,5 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotBlank;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public record SearchAirportRequest(@JsonProperty("by_name") @NotBlank String name) {
+public record SearchAirportRequest(@JsonProperty("byName") @NotBlank String name) {
 }

@@ -11,7 +11,6 @@ import org.siriusxi.htec.fa.domain.model.User;
 import org.siriusxi.htec.fa.infra.security.jwt.JwtTokenHelper;
 import org.siriusxi.htec.fa.service.UserService;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,21 +19,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
+
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 /**
  * Authentication controller used to handle users authentication.
  *
  * @author Mohamed Taman
  * @version 1.0
- *
+ * <p>
  * FIXME: add refresh token method, change password.
  */
 @Log4j2
 @Tag(name = "Authentication",
-    description = "Set of public APIs, for managing user authentication, and the registration.")
+    description = "A set of public APIs, for managing user authentication, and the registration.")
 @RestController
 @RequestMapping("public")
 public class AuthController {
@@ -59,20 +60,20 @@ public class AuthController {
     public ResponseEntity<UserView> authenticate(@RequestBody @Valid AuthRequest request) {
         try {
             var authenticate = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(
-                    request.username(),
-                    request.password()));
+                                   .authenticate(new UsernamePasswordAuthenticationToken(
+                                       request.username(),
+                                       request.password()));
             
             User user = (User) authenticate.getPrincipal();
             
             return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION,
-                    JwtTokenHelper.generateAccessToken(
-                        user.getId(),
-                        user.getUsername()))
-                .body(userMapper.toView(user));
+                       .header(HttpHeaders.AUTHORIZATION,
+                           JwtTokenHelper.generateAccessToken(
+                               user.getId(),
+                               user.getUsername()))
+                       .body(userMapper.toView(user));
         } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new HttpClientErrorException(UNAUTHORIZED, UNAUTHORIZED.getReasonPhrase());
         }
     }
     
@@ -83,9 +84,6 @@ public class AuthController {
     @PostMapping(value = "register")
     public UserView register(@RequestBody @Valid CreateUserRequest userRequest) {
         
-        if (!userRequest.password().equals(userRequest.rePassword())) {
-            throw new ValidationException("Passwords doesn't match!");
-        }
         log.debug("User information to be created: {}", userRequest);
         return userService.create(userRequest);
     }

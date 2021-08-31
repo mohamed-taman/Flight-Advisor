@@ -1,8 +1,5 @@
 package org.siriusxi.htec.fa.infra.calc.distance;
 
-import org.siriusxi.htec.fa.infra.calc.distance.impl.HaversineAlgorithm;
-import org.siriusxi.htec.fa.infra.calc.distance.impl.OrthodromicAlgorithm;
-
 /**
  * A distance Algorithm interface to represent different calculations algorithms type
  * of distances between any two points on earth.
@@ -16,7 +13,7 @@ import org.siriusxi.htec.fa.infra.calc.distance.impl.OrthodromicAlgorithm;
  * @author Mohamed Taman
  * @since v0.4
  */
-public interface DistanceAlgorithm {
+public sealed interface DistanceAlgorithm permits HaversineAlgorithm, OrthodromicAlgorithm {
     
     /**
      * Method to calculate the distance between co-ordinates of two points.

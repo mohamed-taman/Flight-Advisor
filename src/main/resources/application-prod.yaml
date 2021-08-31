@@ -1,16 +1,22 @@
 # Production profile
+app:
+  allowedOrigins: 'http://localhost:4200'
+
 spring:
   jmx:
     enabled: false
   # Database configurations
   datasource:
-    data: classpath*:db/prod/data.sql
+    url: jdbc:h2:./db/flightDB
     password: Admin1234
   jpa:
     show-sql: false
     properties:
       hibernate:
         generate_statistics: false
+  sql:
+    init:
+      data-locations: classpath*:db/prod/data.sql
 
 logging.level:
   org:
@@ -19,9 +25,9 @@ logging.level:
       type.descriptor.sql.BasicBinder: info
     springframework:
       cache: info
-      web: info
+      web: debug
     siriusxi:
       htec:
-        fa: info
-  web: info
+        fa: debug
+  web: debug
   root: info

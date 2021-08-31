@@ -1,0 +1,5 @@
+@media screen and (min-width: 676px) {
+    div[id="showComments"] div.modal-dialog {
+        max-width: 676px; /* New width for default modal */
+    }
+}

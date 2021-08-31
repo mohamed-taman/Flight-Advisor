@@ -1,0 +1,128 @@
+<div class="container mt-5">
+    <h5>
+        <i-bs name="search" style="color: gray" width="1.4rem" height="1.4rem"></i-bs>
+        Search Cities
+    </h5>
+    <div class="row">
+        <div class="col">
+            <form class="form-inline justify-content-end" id="search"
+                  (ngSubmit)="onSearchSubmit()" [formGroup]="form!">
+                <input type="text" class="form-control mb-2 mr-sm-2" id="byName"
+                       formControlName="byName" aria-label="By city name"
+                       placeholder="By city name">
+
+                <input type="number" max="30" aria-label="Comments limit"
+                       (keyup)="checkCommentsLimitInput(f.commentsLimit.value)"
+                       class="form-control mb-2 mr-sm-2" id="commentsLimit"
+                       placeholder="Comments limit" formControlName="commentsLimit"/>
+
+                <button type="submit" [disabled]="loading" class="btn btn-primary mb-2">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1">
+                            </span>Search
+                </button>
+                <button type="button" class="btn btn-outline-primary mb-2 ml-2" routerLink="../add">
+                    Add City
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="text-center" *ngIf="cities.length == 0">
+        <hr/>
+        <p class="mb-0 lead text-dark">No search results! try again...</p>
+        <i-bs name="eyeglasses" width="2rem" height="2rem"></i-bs>
+    </div>
+    <div *ngIf="cities.length != 0">
+        <div class="row mt-lg-2">
+            <div class="col">
+                <table class="table table-striped table-hover">
+                    <caption>Search results for {{cities.length}} {{cities.length > 1 ?
+                        'cities' : 'city'}}
+                    </caption>
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Country</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Comments</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let city of cities; let i = index">
+                        <th scope="row">{{ i + 1 }}</th>
+                        <td>{{ city.name }}</td>
+                        <td>{{ city.country }}</td>
+                        <td>{{ city.description }}</td>
+                        <td class="text-right">
+                            <button class="btn btn-primary btn-sm mr-2" data-toggle="modal"
+                                    data-target="#showComments" routerLink="../comments"
+                                    (click)="onShow(city)"
+                                    [disabled]="city.comments!.length == 0"> Show
+                                <span class="badge badge-light">
+                                            {{city.comments!.length}}
+                                        </span>
+                            </button>
+                            <button class="btn btn-secondary btn-sm" data-toggle="modal"
+                                    data-target="#addComment" (click)="onAdd(city.id)"> Add
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <nav aria-label="City Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                        <li class="page-item"><a class="page-link">1</a></li>
+                        <li class="page-item"><a class="page-link">2</a></li>
+                        <li class="page-item"><a class="page-link">3</a></li>
+                        <li class="page-item"><a class="page-link">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Comment Modal -->
+<div class="modal fade" id="addComment" data-backdrop="static" data-keyboard="false" tabindex="-1"
+     aria-labelledby="addCommentLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCommentLabel">Add Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="commentForm" [formGroup]="addForm!">
+                    <div class="form-group">
+                        <textarea class="form-control" formControlName="description"
+                                  id="description" name="description" rows="3"
+                                  placeholder="Description" required aria-label="description"
+                                  [ngClass]="{'is-invalid': submitted && af.description.errors}">
+                        </textarea>
+                        <div *ngIf="af.description.errors" class="invalid-feedback">
+                            <div *ngIf="af.description.errors.required">Description is
+                                required.
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            (click)="addComment()" [disabled]="af.description.errors ||
+                            af.description.value == ''">
+                        Add
+                    </button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -36,15 +36,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserRepository userRepository;
     private final JwtTokenFilter jwtTokenFilter;
     private final String appVersion;
+    private final String allowedOrigins;
     
     public SecurityConfig(UserRepository userRepository,
                           JwtTokenFilter jwtTokenFilter,
-                          @Value("${app.version:v1}") String appVersion) {
+                          @Value("${app.version:v1}") String appVersion,
+                          @Value("${app.allowedOrigins:*}") String allowedOrigins) {
         super();
         
         this.userRepository = userRepository;
         this.jwtTokenFilter = jwtTokenFilter;
         this.appVersion = "/".concat(appVersion);
+        this.allowedOrigins = allowedOrigins;
         
         // Inherit security context in async function calls
         setStrategyName(MODE_INHERITABLETHREADLOCAL);
@@ -53,12 +56,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(username ->
-            userRepository
-                .findByUsernameIgnoreCase(username)
-                .orElseThrow(
-                    () -> new UsernameNotFoundException(
-                        format("User: %s, not found",
-                            username))))
+                                    userRepository
+                                        .findByUsernameIgnoreCase(username)
+                                        .orElseThrow(
+                                            () -> new UsernameNotFoundException(
+                                                format("User: %s, not found",
+                                                    username))))
             .passwordEncoder(passwordEncoder());
     }
     
@@ -108,7 +111,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             
             // Set permissions on endpoints
             .authorizeRequests()
+            //Enable root
             .antMatchers("/", "/index.html").permitAll()
+            //Enables images
+            .antMatchers("/assets/**").permitAll()
             // Swagger endpoints must be publicly accessible
             .antMatchers(swaggerAuthList).permitAll()
             // Our public endpoints
@@ -127,9 +133,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         var source = new UrlBasedCorsConfigurationSource();
         var config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
+        
+        /*
+          When allowCredentials is true, allowedOrigins cannot contain the special value "*" since
+          that cannot be set on the "Access-Control-Allow-Origin" response header.
+           
+          To allow credentials to a set of origins, list them explicitly or consider
+          using "allowedOriginPatterns" instead.
+         */
+        config.addAllowedOrigin(allowedOrigins);
+        
+        /*
+          When we have a client application say Angular, there is a problem will occur when
+          reading headers from the client application which is related to the CORS handshaking:
+          
+          - If the server does not explicitly allow the client application to read the headers,
+             the browser will hide them from the client application.
+          
+          -- Then the solution is that the server must add in its responses the header
+             "Access-Control-Expose-Headers:<header_name>,<header-name2>" in order to let client to
+              read them. So we use here config.addExposedHeader() method.
+         */
+        config.addExposedHeader("Authorization");
+    
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
