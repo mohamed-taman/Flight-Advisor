@@ -70,7 +70,7 @@
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
         <org.springdoc.version>1.5.10</org.springdoc.version>
         <lombok.version>1.18.20</lombok.version>
-        <opencsv.version>5.5</opencsv.version>
+        <opencsv.version>5.5.2</opencsv.version>
         <hipster-core.version>1.0.1</hipster-core.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
     </properties>

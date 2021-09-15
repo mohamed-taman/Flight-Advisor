@@ -37,7 +37,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         
         // Get authorization header and validate
         var authToken = getJwtTokenIfValid(request
-                                               .getHeader(HttpHeaders.AUTHORIZATION));
+            .getHeader(HttpHeaders.AUTHORIZATION));
         
         String token;
         
@@ -48,8 +48,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         
         // Get user identity and set it on the spring security context
         var userDetails = userRepository
-                              .findByUsernameIgnoreCase(JwtTokenHelper.getUsername(token))
-                              .orElse(null);
+            .findByUsernameIgnoreCase(JwtTokenHelper.getUsername(token))
+            .orElse(null);
         
         var authentication = new UsernamePasswordAuthenticationToken(
             userDetails, null,

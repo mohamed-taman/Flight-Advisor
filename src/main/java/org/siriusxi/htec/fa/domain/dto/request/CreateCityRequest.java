@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"name", "country", "countryId", "description"})
 public record CreateCityRequest(
     @JsonProperty("name") @NotBlank @Size(min = 5, max = 100) String name,

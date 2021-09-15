@@ -1,6 +1,7 @@
 package org.siriusxi.htec.fa.infra.exception;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
+import static java.lang.String.valueOf;
 
 public class NotFoundException extends RuntimeException {
     
@@ -17,6 +18,6 @@ public class NotFoundException extends RuntimeException {
     }
     
     private static String getFormattedMessage(String entity, String id) {
-        return format("%s with id %s not found", entity, id );
+        return format("%s with id %s not found", entity, id);
     }
 }

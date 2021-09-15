@@ -27,7 +27,7 @@ public final class JwtTokenHelper {
      * Generates a token fot the user.
      *
      * @param id       of the user.
-     * @param username of the the login user.
+     * @param username of the login user.
      * @return a valid JWT token.
      */
     public static String generateAccessToken(int id, String username) {
@@ -49,7 +49,7 @@ public final class JwtTokenHelper {
      * Extracts the User id claim from the JWT token
      *
      * @param token - token to analyze
-     * @return the User Id claim contained in the token
+     * @return the User id claim contained in the token
      */
     public static int getUserId(String token) {
         return Integer.parseInt(getClaims(token)
@@ -146,6 +146,7 @@ public final class JwtTokenHelper {
         static final String TOKEN_PREFIX = "Bearer ";
         static final String ISSUER = "siriusx.io";
         static final int TOKEN_EXPIRY_DURATION = 7; // In days
+        
         private JwtConfig() {
         }
         

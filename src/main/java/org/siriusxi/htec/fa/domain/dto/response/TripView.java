@@ -17,9 +17,11 @@ public record TripView(
     
     public record Price(
         @JsonProperty double total,
-        @JsonProperty String currency) { }
+        @JsonProperty String currency) {
+    }
     
     public record Distance(
         @JsonProperty double total,
-        @JsonProperty String in) { }
+        @JsonProperty String in) {
+    }
 }

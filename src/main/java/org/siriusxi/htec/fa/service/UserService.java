@@ -42,7 +42,7 @@ public class UserService implements UserDetailsService {
         if (repository.findByUsernameIgnoreCase(request.username()).isPresent()) {
             throw new ValidationException("Username exists!");
         }
-    
+        
         // Add user
         User user = repository.save(userMapper.toUser(request));
         // Add user authorities

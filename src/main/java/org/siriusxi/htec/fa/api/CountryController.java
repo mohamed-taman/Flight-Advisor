@@ -45,16 +45,16 @@ public class CountryController {
     @GetMapping
     public Set<CountryView> getAllCountries() {
         return mapper
-                   .toViews(countryRepository
-                                .findAllByNameIgnoreCaseIsLike("%%"));
+            .toViews(countryRepository
+                .findAllByNameIgnoreCaseIsLike("%%"));
     }
     
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @GetMapping("search")
     public Set<CountryView> searchCountries(@RequestParam @NotBlank String name) {
         return mapper
-                   .toViews(countryRepository
-                                .findAllByNameIgnoreCaseIsLike("%" + name + "%"));
+            .toViews(countryRepository
+                .findAllByNameIgnoreCaseIsLike("%" + name + "%"));
     }
     
 }

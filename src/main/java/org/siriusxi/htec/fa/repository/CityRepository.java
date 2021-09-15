@@ -19,9 +19,9 @@ public interface CityRepository extends CrudRepository<City, Integer> {
     /**
      * Return the city if exist, else save and return it.
      *
-     * @param name of the country.
+     * @param name        of the country.
      * @param description of the city
-     * @param country of the city.
+     * @param country     of the city.
      * @return the found or saved country.
      */
     default City findOrSaveBy(Country country, String name, String description) {
@@ -37,6 +37,7 @@ public interface CityRepository extends CrudRepository<City, Integer> {
     
     /**
      * Search cities by name, it is case insensitive search.
+     *
      * @param name to search city by.
      * @return list of found cities, or empty list if not found.
      */

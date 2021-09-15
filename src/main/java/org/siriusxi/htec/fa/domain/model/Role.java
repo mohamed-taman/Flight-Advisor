@@ -1,14 +1,17 @@
 package org.siriusxi.htec.fa.domain.model;
 
 import lombok.*;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.io.Serial;
+import java.util.Objects;
 
 @Entity
 @Table(name = "AUTHORITY", catalog = "FLIGHTDB", schema = "PUBLIC")
-@Data
+@Getter
+@Setter
 @RequiredArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = {"rolePK"})
@@ -31,5 +34,19 @@ public class Role implements GrantedAuthority {
     public Role(RolePK rolePK) {
         setRolePK(rolePK);
         this.authority = rolePK.getAuthority();
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
+        Role role = (Role) o;
+        return Objects.equals(rolePK, role.rolePK);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(rolePK);
     }
 }

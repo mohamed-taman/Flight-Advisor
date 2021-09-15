@@ -26,9 +26,10 @@ public abstract class CityMapper {
     public abstract City toModel(CreateCityRequest request, Country country);
     
     @Mapping(target = "comments", expression = """
-        java( city.getComments() != null ? commentMapper.toViews(city.getComments()) : null )""")
+        java( city.getComments() != null ? commentMapper.toViews(city.getComments()) : null )
+        """)
     @Mapping(target = "country", source = "country.name")
     public abstract CityView toView(City city);
-
-public abstract List<CityView> toViews(List<City> city);
+    
+    public abstract List<CityView> toViews(List<City> city);
 }

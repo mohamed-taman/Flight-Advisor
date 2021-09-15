@@ -26,11 +26,11 @@ public interface AirportRepository extends CrudRepository<Airport, Integer> {
     Optional<Airport> findById(Integer integer);
     
     @Query("""
-               SELECT a FROM Airport a
-               WHERE LOWER(a.iata) LIKE %:name%
-               OR LOWER(a.name) LIKE %:name%
-               OR LOWER(a.city.name) LIKE %:name%
-               OR LOWER(a.country.name) LIKE %:name%
-           """)
+            SELECT a FROM Airport a
+            WHERE LOWER(a.iata) LIKE %:name%
+            OR LOWER(a.name) LIKE %:name%
+            OR LOWER(a.city.name) LIKE %:name%
+            OR LOWER(a.country.name) LIKE %:name%
+        """)
     List<Airport> findAirportsByCityOrCountryName(String name);
 }

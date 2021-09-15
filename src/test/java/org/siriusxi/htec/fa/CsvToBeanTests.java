@@ -5,7 +5,6 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.siriusxi.htec.fa.domain.dto.upload.airport.AirportDto;
 import org.siriusxi.htec.fa.domain.dto.upload.airport.verifer.AirportBeanVerifier;
 import org.siriusxi.htec.fa.domain.dto.upload.route.RouteDto;
@@ -40,7 +39,7 @@ class CsvToBeanTests {
     }
     
     @SneakyThrows
-   // @Test
+        // @Test
     void parseAirportsCSVFileToBeans() {
         
         try (Reader fileReader = new FileReader("./data/airports.txt")) {

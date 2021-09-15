@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record CreateUserRequest(@JsonProperty("firstName") @NotBlank String firstName,
                                 @JsonProperty("lastName") @NotBlank String lastName,
                                 @JsonProperty("username") @NotBlank @Email String username,

@@ -29,10 +29,10 @@ public abstract class UserMapper {
     
     public abstract UserView toView(User user);
     
-    protected String[] map(Set<Role> authorities){
+    protected String[] map(Set<Role> authorities) {
         return authorities
-                   .stream()
-                   .map(Role::getAuthority)
-                   .toArray(String[]::new);
+            .stream()
+            .map(Role::getAuthority)
+            .toArray(String[]::new);
     }
 }

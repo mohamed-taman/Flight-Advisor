@@ -12,10 +12,8 @@ import org.siriusxi.htec.fa.domain.mapper.AirportMapper;
 import org.siriusxi.htec.fa.domain.model.Airport;
 import org.siriusxi.htec.fa.domain.model.Route;
 import org.siriusxi.htec.fa.domain.model.RoutePK;
-import org.siriusxi.htec.fa.infra.calc.distance.AlgorithmType;
-import org.siriusxi.htec.fa.infra.calc.distance.DistanceAlgorithm;
-import org.siriusxi.htec.fa.infra.calc.distance.MeasureType;
-import org.siriusxi.htec.fa.infra.calc.distance.Point;
+import org.siriusxi.htec.fa.infra.algorithm.distance.DistanceAlgorithm;
+import org.siriusxi.htec.fa.infra.algorithm.distance.Point;
 import org.siriusxi.htec.fa.repository.AirportRepository;
 import org.siriusxi.htec.fa.repository.RouteRepository;
 import org.springframework.cache.annotation.CacheConfig;
@@ -28,11 +26,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.lang.Double.parseDouble;
 import static java.util.Objects.requireNonNull;
-import static org.siriusxi.htec.fa.infra.calc.distance.DistanceAlgorithm.getAlgorithm;
+import static org.siriusxi.htec.fa.infra.algorithm.distance.DistanceAlgorithm.getAlgorithm;
 
 /**
  * Travel Service class is the core of travel calculations from city A to City B.
@@ -70,13 +67,7 @@ public class TravelService {
     private final AirportRepository airportRepository;
     private final AirportMapper airportMapper;
     private final DistanceAlgorithm orthodromicAlgorithm;
-    private final DecimalFormat formater = new DecimalFormat("#.00");
-    
-    private record FinalTrip(String start,
-                             List<String> through,
-                             String end,
-                             double totalCost) {
-    }
+    private final DecimalFormat formatter = new DecimalFormat("#.00");
     
     public TravelService(RouteRepository routeRepository,
                          AirportRepository airportRepository,
@@ -84,7 +75,22 @@ public class TravelService {
         this.routeRepository = routeRepository;
         this.airportRepository = airportRepository;
         this.airportMapper = airportMapper;
-        this.orthodromicAlgorithm = getAlgorithm(AlgorithmType.ORTHODROMIC);
+        this.orthodromicAlgorithm = getAlgorithm(DistanceAlgorithm.Type.ORTHODROMIC);
+    }
+    
+    private static FinalTrip getTrip(Algorithm<Double, String,
+                                                  WeightedNode<Double, String, Double>>
+                                         .SearchResult result) {
+        
+        var paths = result.getOptimalPaths().get(0);
+        int lastIndex = result.getOptimalPaths().get(0).size() - 1;
+        
+        // calculate final cost
+        return new FinalTrip(
+            paths.get(0),
+            lastIndex != 0 ? paths.subList(1, lastIndex) : Collections.emptyList(),
+            paths.get(lastIndex),
+            result.getGoalNode().getCost());
     }
     
     @Transactional(readOnly = true)
@@ -96,7 +102,7 @@ public class TravelService {
     
     private List<TripView> buildFinalTripViews(FinalTrip trip) {
         var trips = new ArrayList<TripView>();
-        if (trip.through.size() == 0) {
+        if (trip.through.isEmpty()) {
             routeRepository
                 .findById(new RoutePK(trip.start(), trip.end()))
                 .ifPresent(route ->
@@ -105,7 +111,6 @@ public class TravelService {
                                    route.getDestinationAirport(), null, route.getPrice(),
                                    calculateDistance(route))));
         } else {
-            
             var airports = new LinkedList<Airport>();
             //Get source
             airportRepository.findByCode(trip.start()).ifPresent(airports::add);
@@ -136,7 +141,7 @@ public class TravelService {
                     .subList(1, airports.size() - 1)
                     .stream()
                     .map(airport -> airportMapper.toTripView(airport, 0))
-                    .collect(Collectors.toList()),
+                    .toList(),
                 // Calculate final price
                 routeRepository.getTripCost(routePKs),
                 // Calculate total distance
@@ -152,14 +157,13 @@ public class TravelService {
     
     private double calculateDistance(Route route) {
         return orthodromicAlgorithm
-                   .calculate(
-                       new Point(
-                           route.getSourceAirport().getLatitude().doubleValue(),
-                           route.getSourceAirport().getLongitude().doubleValue()),
-                       new Point(
-                           route.getDestinationAirport().getLatitude().doubleValue(),
-                           route.getDestinationAirport().getLongitude().doubleValue()),
-                       MeasureType.KILOMETER);
+            .calculate(
+                new Point(
+                    route.getSourceAirport().getLatitude().doubleValue(),
+                    route.getSourceAirport().getLongitude().doubleValue()),
+                new Point(
+                    route.getDestinationAirport().getLatitude().doubleValue(),
+                    route.getDestinationAirport().getLongitude().doubleValue()));
     }
     
     private TripView newTripView(Airport src, Airport dest,
@@ -169,7 +173,7 @@ public class TravelService {
             airportMapper.toTripView(src, 0), through,
             airportMapper.toTripView(dest, 0),
             new TripView.Price(cost, "US"),
-            new TripView.Distance(parseDouble(formater.format(distance)), "KM"));
+            new TripView.Distance(parseDouble(formatter.format(distance)), "KM"));
     }
     
     private FinalTrip findShortestPath(String from, String to) {
@@ -188,9 +192,9 @@ public class TravelService {
         // Create the search problem. For graph problems, just use
         // the GraphSearchProblem util class to generate the problem with ease.
         var problem = GraphSearchProblem
-                          .startingFrom(from).in(graph)
-                          .takeCostsFromEdges()
-                          .build();
+            .startingFrom(from).in(graph)
+            .takeCostsFromEdges()
+            .build();
         
         // Search the shortest path from source to destination
         final var result = Hipster.createDijkstra(problem).search(to);
@@ -211,25 +215,16 @@ public class TravelService {
         return graph;
     }
     
-    private static FinalTrip getTrip(Algorithm<Double, String,
-                                                  WeightedNode<Double, String, Double>>
-                                         .SearchResult result) {
-        
-        var paths = result.getOptimalPaths().get(0);
-        int lastIndex = result.getOptimalPaths().get(0).size() - 1;
-        
-        // calculate final cost
-        return new FinalTrip(
-            paths.get(0),
-            lastIndex != 0 ? paths.subList(1, lastIndex) : Collections.emptyList(),
-            paths.get(lastIndex),
-            result.getGoalNode().getCost());
+    public List<AirportView> findAirportsForCityOrCountry(String name) {
+        return airportMapper
+            .toView(airportRepository
+                .findAirportsByCityOrCountryName(name.toLowerCase()));
     }
     
-    public List<AirportView> findAirportsForCityOrCountry(String name){
-        return airportMapper
-                   .toView(airportRepository
-                               .findAirportsByCityOrCountryName(name.toLowerCase()));
+    private record FinalTrip(String start,
+                             List<String> through,
+                             String end,
+                             double totalCost) {
     }
-
+    
 }

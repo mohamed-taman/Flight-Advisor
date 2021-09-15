@@ -30,8 +30,8 @@ public class GlobalExceptionHandler {
         log.error("NotFoundException {}\n", request.getRequestURI(), ex);
         
         return ResponseEntity
-                   .status(HttpStatus.NOT_FOUND)
-                   .body(new ApiCallError<>("Not found", List.of(ex.getMessage())));
+            .status(HttpStatus.NOT_FOUND)
+            .body(new ApiCallError<>("Not found", List.of(ex.getMessage())));
     }
     
     @ExceptionHandler(NotAllowedException.class)
@@ -42,23 +42,23 @@ public class GlobalExceptionHandler {
         log.error("NotAllowedException {}\n", request.getRequestURI(), ex);
         
         return ResponseEntity
-                   .status(HttpStatus.NOT_ACCEPTABLE)
-                   .body(new ApiCallError<>("Not Applicable", List.of(ex.getMessage())));
+            .status(HttpStatus.NOT_ACCEPTABLE)
+            .body(new ApiCallError<>("Not Applicable", List.of(ex.getMessage())));
     }
     
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiCallError<String>>
     handleIllegalArgumentException(HttpServletRequest request,
-                              IllegalArgumentException ex) {
+                                   IllegalArgumentException ex) {
         
         log.error("IllegalArgumentException {} \n\n {}",
             request.getRequestURI(), ex.getMessage());
         
         return ResponseEntity
-                   .badRequest()
-                   .body(new ApiCallError<>(
-                       "Illegal Arguments",
-                       List.of(ex.getMessage())));
+            .badRequest()
+            .body(new ApiCallError<>(
+                "Illegal Arguments",
+                List.of(ex.getMessage())));
     }
     
     
@@ -70,10 +70,10 @@ public class GlobalExceptionHandler {
         log.error("ValidationException {}\n", request.getRequestURI(), ex);
         
         return ResponseEntity
-                   .badRequest()
-                   .body(new ApiCallError<>(
-                       "Validation exception",
-                       List.of(ex.getMessage())));
+            .badRequest()
+            .body(new ApiCallError<>(
+                "Validation exception",
+                List.of(ex.getMessage())));
     }
     
     @ExceptionHandler(MissingServletRequestParameterException.class)
@@ -84,9 +84,9 @@ public class GlobalExceptionHandler {
         log.error("handleMissingServletRequestParameterException {}\n", request.getRequestURI(), ex);
         
         return ResponseEntity
-                   .badRequest()
-                   .body(new ApiCallError<>("Missing request parameter",
-                       List.of(Objects.requireNonNull(ex.getMessage()))));
+            .badRequest()
+            .body(new ApiCallError<>("Missing request parameter",
+                List.of(Objects.requireNonNull(ex.getMessage()))));
     }
     
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -102,10 +102,10 @@ public class GlobalExceptionHandler {
         details.put("errorMessage", ex.getMessage());
         
         return ResponseEntity
-                   .badRequest()
-                   .body(new ApiCallError<>(
-                       "Method argument type mismatch",
-                       List.of(details)));
+            .badRequest()
+            .body(new ApiCallError<>(
+                "Method argument type mismatch",
+                List.of(details)));
     }
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -128,10 +128,10 @@ public class GlobalExceptionHandler {
             });
         
         return ResponseEntity
-                   .badRequest()
-                   .body(new ApiCallError<>(
-                       "Method argument validation failed",
-                       details));
+            .badRequest()
+            .body(new ApiCallError<>(
+                "Method argument validation failed",
+                details));
     }
     
     @ExceptionHandler(AccessDeniedException.class)
@@ -141,8 +141,8 @@ public class GlobalExceptionHandler {
         log.error("handleAccessDeniedException {}\n", request.getRequestURI(), ex);
         
         return ResponseEntity
-                   .status(HttpStatus.FORBIDDEN)
-                   .body(new ApiCallError<>("Access denied!", List.of(ex.getMessage())));
+            .status(HttpStatus.FORBIDDEN)
+            .body(new ApiCallError<>("Access denied!", List.of(ex.getMessage())));
     }
     
     @ExceptionHandler(HttpClientErrorException.class)
@@ -152,9 +152,9 @@ public class GlobalExceptionHandler {
         log.error("handleUnauthorizedException {}\n", request.getRequestURI(), ex);
         
         return ResponseEntity
-                   .status(HttpStatus.UNAUTHORIZED)
-                   .body(new ApiCallError<>("Unauthorized Access, check your credentials!",
-                       List.of(ex.getMessage() != null ? ex.getMessage() : "")));
+            .status(HttpStatus.UNAUTHORIZED)
+            .body(new ApiCallError<>("Unauthorized Access, check your credentials!",
+                List.of(ex.getMessage() != null ? ex.getMessage() : "")));
     }
     
     @ExceptionHandler(Exception.class)
@@ -164,10 +164,10 @@ public class GlobalExceptionHandler {
         log.error("handleInternalServerError {}\n", request.getRequestURI(), ex);
         
         return ResponseEntity
-                   .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                   .body(new ApiCallError<>(
-                       "Internal server error",
-                       List.of(ex.getMessage())));
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(new ApiCallError<>(
+                "Internal server error",
+                List.of(ex.getMessage())));
     }
 }
 

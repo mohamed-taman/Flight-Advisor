@@ -32,12 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -46,7 +42,7 @@ import static org.springframework.http.HttpStatus.*;
  *
  * @author Mohamed Taman
  * @version 1.0
- *
+ * <p>
  * TODO: Improve performance of the file processing.
  */
 @Log4j2
@@ -111,19 +107,21 @@ public class FileUploadController {
                 airportRepository.saveAll(
                     airports
                         .stream()// Save countries and cities to database
-                        .peek(airportDto -> {
+                        .map(airportDto -> {
                             
                             Country country = countryRepository
                                 .findOrSaveBy(airportDto.getCountry());
+                            
                             airportDto.setCountryId(country.getId());
                             
                             airportDto.setCityId(cityRepository.findOrSaveBy(country,
                                 airportDto.getCity()).getId());
+                            
+                            // then converting to
+                            return airportMapper.toModel(airportDto);
                         })
-                        // converting to
-                        .map(airportMapper::toModel)
                         // Then collect them to list
-                        .collect(Collectors.toList()));
+                        .toList());
                 
             } catch (Exception ex) {
                 log.error("Error while reading airports file.", ex);
@@ -180,12 +178,12 @@ public class FileUploadController {
                         .stream()
                         // filter routes doesn't exists
                         .filter(dto ->
-                            airportRepository.findById(dto.getSrcAirportId()).isPresent() &&
-                                airportRepository.findById(dto.getDestAirportId()).isPresent())
+                                    airportRepository.findById(dto.getSrcAirportId()).isPresent() &&
+                                        airportRepository.findById(dto.getDestAirportId()).isPresent())
                         // converting to
                         .map(routeMapper::toModel)
                         // Then collect them to list
-                        .collect(Collectors.toList()));
+                        .toList());
                 
             } catch (Exception ex) {
                 log.error("Error while reading routes file.", ex);
@@ -205,13 +203,12 @@ public class FileUploadController {
      * @param beanVerifier to verify and exclude unwanted data for a specific bean type.
      * @param <T>          is the bean type.
      * @return List of bean type T.
-     *
-     * @throws Exception If any data is invalid or problem parsing the content of the input stream.
-     *
+     * @throws IOException If any data is invalid or problem parsing the content of the input
+     *                     stream.
      * @since v1.0
      */
     private <T> List<T> parseCsvContent(InputStream content, Class<T> clazz,
-                                        BeanVerifier<T> beanVerifier) throws Exception {
+                                        BeanVerifier<T> beanVerifier) throws IOException {
         
         List<T> dtoList;
         // parse CSV file to create a list of `TypeDto` objects

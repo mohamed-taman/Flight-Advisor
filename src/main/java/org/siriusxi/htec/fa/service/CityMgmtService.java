@@ -17,7 +17,10 @@ import org.siriusxi.htec.fa.domain.model.Country;
 import org.siriusxi.htec.fa.domain.model.User;
 import org.siriusxi.htec.fa.infra.exception.NotAllowedException;
 import org.siriusxi.htec.fa.infra.exception.NotFoundException;
-import org.siriusxi.htec.fa.repository.*;
+import org.siriusxi.htec.fa.repository.AirportRepository;
+import org.siriusxi.htec.fa.repository.CityRepository;
+import org.siriusxi.htec.fa.repository.CommentRepository;
+import org.siriusxi.htec.fa.repository.CountryRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,15 +32,14 @@ import java.util.List;
 @Service
 public class CityMgmtService {
     
+    private static final String LIKE = "%";
     private final CityRepository cityRepository;
     private final CountryRepository countryRepository;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
     private final CityMapper cityMapper;
     private final AirportRepository airportRepository;
-    private final AirportMapper airportMapper ;
-    
-    private static final String LIKE = "%";
+    private final AirportMapper airportMapper;
     
     public CityMgmtService(CountryRepository countryRepository,
                            CityRepository cityRepository, CityMapper cityMapper,
@@ -88,7 +90,7 @@ public class CityMgmtService {
         if (cLimit != 0)
             for (City city : cityRepository.findByNameIgnoreCaseIsLike(searchWord)) {
                 city.setComments(commentRepository
-                                     .findByCity(city, PageRequest.of(0, cLimit)));
+                    .findByCity(city, PageRequest.of(0, cLimit)));
                 cities.add(city);
             }
         
@@ -103,10 +105,10 @@ public class CityMgmtService {
     public List<AirportView> searchAirports(SearchAirportRequest request, int cityId) {
         String searchWord = LIKE.concat(request.name()).concat(LIKE);
         return airportMapper
-                   .toView(airportRepository
-                               .findAirportsByCityAndNameIgnoreCaseIsLike(
-                                   new City(cityId),
-                                   searchWord));
+            .toView(airportRepository
+                .findAirportsByCityAndNameIgnoreCaseIsLike(
+                    new City(cityId),
+                    searchWord));
     }
     
     // City Comments management
@@ -118,9 +120,9 @@ public class CityMgmtService {
         City city = getCityIfExists(cityId);
         
         return commentMapper
-                   .toView(commentRepository
-                               .save(commentMapper
-                                         .toNewModel(request, user, city)));
+            .toView(commentRepository
+                .save(commentMapper
+                    .toNewModel(request, user, city)));
     }
     
     @Transactional
@@ -142,9 +144,9 @@ public class CityMgmtService {
                          .orElseThrow(() ->
                                           new NotAllowedException(Comment.class, found.getId(), "Update")))
             .ifPresent(comment -> commentMapper
-                                      .toView(commentRepository
-                                                  .save(commentMapper
-                                                            .toUpdateModel(request, comment.getId(), user, city))));
+                .toView(commentRepository
+                    .save(commentMapper
+                        .toUpdateModel(request, comment.getId(), user, city))));
     }
     
     public void deleteComment(User user, int cityId, int commentId) {
@@ -158,14 +160,14 @@ public class CityMgmtService {
             .flatMap(comment -> commentRepository.findByIdAndCity(comment.getId(), city))
             // If exist check if user is allowed to delete it
             .ifPresent(found -> commentRepository.delete(commentRepository
-                                                             .findByIdAndCityAndUser(found.getId(), city, user)
-                                                             // If user is not allowed throw exception
-                                                             .orElseThrow(() -> new NotAllowedException(Comment.class, found.getId(), "Delete"))));
+                .findByIdAndCityAndUser(found.getId(), city, user)
+                // If user is not allowed throw exception
+                .orElseThrow(() -> new NotAllowedException(Comment.class, found.getId(), "Delete"))));
     }
     
     private City getCityIfExists(int cityId) {
         return cityRepository
-                   .findById(cityId)
-                   .orElseThrow(() -> new NotFoundException(City.class, cityId));
+            .findById(cityId)
+            .orElseThrow(() -> new NotFoundException(City.class, cityId));
     }
 }

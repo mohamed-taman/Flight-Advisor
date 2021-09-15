@@ -5,16 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
-public record AirportView(
-    @JsonInclude(NON_NULL)
-    @JsonProperty Integer id,
-    @JsonProperty String airport,
-    @JsonProperty String city,
-    @JsonProperty String country,
-    @JsonInclude(NON_NULL)
-    @JsonProperty String iata,
-    @JsonInclude(NON_NULL)
-    @JsonProperty String icao) {
+public record AirportView(@JsonInclude(NON_NULL)
+                          @JsonProperty Integer id,
+                          @JsonProperty String airport,
+                          @JsonProperty String city,
+                          @JsonProperty String country,
+                          @JsonInclude(NON_NULL)
+                          @JsonProperty String iata,
+                          @JsonInclude(NON_NULL)
+                          @JsonProperty String icao) {
 }
 
 

@@ -7,6 +7,6 @@ public class AirportBeanVerifier implements BeanVerifier<AirportDto> {
     @Override
     public boolean verifyBean(AirportDto airport) {
         return airport.getAirportId() != 0 &&
-            !airport.getCity().isBlank();
+                   !airport.getCity().isBlank();
     }
 }

@@ -25,7 +25,7 @@ public class SwaggerConfig {
                 .version("1.0")
                 .license(new License()
                     .name("MIT License")
-                    .url("http://springdoc.org")));
+                    .url("https://springdoc.org")));
     }
     
 }

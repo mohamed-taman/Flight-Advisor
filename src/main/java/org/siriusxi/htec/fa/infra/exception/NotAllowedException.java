@@ -1,6 +1,7 @@
 package org.siriusxi.htec.fa.infra.exception;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
+import static java.lang.String.valueOf;
 
 public class NotAllowedException extends RuntimeException {
     
@@ -18,7 +19,7 @@ public class NotAllowedException extends RuntimeException {
     
     private static String getFormattedMessage(String id, String method, String entity) {
         return format("You are not allowed to [%s] %s [id = %s] which is not yours.",
-            method, entity, id );
+            method, entity, id);
     }
     
     

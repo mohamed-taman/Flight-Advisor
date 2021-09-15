@@ -60,18 +60,18 @@ public class AuthController {
     public ResponseEntity<UserView> authenticate(@RequestBody @Valid AuthRequest request) {
         try {
             var authenticate = authenticationManager
-                                   .authenticate(new UsernamePasswordAuthenticationToken(
-                                       request.username(),
-                                       request.password()));
+                .authenticate(new UsernamePasswordAuthenticationToken(
+                    request.username(),
+                    request.password()));
             
             User user = (User) authenticate.getPrincipal();
             
             return ResponseEntity.ok()
-                       .header(HttpHeaders.AUTHORIZATION,
-                           JwtTokenHelper.generateAccessToken(
-                               user.getId(),
-                               user.getUsername()))
-                       .body(userMapper.toView(user));
+                .header(HttpHeaders.AUTHORIZATION,
+                    JwtTokenHelper.generateAccessToken(
+                        user.getId(),
+                        user.getUsername()))
+                .body(userMapper.toView(user));
         } catch (BadCredentialsException ex) {
             throw new HttpClientErrorException(UNAUTHORIZED, UNAUTHORIZED.getReasonPhrase());
         }

@@ -1,14 +1,16 @@
 package org.siriusxi.htec.fa.domain.model;
 
 import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 
 /**
  * @author Mohamed Taman
@@ -16,7 +18,8 @@ import static javax.persistence.FetchType.*;
  **/
 @Entity
 @Table(catalog = "FLIGHTDB", schema = "PUBLIC")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
 @ToString(exclude = {"destinationRoutes", "sourceRoutes"})
@@ -95,16 +98,34 @@ public class Airport implements Serializable {
     private String dataSource;
     
     @OneToMany(mappedBy = "destinationAirport", fetch = LAZY)
+    @ToString.Exclude
     private List<Route> destinationRoutes;
     
     @OneToMany(mappedBy = "sourceAirport", fetch = LAZY)
+    @ToString.Exclude
     private List<Route> sourceRoutes;
     
     @JoinColumn(name = "CITY_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false, fetch = LAZY)
+    @ToString.Exclude
     private City city;
     
     @JoinColumn(name = "COUNTRY_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false, fetch = LAZY)
+    @ToString.Exclude
     private Country country;
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
+     
+        return Objects.equals(airportId, ((Airport) o).airportId);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(latitude, longitude, altitude);
+    }
 }

@@ -1,19 +1,15 @@
 package org.siriusxi.htec.fa.domain.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-import static java.time.LocalDateTime.*;
-import static javax.persistence.FetchType.EAGER;
+import static java.time.LocalDateTime.now;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -23,7 +19,8 @@ import static javax.persistence.GenerationType.IDENTITY;
  **/
 @Entity
 @Table(name = "CITY_COMMENT", catalog = "FLIGHTDB", schema = "PUBLIC")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class Comment implements Serializable {
@@ -52,10 +49,12 @@ public class Comment implements Serializable {
     
     @JoinColumn(name = "CITY_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false, fetch = LAZY)
+    @ToString.Exclude
     private City city;
     
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false)
     @ManyToOne(optional = false, fetch = LAZY)
+    @ToString.Exclude
     private User user;
     
     @Override
@@ -64,5 +63,19 @@ public class Comment implements Serializable {
             Comment{id= %d, comment= %s, createdAt= %s, \
             updatedOn= %s, city= "%s", user= %s }"""
             .formatted(id, comment, createdAt, updatedAt, city.getName(), user.getUserUuid());
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
+        
+        return Objects.equals(id, ((Comment) o).id);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, comment, createdAt, updatedAt, city, user);
     }
 }

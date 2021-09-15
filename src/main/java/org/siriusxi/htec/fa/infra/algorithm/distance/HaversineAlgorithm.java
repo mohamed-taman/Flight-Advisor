@@ -1,4 +1,4 @@
-package org.siriusxi.htec.fa.infra.calc.distance;
+package org.siriusxi.htec.fa.infra.algorithm.distance;
 
 import static java.lang.Math.*;
 import static java.util.Objects.requireNonNull;
@@ -13,18 +13,13 @@ import static java.util.Objects.requireNonNullElse;
  *
  * @author Mohamed Taman
  * @apiNote It is important for use in navigation.
- * @see org.siriusxi.htec.fa.infra.calc.distance.DistanceAlgorithm
+ * @see DistanceAlgorithm
  * @since v0.4
  */
 public final class HaversineAlgorithm implements DistanceAlgorithm {
     
     /**
      * {@inheritDoc}
-     *
-     * @param first   point in latitude and longitude.
-     * @param second  point in latitude and longitude.
-     * @param measure the result of the calculation either to be in Mile or KM.
-     * @return the final distance.
      */
     @Override
     public double calculate(Point first, Point second, MeasureType measure) {
@@ -50,5 +45,12 @@ public final class HaversineAlgorithm implements DistanceAlgorithm {
         double distance = 2 * asin(sqrt(a));
         
         return distance * measure.getValue();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public double calculate(Point first, Point second) {
+        return calculate(first, second, null);
     }
 }

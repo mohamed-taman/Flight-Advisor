@@ -1,14 +1,16 @@
 package org.siriusxi.htec.fa.domain.model;
 
 import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 
 /**
  * @author Mohamed Taman
@@ -16,7 +18,10 @@ import static javax.persistence.FetchType.*;
  **/
 @Entity
 @Table(catalog = "FLIGHTDB", schema = "PUBLIC")
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @NoArgsConstructor
 public class Route implements Serializable {
     
@@ -47,9 +52,25 @@ public class Route implements Serializable {
     
     @JoinColumn(name = "DESTINATION_AIRPORT_ID", referencedColumnName = "AIRPORT_ID")
     @ManyToOne(fetch = LAZY)
+    @ToString.Exclude
     private Airport destinationAirport;
     
     @JoinColumn(name = "SOURCE_AIRPORT_ID", referencedColumnName = "AIRPORT_ID")
     @ManyToOne(fetch = LAZY)
+    @ToString.Exclude
     private Airport sourceAirport;
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
+        Route route = (Route) o;
+        return Objects.equals(routePK, route.routePK);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(routePK);
+    }
 }

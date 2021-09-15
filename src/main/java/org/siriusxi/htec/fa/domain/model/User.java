@@ -1,6 +1,7 @@
 package org.siriusxi.htec.fa.domain.model;
 
 import lombok.*;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -8,9 +9,10 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
-import static javax.persistence.CascadeType.*;
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
@@ -28,15 +30,14 @@ import static javax.persistence.FetchType.LAZY;
         @UniqueConstraint(columnNames = {"USER_UUID"}),
         @UniqueConstraint(columnNames = {"USERNAME"})
     })
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
 @ToString(exclude = {"userUuid", "username", "password", "comments", "enabled"})
 public class User implements UserDetails, Serializable {
     
-    public User(Integer id) {
-        this.id = id;
-    }
+    public User(Integer id) { this.id = id;}
     
     @Serial
     private static final long serialVersionUID = 5666668516577592568L;
@@ -72,6 +73,7 @@ public class User implements UserDetails, Serializable {
     private String password;
     
     @OneToMany(cascade = ALL, mappedBy = "user", fetch = LAZY)
+    @ToString.Exclude
     private List<Comment> comments;
     
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID",
@@ -112,5 +114,21 @@ public class User implements UserDetails, Serializable {
     @Override
     public boolean isCredentialsNonExpired() {
         return isEnabled();
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            id, userUuid, firstName, lastName, username,
+            password, comments, authorities, enabled);
     }
 }

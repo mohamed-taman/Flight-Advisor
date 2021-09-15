@@ -101,6 +101,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     response.sendError(SC_UNAUTHORIZED, ex.getMessage());
                 })
             .and()
+            
+            
             // Set H2 database console permission
             .authorizeRequests()
             .antMatchers("/db-console/**").permitAll()
@@ -153,11 +155,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
              the browser will hide them from the client application.
           
           -- Then the solution is that the server must add in its responses the header
-             "Access-Control-Expose-Headers:<header_name>,<header-name2>" in order to let client to
+             "Access-Control-Expose-Headers:<header_name>,<header-name2>" in order to let the client
               read them. So we use here config.addExposedHeader() method.
          */
         config.addExposedHeader("Authorization");
-    
+        
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
