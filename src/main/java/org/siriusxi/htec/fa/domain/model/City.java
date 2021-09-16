@@ -23,7 +23,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString(exclude = {"airports","country", "comments"})
 public class City implements Serializable {
     
     public City(Integer id) {

@@ -22,7 +22,6 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString(exclude = {"airports","cities"})
 public class Country implements Serializable {
     
     public Country(Integer id) {

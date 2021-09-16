@@ -25,9 +25,7 @@ public abstract class CityMapper {
     @Mapping(target = "country", source = "country")
     public abstract City toModel(CreateCityRequest request, Country country);
     
-    @Mapping(target = "comments", expression = """
-        java( city.getComments() != null ? commentMapper.toViews(city.getComments()) : null )
-        """)
+    @Mapping(target = "comments", expression = "java( city.getComments() != null ? commentMapper.toViews(city.getComments()) : null )")
     @Mapping(target = "country", source = "country.name")
     public abstract CityView toView(City city);
     

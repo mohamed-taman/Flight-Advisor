@@ -22,7 +22,6 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString(exclude = {"destinationRoutes", "sourceRoutes"})
 public class Airport implements Serializable {
     
     public enum Dst {

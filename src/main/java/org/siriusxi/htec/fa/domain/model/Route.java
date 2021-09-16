@@ -22,7 +22,6 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@NoArgsConstructor
 public class Route implements Serializable {
     
     @Serial

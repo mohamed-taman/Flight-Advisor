@@ -34,7 +34,6 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString(exclude = {"userUuid", "username", "password", "comments", "enabled"})
 public class User implements UserDetails, Serializable {
     
     public User(Integer id) { this.id = id;}
@@ -47,9 +46,10 @@ public class User implements UserDetails, Serializable {
     @Basic(optional = false)
     @Column(nullable = false)
     private Integer id;
-    
+
     @Basic(optional = false)
     @Column(name = "USER_UUID", nullable = false, updatable = false)
+    @ToString.Exclude
     private String userUuid;
     
     @NonNull
@@ -65,11 +65,13 @@ public class User implements UserDetails, Serializable {
     @NonNull
     @Basic(optional = false)
     @Column(nullable = false)
+    @ToString.Exclude
     private String username;
     
     @NonNull
     @Basic(optional = false)
     @Column(nullable = false)
+    @ToString.Exclude
     private String password;
     
     @OneToMany(cascade = ALL, mappedBy = "user", fetch = LAZY)
@@ -80,7 +82,8 @@ public class User implements UserDetails, Serializable {
         nullable = false, insertable = false, updatable = false)
     @OneToMany(cascade = ALL, fetch = EAGER)
     private Set<Role> authorities = new HashSet<>();
-    
+
+    @ToString.Exclude
     private boolean enabled = true;
     
     public void setAuthorities(Set<Role> roles) {
