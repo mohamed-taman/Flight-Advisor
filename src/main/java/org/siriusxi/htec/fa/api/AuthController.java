@@ -30,9 +30,9 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
  *
  * @author Mohamed Taman
  * @version 1.0
- * <p>
- * FIXME: add refresh token method, change password.
  */
+
+// TODO: add refresh token method, change password.
 @Log4j2
 @Tag(name = "Authentication",
     description = "A set of public APIs, for managing user authentication, and the registration.")
@@ -84,7 +84,7 @@ public class AuthController {
     @PostMapping(value = "register")
     public UserView register(@RequestBody @Valid CreateUserRequest userRequest) {
         
-        log.debug("User information to be created: {}", userRequest);
+        log.debug("User to be created: {}", userRequest);
         return userService.create(userRequest);
     }
     

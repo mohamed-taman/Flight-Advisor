@@ -23,7 +23,7 @@ public interface AirportRepository extends CrudRepository<Airport, Integer> {
     
     @Cacheable
     @Override
-    Optional<Airport> findById(Integer integer);
+    Optional<Airport> findById(Integer id);
     
     @Query("""
             SELECT a FROM Airport a

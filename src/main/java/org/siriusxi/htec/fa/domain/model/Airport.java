@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
+import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
 /**
@@ -78,6 +79,7 @@ public class Airport implements Serializable {
     private Float timezone;
     
     @NonNull
+    @Enumerated(STRING)
     @Basic(optional = false)
     @Column(nullable = false)
     private Dst dst;

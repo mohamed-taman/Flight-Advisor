@@ -5,17 +5,17 @@ DROP TABLE IF EXISTS city_comment;
 DROP TABLE IF EXISTS city;
 DROP TABLE IF EXISTS country;
 DROP TABLE IF EXISTS authority;
-DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS users;
 
 -- Start - Spring Security tables definition
 ---- Start - User table definition
 
-CREATE TABLE IF NOT EXISTS user
+CREATE TABLE IF NOT EXISTS users
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     user_uuid  UUID UNIQUE                    NOT NULL,
-    first_name VARCHAR(100)                   NOT NULL,
-    last_name  VARCHAR(100)                   NOT NULL,
+    first_name CHARACTER VARYING(100)         NOT NULL,
+    last_name  CHARACTER VARYING(100)         NOT NULL,
     username   VARCHAR_IGNORECASE(255) UNIQUE NOT NULL,
     password   VARCHAR_IGNORECASE(255)        NOT NULL,
     enabled    BOOLEAN                        NOT NULL
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS authority
 
     CONSTRAINT authority_user_fk
         FOREIGN KEY (user_id)
-            REFERENCES user (id)
+            REFERENCES users (id)
 );
 ---- End - Authorities table definition
 
@@ -43,15 +43,15 @@ CREATE TABLE IF NOT EXISTS authority
 CREATE TABLE IF NOT EXISTS country
 (
     id   INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
+    name CHARACTER VARYING(100) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS city
 (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    name        VARCHAR(100) NOT NULL,
-    description VARCHAR(100),
-    country_id  INT          NOT NULL,
+    id          INT   AUTO_INCREMENT PRIMARY KEY,
+    name        CHARACTER VARYING(100)  NOT NULL,
+    description CHARACTER VARYING(100)          ,
+    country_id  INT                     NOT NULL,
 
     CONSTRAINT city_country_fk
         FOREIGN KEY (country_id)
@@ -60,11 +60,11 @@ CREATE TABLE IF NOT EXISTS city
 
 CREATE TABLE IF NOT EXISTS city_comment
 (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    city_id     INT           NOT NULL,
-    user_id     INT           NOT NULL,
-    description VARCHAR(1000) NOT NULL,
-    created_at  DATETIME      NOT NULL DEFAULT now(),
+    id          INT   AUTO_INCREMENT PRIMARY KEY,
+    city_id     INT                     NOT NULL,
+    user_id     INT                     NOT NULL,
+    description CHARACTER VARYING(1000) NOT NULL,
+    created_at  DATETIME  NOT NULL DEFAULT now(),
     updated_at  DATETIME,
 
     CONSTRAINT comment_city_fk
@@ -73,27 +73,27 @@ CREATE TABLE IF NOT EXISTS city_comment
 
     CONSTRAINT comment_user_fk
         FOREIGN KEY (user_id)
-            REFERENCES user (id)
+            REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS airport
 (
-    airport_id  INT(5) PRIMARY KEY                 NOT NULL,
-    name        VARCHAR(255)                       NOT NULL,
+    airport_id  INT PRIMARY KEY                    NOT NULL,
+    name        CHARACTER VARYING(255)             NOT NULL,
     city_id     INT                                NOT NULL,
     country_id  INT                                NOT NULL,
-    city        VARCHAR(100)                       NOT NULL,
-    country     VARCHAR(100)                       NOT NULL,
-    iata        VARCHAR(3),
-    icao        VARCHAR(4),
-    latitude    DECIMAL(12, 6)                     NOT NULL,
-    longitude   DECIMAL(12, 6)                     NOT NULL,
-    altitude    INT(6),
-    timezone    DECIMAL(3, 1),
+    city        CHARACTER VARYING(100)             NOT NULL,
+    country     CHARACTER VARYING(100)             NOT NULL,
+    iata        CHAR(3),
+    icao        CHAR(4),
+    latitude    NUMERIC(12, 6)                     NOT NULL,
+    longitude   NUMERIC(12, 6)                     NOT NULL,
+    altitude    INT,
+    timezone    NUMERIC(3, 1),
     dst         ENUM ('E','A','S','O','Z','N','U') NOT NULL,
-    tz          VARCHAR(50),
-    type        VARCHAR(50)                        NOT NULL,
-    data_source VARCHAR(255)                       NOT NULL,
+    tz          CHARACTER VARYING(50),
+    type        CHARACTER VARYING(50)              NOT NULL,
+    data_source CHARACTER VARYING(255)             NOT NULL,
 
     CONSTRAINT airport_city_fk
         FOREIGN KEY (city_id)
@@ -122,16 +122,16 @@ COMMENT ON COLUMN airport.data_source IS 'Source of this data.';
 
 CREATE TABLE IF NOT EXISTS route
 (
-    airline_code           VARCHAR(3),
-    airline_id             INT(5),
-    source_airport         VARCHAR(4),
-    source_airport_id      INT(4),
-    destination_airport    VARCHAR(4),
-    destination_airport_id INT(4),
+    airline_code           CHAR(3),
+    airline_id             INT,
+    source_airport         CHAR(4),
+    source_airport_id      INT,
+    destination_airport    CHAR(4),
+    destination_airport_id INT,
     code_share             BOOLEAN,
-    stops                  INT(3),
-    equipment              VARCHAR(100),
-    price                  DECIMAL(6, 3),
+    stops                  INT,
+    equipment              CHARACTER VARYING(100),
+    price                  NUMERIC(6, 3),
 
 
     CONSTRAINT route_pk

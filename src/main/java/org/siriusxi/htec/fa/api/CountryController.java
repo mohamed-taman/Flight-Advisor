@@ -22,9 +22,9 @@ import java.util.Set;
  *
  * @author Mohamed Taman
  * @version 1.0
- * <p>
- * FIXME: Swagger documentation
  */
+
+// TODO: Add Swagger documentation
 @Log4j2
 @Tag(name = "Country Management",
     description = "A set of authorized APIs, for getting and managing system countries.")

@@ -23,7 +23,7 @@ import static javax.persistence.FetchType.LAZY;
  * @version 1.0
  */
 @Entity
-@Table(
+@Table( name ="users",
     catalog = "FLIGHTDB",
     schema = "PUBLIC",
     uniqueConstraints = {

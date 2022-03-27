@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ public interface RouteRepository extends CrudRepository<Route, RoutePK> {
         """)
     double getTripCost(Iterable<RoutePK> routePKs);
     
-    List<Route> findAllByRoutePKIn(Iterable<RoutePK> routePKs);
+    List<Route> findAllByRoutePKIn(Collection<RoutePK> routePK);
     
     @CacheEvict(key = "#p0.routePK.source + #p0.routePK.destination")
     @Override

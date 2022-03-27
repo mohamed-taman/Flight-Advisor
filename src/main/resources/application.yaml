@@ -1,101 +1,99 @@
 # Development profile
 ## Custom application properties
 app:
-  version: 'v1'
+    version: 'v1'
 
 # Spring properties
 spring:
-  application:
-    name: Flight-Advisor-Service
+    application:
+        name: Flight-Advisor-Service
 
-  servlet:
-    multipart:
-      enabled: false
-      max-file-size: 10MB
-  # Database configurations
-  datasource:
-    url: jdbc:h2:./target/db/flightDB
-    username: sa
-    hikari:
-      initialization-fail-timeout: 60000
-      connection-test-query: SELECT 1
-      maximum-pool-size: 10
-  h2:
-    console:
-      enabled: true
-      path: /db-console
-  jpa:
-    show-sql: true
-    open-in-view: false
-    hibernate:
-      ddl-auto: none
-    # The SQL dialect makes Hibernate generate better SQL for the chosen database
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        generate_statistics: true
-        # Switching on batch insert
-        # Take the time to group inserts by entity, creating larger batches.
-        order_inserts: true
-        order_updates: true
-        # collect inserts in batches of 100
-        jdbc:
-          size: 100
-  sql:
-    init:
-      data-locations: classpath*:db/data.sql
-      schema-locations: classpath*:db/schema.sql
-      platform: h2
-      mode: always
+    servlet:
+        multipart:
+            enabled: false
+            max-file-size: 10MB
+    # Database configurations
+    datasource:
+        url: jdbc:h2:./target/db/flightDB
+        username: sa
+        hikari:
+            initialization-fail-timeout: 60000
+            connection-test-query: SELECT 1
+            maximum-pool-size: 10
+    h2:
+        console:
+            enabled: true
+            path: /db-console
+    jpa:
+        open-in-view: false
+        hibernate:
+            ddl-auto: none
+        # The SQL dialect makes Hibernate generate better SQL for the chosen database
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.H2Dialect
+                generate_statistics: true
+                # Switching on batch insert
+                # Take the time to group inserts by entity, creating larger batches.
+                order_inserts: true
+                order_updates: true
+                # collect inserts in batches of 100
+                jdbc:
+                    size: 100
+    sql:
+        init:
+            data-locations: classpath*:db/data.sql
+            schema-locations: classpath*:db/schema.sql
+            platform: h2
+            mode: always
 
 # Server configs
 server:
-  port: 8090
-  ## Should be included to show message, if not error message will be empty
-  error:
-    include-message: always
-    include-binding-errors: always
-  servlet:
-    context-path: /flight/service/api
+    port: 8090
+    ## Should be included to show message, if not error message will be empty
+    error:
+        include-message: always
+        include-binding-errors: always
+    servlet:
+        context-path: /flight/service/api
 
 # Application health and information management
 management:
-  info.git:
-    mode: full
-    enabled: true
-  endpoints.web.exposure.include: "*"
-  endpoint:
-    shutdown.enabled: false
-    health.show-details: always
+    info.git:
+        mode: full
+        enabled: true
+    endpoints.web.exposure.include: "*"
+    endpoint:
+        shutdown.enabled: false
+        health.show-details: always
 
 # Logging settings
 logging.level:
-  org:
-    hibernate:
-      SQL: debug
-      type.descriptor.sql.BasicBinder: trace
-    springframework:
-      cache: trace
-      web: debug
-    siriusxi:
-      htec:
-        fa: debug
-  web: debug
-  root: info
-
+    org:
+        hibernate:
+            SQL: debug
+            type.descriptor.sql.BasicBinder: trace
+        springframework:
+            cache: trace
+            web: debug
+        siriusxi:
+            htec:
+                fa: debug
+    web: debug
+    root: info
 
 # OpenAPI (Swagger) settings
 springdoc:
-  # swagger-ui custom path
-  swagger-ui:
-    path: /${app.version}/doc/index.html
-    operationsSorter: alpha
-    tagsSorter: alpha
-    displayRequestDuration: true
-    syntaxHighlight:
-      theme: arta
-  # /api-docs endpoint custom path
-  api-docs:
-    path: /${app.version}/api-docs
-  # to display the actuator endpoints.
-  show-actuator: false
+    # swagger-ui custom path
+    swagger-ui:
+        path: /${app.version}/doc/index.html
+        operationsSorter: alpha
+        tagsSorter: alpha
+        displayRequestDuration: true
+        syntaxHighlight:
+            theme: arta
+    # /api-docs endpoint custom path
+    api-docs:
+        path: /${app.version}/api-docs
+    # to display the actuator endpoints.
+    show-actuator: false

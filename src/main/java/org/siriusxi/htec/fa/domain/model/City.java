@@ -25,15 +25,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @RequiredArgsConstructor
 public class City implements Serializable {
     
-    public City(Integer id) {
-        this.id = id;
-    }
-    
-    public City(String name, String description, Country country) {
-        this(name, country);
-        this.description = description;
-    }
-    
     @Serial
     private static final long serialVersionUID = 1322727266984495327L;
     
@@ -65,6 +56,15 @@ public class City implements Serializable {
     @ManyToOne(optional = false, fetch = LAZY)
     @ToString.Exclude
     private Country country;
+    
+    public City(Integer id) {
+        this.id = id;
+    }
+    
+    public City(String name, String description, Country country) {
+        this(name, country);
+        this.description = description;
+    }
     
     @Override
     public boolean equals(Object o) {

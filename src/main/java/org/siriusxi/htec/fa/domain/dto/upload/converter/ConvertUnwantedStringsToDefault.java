@@ -8,7 +8,7 @@ public class ConvertUnwantedStringsToDefault implements StringProcessor {
     
     @Override
     public String processString(String value) {
-        if (value == null || value.trim().isEmpty() ||
+        if (value == null || value.isBlank() ||
                 value.equalsIgnoreCase("\\N") ||
                 value.equalsIgnoreCase("N")) {
             return defaultValue;
