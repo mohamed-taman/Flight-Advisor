@@ -27,7 +27,7 @@ public class AirportDto {
     @CsvBindByPosition(position = 3)
     private String country;
     
-    @PreAssignmentProcessor(processor = ConvertUnwantedStringsToDefault.class, paramString = "")
+    @PreAssignmentProcessor(processor = ConvertUnwantedStringsToDefault.class)
     @CsvBindByPosition(position = 4)
     private String iata;
     

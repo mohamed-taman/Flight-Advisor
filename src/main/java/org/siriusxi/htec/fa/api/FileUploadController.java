@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
 import java.io.*;
+import java.nio.file.Files;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
@@ -42,9 +43,9 @@ import static org.springframework.http.HttpStatus.*;
  *
  * @author Mohamed Taman
  * @version 1.0
- * <p>
- * TODO: Improve performance of the file processing.
  */
+
+// TODO: Improve performance of the file processing.
 @Log4j2
 @Tag(name = "Files Upload Management",
     description = """
@@ -130,7 +131,7 @@ public class FileUploadController {
             }
         }
         
-        return new ResponseEntity<>("File uploaded successfully.", OK);
+        return new ResponseEntity<>("Airports file uploaded successfully.", OK);
     }
     
     @Operation(summary = "Upload file that contains flights routes.",
@@ -192,7 +193,7 @@ public class FileUploadController {
             }
         }
         
-        return new ResponseEntity<>("File uploaded successfully.", OK);
+        return new ResponseEntity<>("Routes file uploaded successfully.", OK);
     }
     
     /**

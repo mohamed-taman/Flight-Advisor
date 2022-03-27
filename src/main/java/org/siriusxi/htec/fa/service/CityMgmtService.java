@@ -93,7 +93,6 @@ public class CityMgmtService {
                     .findByCity(city, PageRequest.of(0, cLimit)));
                 cities.add(city);
             }
-        
         else
             cities = cityRepository.findByNameIgnoreCaseIsLike(searchWord);
         
