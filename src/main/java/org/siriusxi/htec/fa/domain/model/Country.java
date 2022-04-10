@@ -20,6 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 @Table(catalog = "FLIGHTDB", schema = "PUBLIC")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class Country implements Serializable {

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+// FIXME Cache is not working properly
 @Repository
 @CacheConfig(cacheNames = "cities")
 public interface CityRepository extends CrudRepository<City, Integer> {
