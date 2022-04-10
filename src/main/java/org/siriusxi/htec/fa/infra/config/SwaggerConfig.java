@@ -22,7 +22,7 @@ public class SwaggerConfig {
                         .bearerFormat("JWT")))
             .info(new Info()
                 .title("REST API for Flight Advisor Service.")
-                .version("1.0")
+                .version("2.8")
                 .license(new License()
                     .name("MIT License")
                     .url("https://springdoc.org")));
