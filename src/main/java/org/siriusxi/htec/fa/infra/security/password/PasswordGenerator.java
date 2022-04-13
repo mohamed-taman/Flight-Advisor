@@ -51,6 +51,6 @@ public final class PasswordGenerator {
     
     public static String bcrypt(String password) {
         return new BCryptPasswordEncoder()
-            .encode(password);
+                   .encode(password);
     }
 }

@@ -1,7 +1,7 @@
 package org.siriusxi.htec.fa.repository;
 
-import org.siriusxi.htec.fa.domain.model.Airport;
-import org.siriusxi.htec.fa.domain.model.City;
+import org.siriusxi.htec.fa.domain.Airport;
+import org.siriusxi.htec.fa.domain.City;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.Query;

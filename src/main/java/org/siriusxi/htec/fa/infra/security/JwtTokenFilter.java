@@ -1,5 +1,9 @@
 package org.siriusxi.htec.fa.infra.security;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 import org.siriusxi.htec.fa.infra.security.jwt.JwtTokenHelper;
 import org.siriusxi.htec.fa.repository.UserRepository;
@@ -10,10 +14,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +37,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         
         // Get authorization header and validate
         var authToken = getJwtTokenIfValid(request
-            .getHeader(HttpHeaders.AUTHORIZATION));
+                                               .getHeader(HttpHeaders.AUTHORIZATION));
         
         String token;
         
@@ -48,8 +48,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         
         // Get user identity and set it on the spring security context
         var userDetails = userRepository
-            .findByUsernameIgnoreCase(JwtTokenHelper.getUsername(token))
-            .orElse(null);
+                              .findByUsernameIgnoreCase(JwtTokenHelper.getUsername(token))
+                              .orElse(null);
         
         var authentication = new UsernamePasswordAuthenticationToken(
             userDetails, null,

@@ -1,6 +1,6 @@
 package org.siriusxi.htec.fa.repository;
 
-import org.siriusxi.htec.fa.domain.model.User;
+import org.siriusxi.htec.fa.domain.User;
 import org.siriusxi.htec.fa.infra.exception.NotFoundException;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;

@@ -16,38 +16,6 @@ package org.siriusxi.htec.fa.infra.algorithm.distance;
 public sealed interface DistanceAlgorithm permits HaversineAlgorithm, OrthodromicAlgorithm {
     
     /**
-     * Enum to represent the implemented distance calculators algorithms.
-     */
-    enum Type {
-        HAVERSINE,
-        ORTHODROMIC
-    }
-    
-    /**
-     * The Radius of earth measurements.
-     */
-    enum MeasureType {
-        /**
-         * Earth radius in Mile.
-         */
-        MILE(3_958.0),
-        /**
-         * Earth radius in Kilometer.
-         */
-        KILOMETER(6_371.0);
-        
-        private final double value;
-        
-        MeasureType(double v) {
-            this.value = v;
-        }
-        
-        public double getValue() {
-            return value;
-        }
-    }
-    
-    /**
      * A factory method to return the implementation of selected distance  calculator algorithm.
      *
      * @param type of the algorithm.
@@ -79,5 +47,37 @@ public sealed interface DistanceAlgorithm permits HaversineAlgorithm, Orthodromi
      * @return the final distance.
      */
     double calculate(Point first, Point second);
+    
+    /**
+     * Enum to represent the implemented distance calculators algorithms.
+     */
+    enum Type {
+        HAVERSINE,
+        ORTHODROMIC
+    }
+    
+    /**
+     * The Radius of earth measurements.
+     */
+    enum MeasureType {
+        /**
+         * Earth radius in Mile.
+         */
+        MILE(3_958.0),
+        /**
+         * Earth radius in Kilometer.
+         */
+        KILOMETER(6_371.0);
+        
+        private final double value;
+        
+        MeasureType(double v) {
+            this.value = v;
+        }
+        
+        public double getValue() {
+            return value;
+        }
+    }
     
 }

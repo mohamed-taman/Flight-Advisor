@@ -1,7 +1,9 @@
 # Development profile
 ## Custom application properties
 app:
-    version: 'v1'
+    version: @project.version@
+    api:
+        version: 'v1'
 
 # Spring properties
 spring:
@@ -10,7 +12,7 @@ spring:
 
     servlet:
         multipart:
-            enabled: false
+            enabled: true
             max-file-size: 10MB
     # Database configurations
     datasource:
@@ -55,7 +57,7 @@ server:
         include-message: always
         include-binding-errors: always
     servlet:
-        context-path: /flight/service/api
+        context-path: /api/${app.api.version}/flight/service
 
 # Application health and information management
 management:
@@ -86,7 +88,7 @@ logging.level:
 springdoc:
     # swagger-ui custom path
     swagger-ui:
-        path: /${app.version}/doc/index.html
+        path: /doc/index.html
         operationsSorter: alpha
         tagsSorter: alpha
         displayRequestDuration: true
@@ -94,6 +96,6 @@ springdoc:
             theme: arta
     # /api-docs endpoint custom path
     api-docs:
-        path: /${app.version}/api-docs
+        path: /api-docs
     # to display the actuator endpoints.
     show-actuator: false

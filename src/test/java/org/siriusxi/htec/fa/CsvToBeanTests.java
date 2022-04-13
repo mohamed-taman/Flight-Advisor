@@ -2,60 +2,63 @@ package org.siriusxi.htec.fa;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.Assertions;
-import org.siriusxi.htec.fa.domain.dto.upload.airport.AirportDto;
-import org.siriusxi.htec.fa.domain.dto.upload.airport.verifer.AirportBeanVerifier;
-import org.siriusxi.htec.fa.domain.dto.upload.route.RouteDto;
-import org.siriusxi.htec.fa.domain.dto.upload.route.verifer.RouteBeanVerifier;
+import org.siriusxi.htec.fa.api.model.upload.airport.AirportDto;
+import org.siriusxi.htec.fa.api.model.upload.airport.verifer.AirportBeanVerifier;
+import org.siriusxi.htec.fa.api.model.upload.route.RouteDto;
+import org.siriusxi.htec.fa.api.model.upload.route.verifer.RouteBeanVerifier;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
 
 @Log4j2
 class CsvToBeanTests {
     
-    @SneakyThrows
     //@Test
     void parseRoutesCSVFileToBeans() {
         
         try (Reader fileReader = new FileReader("./data/routes.txt")) {
             
             CsvToBean<RouteDto> csvToRouteBeans = new CsvToBeanBuilder<RouteDto>(fileReader)
-                .withType(RouteDto.class)
-                .withVerifier(new RouteBeanVerifier())
-                .withIgnoreLeadingWhiteSpace(true)
-                .build();
+                                                      .withType(RouteDto.class)
+                                                      .withVerifier(new RouteBeanVerifier())
+                                                      .withIgnoreLeadingWhiteSpace(true)
+                                                      .build();
             
             // convert `CsvToBean` object to list of airports
             List<RouteDto> routes = csvToRouteBeans.parse();
             
             System.out.println(routes.size());
             
-            Assertions.assertThat(routes.size()).isEqualTo(66754);
+            Assertions.assertThat(routes).hasSize(66754);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
     
-    @SneakyThrows
-        // @Test
-    void parseAirportsCSVFileToBeans() {
+    // @Test
+    void parseAirportsCSVFileToBeans() throws FileNotFoundException {
         
         try (Reader fileReader = new FileReader("./data/airports.txt")) {
             
             CsvToBean<AirportDto> csvToAirportBeans = new CsvToBeanBuilder<AirportDto>(fileReader)
-                .withType(AirportDto.class)
-                .withVerifier(new AirportBeanVerifier())
-                .withIgnoreLeadingWhiteSpace(true)
-                .build();
+                                                          .withType(AirportDto.class)
+                                                          .withVerifier(new AirportBeanVerifier())
+                                                          .withIgnoreLeadingWhiteSpace(true)
+                                                          .build();
             
             // convert `CsvToBean` object to list of airports
             List<AirportDto> airports = csvToAirportBeans.parse();
             
             System.out.println(airports.size());
             
-            Assertions.assertThat(airports.size()).isEqualTo(7140);
+            Assertions.assertThat(airports).hasSize(7140);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
