@@ -6,14 +6,14 @@ import es.usc.citius.hipster.graph.GraphBuilder;
 import es.usc.citius.hipster.graph.GraphSearchProblem;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 import lombok.extern.log4j.Log4j2;
-import org.siriusxi.htec.fa.domain.dto.response.AirportView;
-import org.siriusxi.htec.fa.domain.dto.response.TripView;
-import org.siriusxi.htec.fa.domain.mapper.AirportMapper;
-import org.siriusxi.htec.fa.domain.model.Airport;
-import org.siriusxi.htec.fa.domain.model.Route;
-import org.siriusxi.htec.fa.domain.model.RoutePK;
+import org.siriusxi.htec.fa.api.model.response.AirportView;
+import org.siriusxi.htec.fa.api.model.response.TripView;
+import org.siriusxi.htec.fa.domain.Airport;
+import org.siriusxi.htec.fa.domain.Route;
+import org.siriusxi.htec.fa.domain.RoutePK;
 import org.siriusxi.htec.fa.infra.algorithm.distance.DistanceAlgorithm;
 import org.siriusxi.htec.fa.infra.algorithm.distance.Point;
+import org.siriusxi.htec.fa.infra.mapper.AirportMapper;
 import org.siriusxi.htec.fa.repository.AirportRepository;
 import org.siriusxi.htec.fa.repository.RouteRepository;
 import org.springframework.cache.annotation.CacheConfig;
@@ -157,13 +157,13 @@ public class TravelService {
     
     private double calculateDistance(Route route) {
         return orthodromicAlgorithm
-            .calculate(
-                new Point(
-                    route.getSourceAirport().getLatitude().doubleValue(),
-                    route.getSourceAirport().getLongitude().doubleValue()),
-                new Point(
-                    route.getDestinationAirport().getLatitude().doubleValue(),
-                    route.getDestinationAirport().getLongitude().doubleValue()));
+                   .calculate(
+                       new Point(
+                           route.getSourceAirport().getLatitude().doubleValue(),
+                           route.getSourceAirport().getLongitude().doubleValue()),
+                       new Point(
+                           route.getDestinationAirport().getLatitude().doubleValue(),
+                           route.getDestinationAirport().getLongitude().doubleValue()));
     }
     
     private TripView newTripView(Airport src, Airport dest,
@@ -192,9 +192,9 @@ public class TravelService {
         // Create the search problem. For graph problems, just use
         // the GraphSearchProblem util class to generate the problem with ease.
         var problem = GraphSearchProblem
-            .startingFrom(from).in(graph)
-            .takeCostsFromEdges()
-            .build();
+                          .startingFrom(from).in(graph)
+                          .takeCostsFromEdges()
+                          .build();
         
         // Search the shortest path from source to destination
         final var result = Hipster.createDijkstra(problem).search(to);
@@ -217,8 +217,8 @@ public class TravelService {
     
     public List<AirportView> findAirportsForCityOrCountry(String name) {
         return airportMapper
-            .toView(airportRepository
-                .findAirportsByCityOrCountryName(name.toLowerCase()));
+                   .toView(airportRepository
+                               .findAirportsByCityOrCountryName(name.toLowerCase()));
     }
     
     private record FinalTrip(String start,

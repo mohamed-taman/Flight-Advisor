@@ -21,7 +21,7 @@ public class FlightAdvisorApplication {
     }
     
     @Bean
-    public ApplicationRunner atStartup(){
+    public ApplicationRunner atStartup() {
         return args -> log.info("Flight Advisor Application is Up & Running... ");
     }
 }
