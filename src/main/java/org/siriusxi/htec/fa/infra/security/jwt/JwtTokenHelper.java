@@ -1,6 +1,11 @@
 package org.siriusxi.htec.fa.infra.security.jwt;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.log4j.Log4j2;
 
@@ -33,16 +38,16 @@ public final class JwtTokenHelper {
     public static String generateAccessToken(int id, String username) {
         var now = System.currentTimeMillis();
         return Jwts
-            .builder()
-            .setId(String.valueOf(id))
-            .setSubject(format("%d,%s", id, username))
-            .setIssuer(JwtConfig.ISSUER)
-            .setIssuedAt(new Date(now))
-            .setExpiration(Date.from(ZonedDateTime.now()
-                .plusDays(JwtConfig.TOKEN_EXPIRY_DURATION)
-                .toInstant()))
-            .signWith(JwtConfig.key(), JwtConfig.SIGNATURE_ALGORITHM)
-            .compact();
+                   .builder()
+                   .setId(String.valueOf(id))
+                   .setSubject(format("%d,%s", id, username))
+                   .setIssuer(JwtConfig.ISSUER)
+                   .setIssuedAt(new Date(now))
+                   .setExpiration(Date.from(ZonedDateTime.now()
+                                                .plusDays(JwtConfig.TOKEN_EXPIRY_DURATION)
+                                                .toInstant()))
+                   .signWith(JwtConfig.key(), JwtConfig.SIGNATURE_ALGORITHM)
+                   .compact();
     }
     
     /**
@@ -53,8 +58,8 @@ public final class JwtTokenHelper {
      */
     public static int getUserId(String token) {
         return Integer.parseInt(getClaims(token)
-            .getSubject()
-            .split(",")[0]);
+                                    .getSubject()
+                                    .split(",")[0]);
     }
     
     /**
@@ -65,8 +70,8 @@ public final class JwtTokenHelper {
      */
     public static String getUsername(String token) {
         return getClaims(token)
-            .getSubject()
-            .split(",")[1];
+                   .getSubject()
+                   .split(",")[1];
     }
     
     /**
@@ -77,7 +82,7 @@ public final class JwtTokenHelper {
      */
     public static Date tokenExpiredAt(String token) {
         return getClaims(token)
-            .getExpiration();
+                   .getExpiration();
     }
     
     /**
@@ -88,11 +93,11 @@ public final class JwtTokenHelper {
      */
     private static Claims getClaims(String token) {
         return Jwts
-            .parserBuilder()
-            .setSigningKey(JwtConfig.key())
-            .build()
-            .parseClaimsJws(token.replace(JwtConfig.TOKEN_PREFIX, ""))
-            .getBody();
+                   .parserBuilder()
+                   .setSigningKey(JwtConfig.key())
+                   .build()
+                   .parseClaimsJws(token.replace(JwtConfig.TOKEN_PREFIX, ""))
+                   .getBody();
     }
     
     /**

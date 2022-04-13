@@ -1,6 +1,11 @@
 package org.siriusxi.htec.fa.infra.algorithm.distance;
 
-import static java.lang.Math.*;
+import static java.lang.Math.asin;
+import static java.lang.Math.cos;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+import static java.lang.Math.toRadians;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNullElse;
 

@@ -1,10 +1,11 @@
 package org.siriusxi.htec.fa.service;
 
+import jakarta.validation.ValidationException;
 import lombok.extern.log4j.Log4j2;
-import org.siriusxi.htec.fa.domain.dto.request.CreateUserRequest;
-import org.siriusxi.htec.fa.domain.dto.response.UserView;
-import org.siriusxi.htec.fa.domain.mapper.UserMapper;
-import org.siriusxi.htec.fa.domain.model.User;
+import org.siriusxi.htec.fa.api.model.request.CreateUserRequest;
+import org.siriusxi.htec.fa.api.model.response.UserView;
+import org.siriusxi.htec.fa.domain.User;
+import org.siriusxi.htec.fa.infra.mapper.UserMapper;
 import org.siriusxi.htec.fa.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,10 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.ValidationException;
-
 import static java.lang.String.format;
-import static org.siriusxi.htec.fa.domain.model.Role.CLIENT;
+import static org.siriusxi.htec.fa.domain.Role.CLIENT;
 
 @Log4j2
 @Service
@@ -57,9 +56,9 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         return repository
-            .findByUsernameIgnoreCase(username)
-            .orElseThrow(
-                () -> new UsernameNotFoundException(
-                    format("User with username - %s, not found", username)));
+                   .findByUsernameIgnoreCase(username)
+                   .orElseThrow(
+                       () -> new UsernameNotFoundException(
+                           format("User with username - %s, not found", username)));
     }
 }

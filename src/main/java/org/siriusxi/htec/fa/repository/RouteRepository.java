@@ -1,8 +1,8 @@
 package org.siriusxi.htec.fa.repository;
 
-import org.siriusxi.htec.fa.domain.model.Route;
-import org.siriusxi.htec.fa.domain.model.RoutePK;
-import org.siriusxi.htec.fa.domain.model.vo.RouteView;
+import org.siriusxi.htec.fa.domain.Route;
+import org.siriusxi.htec.fa.domain.RoutePK;
+import org.siriusxi.htec.fa.domain.vo.RouteView;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +18,7 @@ import java.util.Set;
 public interface RouteRepository extends CrudRepository<Route, RoutePK> {
     
     @Query(value = """
-        SELECT new org.siriusxi.htec.fa.domain.model.vo.RouteView
+        SELECT new org.siriusxi.htec.fa.domain.vo.RouteView
             (routePK.source, routePK.destination, price)
         FROM Route
         ORDER BY routePK.source ASC

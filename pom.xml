@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.0-M3</version>
+        <version>3.0.0-M2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>org.siriusxi.htec</groupId>
     <artifactId>flight-advisor</artifactId>
-    <version>2.8</version>
+    <version>3.0</version>
     <name>Flight Advisor API</name>
     <description>Flight Advisor API Spring Boot based Application.</description>
     <packaging>jar</packaging>
@@ -58,7 +58,9 @@
     </licenses>
 
     <properties>
-        <java.version>18</java.version>
+        <maven.compiler.release>18</maven.compiler.release>
+        <maven.compiler.source>18</maven.compiler.source>
+        <maven.compiler.target>18</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -67,7 +69,7 @@
         <maven.failsafe.plugin.version>3.0.0-M5</maven.failsafe.plugin.version>
         <io.jsonwebtoken.version>0.11.2</io.jsonwebtoken.version>
         <org.mapstruct.version>1.5.0.RC1</org.mapstruct.version>
-        <org.springdoc.version>1.6.7</org.springdoc.version>
+        <org.springdoc.version>2.0.0-M1</org.springdoc.version>
         <lombok.version>1.18.22</lombok.version>
         <opencsv.version>5.6</opencsv.version>
         <hipster-core.version>1.0.1</hipster-core.version>
@@ -75,6 +77,8 @@
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <commons-io.version>2.11.0</commons-io.version>
         <commons-collections4.version>4.4</commons-collections4.version>
+        <hibernate-core-jakarta.version>5.6.5.Final</hibernate-core-jakarta.version>
+        <jackson-databind.version>2.13.2.2</jackson-databind.version>
     </properties>
 
     <dependencies>
@@ -91,15 +95,15 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.hibernate</groupId>
-                    <artifactId>hibernate-core</artifactId>
+                    <artifactId>hibernate-core-jakarta</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.6.5.Final</version>
+            <artifactId>hibernate-core-jakarta</artifactId>
+            <version>${hibernate-core-jakarta.version}</version>
         </dependency>
 
         <dependency>
@@ -120,12 +124,38 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <!--
+                    To fix CVE-2020-36518
+                    https://advisory.checkmarx.net/advisory/vulnerability/CVE-2020-36518/
+                -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${org.springdoc.version}</version>
+            <!--
+                   To fix CVE-2020-36518
+                   https://advisory.checkmarx.net/advisory/vulnerability/CVE-2020-36518/
+               -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
         </dependency>
 
         <dependency>
@@ -133,11 +163,6 @@
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-hateoas</artifactId>
-            <version>${org.springdoc.version}</version>
-        </dependency>
         <!-- End - Web, REST, and their OpenAPI dependencies -->
 
         <!-- Start - Security dependencies -->
@@ -146,11 +171,6 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-security</artifactId>
-            <version>${org.springdoc.version}</version>
-        </dependency>
 
         <!-- Start - JWT library for authentication libraries -->
         <dependency>
@@ -191,6 +211,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
             <optional>true</optional>
         </dependency>
 
@@ -224,29 +245,6 @@
             <artifactId>commons-collections4</artifactId>
             <version>${commons-collections4.version}</version>
         </dependency>
-        <!-- The Commons FileUpload package makes it easy to add robust, high-performance,
-             file upload capability to your servlets and web applications. -->
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>${commons-fileupload.version}</version>
-            <exclusions>
-                <!--
-                     To fix CVE-2021-29425
-                     https://advisory.checkmarx.net/advisory/vulnerability/CVE-2021-29425/
-                -->
-                <exclusion>
-                    <groupId>commons-io</groupId>
-                    <artifactId>commons-io</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-        </dependency>
 
         <!-- Add hipster-core instead of hipster-all for basic functionality. -->
         <dependency>
@@ -262,11 +260,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
@@ -300,9 +300,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <release>${java.version}</release>
                     <enablePreview>true</enablePreview>
                     <annotationProcessorPaths>
                         <path>

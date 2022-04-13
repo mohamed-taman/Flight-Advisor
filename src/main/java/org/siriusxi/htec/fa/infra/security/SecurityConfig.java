@@ -19,8 +19,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static java.lang.String.format;
-import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static org.springframework.security.core.context.SecurityContextHolder.MODE_INHERITABLETHREADLOCAL;
 import static org.springframework.security.core.context.SecurityContextHolder.setStrategyName;
 
@@ -35,18 +35,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     private final UserRepository userRepository;
     private final JwtTokenFilter jwtTokenFilter;
-    private final String appVersion;
     private final String allowedOrigins;
     
     public SecurityConfig(UserRepository userRepository,
                           JwtTokenFilter jwtTokenFilter,
-                          @Value("${app.version:v1}") String appVersion,
                           @Value("${app.allowedOrigins:*}") String allowedOrigins) {
         super();
         
         this.userRepository = userRepository;
         this.jwtTokenFilter = jwtTokenFilter;
-        this.appVersion = "/".concat(appVersion);
         this.allowedOrigins = allowedOrigins;
         
         // Inherit security context in async function calls
@@ -77,9 +74,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         
         // List of Swagger URLs
         var swaggerAuthList = new String[]{
-            appVersion.concat("/api-docs/**"),
-            "/webjars/**", "/swagger-ui/**",
-            appVersion.concat("/doc/**")};
+            "/api-docs/**", "/webjars/**",
+            "/swagger-ui/**", "/doc/**"};
         
         http
             // Enable CORS

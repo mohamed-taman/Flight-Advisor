@@ -1,8 +1,8 @@
 package org.siriusxi.htec.fa.repository;
 
-import org.siriusxi.htec.fa.domain.model.City;
-import org.siriusxi.htec.fa.domain.model.Comment;
-import org.siriusxi.htec.fa.domain.model.User;
+import org.siriusxi.htec.fa.domain.City;
+import org.siriusxi.htec.fa.domain.Comment;
+import org.siriusxi.htec.fa.domain.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

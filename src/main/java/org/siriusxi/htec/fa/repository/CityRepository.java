@@ -1,7 +1,7 @@
 package org.siriusxi.htec.fa.repository;
 
-import org.siriusxi.htec.fa.domain.model.City;
-import org.siriusxi.htec.fa.domain.model.Country;
+import org.siriusxi.htec.fa.domain.City;
+import org.siriusxi.htec.fa.domain.Country;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
@@ -27,7 +27,7 @@ public interface CityRepository extends CrudRepository<City, Integer> {
      */
     default City findOrSaveBy(Country country, String name, String description) {
         return findByCountryAndNameIgnoreCaseIsLike(country, name.trim())
-            .orElseGet(() -> save(new City(name, description, country)));
+                   .orElseGet(() -> save(new City(name, description, country)));
     }
     
     @Cacheable
