@@ -5,6 +5,7 @@ import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.graph.GraphBuilder;
 import es.usc.citius.hipster.graph.GraphSearchProblem;
 import es.usc.citius.hipster.model.impl.WeightedNode;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.siriusxi.htec.fa.api.model.response.AirportView;
 import org.siriusxi.htec.fa.api.model.response.TripView;
@@ -58,6 +59,7 @@ import static org.siriusxi.htec.fa.infra.algorithm.distance.DistanceAlgorithm.ge
  * @see DistanceAlgorithm
  * @since v0.4
  */
+@RequiredArgsConstructor
 @Log4j2
 @Service
 @CacheConfig(cacheNames = "travels")
@@ -66,18 +68,9 @@ public class TravelService {
     private final RouteRepository routeRepository;
     private final AirportRepository airportRepository;
     private final AirportMapper airportMapper;
-    private final DistanceAlgorithm orthodromicAlgorithm;
+    private final DistanceAlgorithm orthodromicAlgorithm = getAlgorithm(DistanceAlgorithm.Type.ORTHODROMIC);
     private final DecimalFormat formatter = new DecimalFormat("#.00");
-    
-    public TravelService(RouteRepository routeRepository,
-                         AirportRepository airportRepository,
-                         AirportMapper airportMapper) {
-        this.routeRepository = routeRepository;
-        this.airportRepository = airportRepository;
-        this.airportMapper = airportMapper;
-        this.orthodromicAlgorithm = getAlgorithm(DistanceAlgorithm.Type.ORTHODROMIC);
-    }
-    
+
     private static FinalTrip getTrip(Algorithm<Double, String,
                                                   WeightedNode<Double, String, Double>>
                                          .SearchResult result) {

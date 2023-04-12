@@ -6,6 +6,4 @@ package org.siriusxi.htec.fa.infra.algorithm.distance;
  * @author Mohamed Taman
  * @since v0.4
  */
-public record Point(double latitude, double longitude) {
-
-}
+public record Point(double latitude, double longitude) { }

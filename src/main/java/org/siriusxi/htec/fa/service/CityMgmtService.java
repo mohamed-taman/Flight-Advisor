@@ -1,5 +1,6 @@
 package org.siriusxi.htec.fa.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.siriusxi.htec.fa.api.model.request.CommentUpSrtRequest;
 import org.siriusxi.htec.fa.api.model.request.CreateCityRequest;
@@ -30,6 +31,7 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 
+@RequiredArgsConstructor
 @Log4j2
 @Service
 public class CityMgmtService {
@@ -42,19 +44,7 @@ public class CityMgmtService {
     private final CityMapper cityMapper;
     private final AirportRepository airportRepository;
     private final AirportMapper airportMapper;
-    
-    public CityMgmtService(CountryRepository countryRepository,
-                           CityRepository cityRepository, CityMapper cityMapper,
-                           CommentRepository commentRepository, CommentMapper commentMapper,
-                           AirportRepository airportRepository, AirportMapper airportMapper) {
-        this.cityRepository = cityRepository;
-        this.countryRepository = countryRepository;
-        this.commentRepository = commentRepository;
-        this.cityMapper = cityMapper;
-        this.commentMapper = commentMapper;
-        this.airportRepository = airportRepository;
-        this.airportMapper = airportMapper;
-    }
+
     
     @Transactional
     public CityView addCity(CreateCityRequest cityRequest) {
@@ -126,7 +116,7 @@ public class CityMgmtService {
         return commentMapper
                    .toView(commentRepository
                                .save(commentMapper
-                                         .toNewModel(request, user, city)));
+                                         .toModel(request, user, city)));
     }
     
     @Transactional
@@ -150,7 +140,7 @@ public class CityMgmtService {
             .ifPresent(comment -> commentMapper
                                       .toView(commentRepository
                                                   .save(commentMapper
-                                                            .toUpdateModel(request, comment.getId(), user, city))));
+                                                            .toUpdatedModel(request, comment.getId(), user, city))));
     }
     
     public void deleteComment(User user, int cityId, int commentId) {

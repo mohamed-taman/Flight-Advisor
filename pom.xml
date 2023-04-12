@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.0-M2</version>
+        <version>3.1.0-M2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -58,27 +58,23 @@
     </licenses>
 
     <properties>
-        <maven.compiler.release>18</maven.compiler.release>
-        <maven.compiler.source>18</maven.compiler.source>
-        <maven.compiler.target>18</maven.compiler.target>
+        <maven.compiler.release>20</maven.compiler.release>
+        <maven.compiler.source>20</maven.compiler.source>
+        <maven.compiler.target>20</maven.compiler.target>
+        <java.version>20</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!--  Dependencies versions properties  -->
-        <maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
-        <maven.failsafe.plugin.version>3.0.0-M5</maven.failsafe.plugin.version>
-        <io.jsonwebtoken.version>0.11.2</io.jsonwebtoken.version>
-        <org.mapstruct.version>1.5.0.RC1</org.mapstruct.version>
-        <org.springdoc.version>2.0.0-M1</org.springdoc.version>
-        <lombok.version>1.18.22</lombok.version>
-        <opencsv.version>5.6</opencsv.version>
+        <maven.surefire.plugin.version>3.0.0</maven.surefire.plugin.version>
+        <maven.failsafe.plugin.version>3.0.0</maven.failsafe.plugin.version>
+        <io.jsonwebtoken.version>0.11.5</io.jsonwebtoken.version>
+        <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+        <org.springdoc.version>2.1.0</org.springdoc.version>
+        <opencsv.version>5.7.1</opencsv.version>
         <hipster-core.version>1.0.1</hipster-core.version>
-        <datasource-proxy-sbs.version>1.8.0</datasource-proxy-sbs.version>
-        <commons-fileupload.version>1.4</commons-fileupload.version>
-        <commons-io.version>2.11.0</commons-io.version>
+        <datasource-proxy-sbs.version>1.8.1</datasource-proxy-sbs.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <hibernate-core-jakarta.version>5.6.5.Final</hibernate-core-jakarta.version>
-        <jackson-databind.version>2.13.2.2</jackson-databind.version>
     </properties>
 
     <dependencies>
@@ -92,18 +88,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hibernate</groupId>
-                    <artifactId>hibernate-core-jakarta</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core-jakarta</artifactId>
-            <version>${hibernate-core-jakarta.version}</version>
         </dependency>
 
         <dependency>
@@ -124,38 +108,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <!--
-                    To fix CVE-2020-36518
-                    https://advisory.checkmarx.net/advisory/vulnerability/CVE-2020-36518/
-                -->
-            <exclusions>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-databind</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${org.springdoc.version}</version>
-            <!--
-                   To fix CVE-2020-36518
-                   https://advisory.checkmarx.net/advisory/vulnerability/CVE-2020-36518/
-               -->
-            <exclusions>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-databind</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson-databind.version}</version>
         </dependency>
 
         <dependency>
@@ -192,7 +150,7 @@
             <version>${io.jsonwebtoken.version}</version>
             <scope>runtime</scope>
         </dependency>
-        <!-- Start - JWT library for authentication libraries -->
+        <!-- End - JWT library for authentication libraries -->
         <!-- End - Security dependencies -->
 
         <!-- Start - Development and Ops dependencies, and third parties libraries -->
@@ -207,11 +165,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
         <!-- Lombok to automate setter/getter generation -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
             <optional>true</optional>
         </dependency>
 
@@ -302,6 +260,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <enablePreview>true</enablePreview>
+                    <compilerArgs>
+                        <arg>-Xlint</arg>
+                    </compilerArgs>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>

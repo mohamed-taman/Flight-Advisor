@@ -19,14 +19,14 @@ public interface CommentMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", source = "user")
     @Mapping(target = "city", source = "city")
-    Comment toNewModel(CommentUpSrtRequest request, User user, City city);
+    Comment toModel(CommentUpSrtRequest request, User user, City city);
     
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", expression = "java( LocalDateTime.now() )")
     @Mapping(target = "user", source = "user")
     @Mapping(target = "city", source = "city")
     @Mapping(target = "id", source = "commentId")
-    Comment toUpdateModel(CommentUpSrtRequest request, int commentId, User user, City city);
+    Comment toUpdatedModel(CommentUpSrtRequest request, int commentId, User user, City city);
     
     @Mapping(target = "id", source = "id")
     @Mapping(target = "by", source = "user.fullName")
