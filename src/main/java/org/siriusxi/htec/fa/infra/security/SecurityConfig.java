@@ -1,130 +1,154 @@
 package org.siriusxi.htec.fa.infra.security;
 
 import lombok.extern.log4j.Log4j2;
-import org.siriusxi.htec.fa.repository.UserRepository;
+import org.siriusxi.htec.fa.domain.Role;
+import org.siriusxi.htec.fa.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
-import static java.lang.String.format;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 import static org.springframework.security.core.context.SecurityContextHolder.MODE_INHERITABLETHREADLOCAL;
 import static org.springframework.security.core.context.SecurityContextHolder.setStrategyName;
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Log4j2
+@Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-    securedEnabled = true,
-    jsr250Enabled = true,
-    prePostEnabled = true
+@EnableMethodSecurity(
+        jsr250Enabled = true
 )
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    
-    private final UserRepository userRepository;
+public class SecurityConfig {
+
     private final JwtTokenFilter jwtTokenFilter;
     private final String allowedOrigins;
-    
-    public SecurityConfig(UserRepository userRepository,
-                          JwtTokenFilter jwtTokenFilter,
-                          @Value("${app.allowedOrigins:*}") String allowedOrigins) {
-        super();
-        
-        this.userRepository = userRepository;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+
+    public SecurityConfig(JwtTokenFilter jwtTokenFilter,
+                          @Value("${app.allowedOrigins:*}") String allowedOrigins,
+                          UserService userService, PasswordEncoder passwordEncoder) {
         this.jwtTokenFilter = jwtTokenFilter;
         this.allowedOrigins = allowedOrigins;
-        
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+
         // Inherit security context in async function calls
         setStrategyName(MODE_INHERITABLETHREADLOCAL);
     }
-    
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(username ->
-                                    userRepository
-                                        .findByUsernameIgnoreCase(username)
-                                        .orElseThrow(
-                                            () -> new UsernameNotFoundException(
-                                                format("User: %s, not found",
-                                                    username))))
-            .passwordEncoder(passwordEncoder());
-    }
-    
-    // Set password encoding schema
+
+    // Configure DaoAuthenticationProvider for username and password
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(this.passwordEncoder);
+
+        return authProvider;
     }
-    
+
+    // Expose authentication manager bean
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return this.userService;
+    }
+
     // Security configurations
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        
-        // List of Swagger URLs
-        var swaggerAuthList = new String[]{
-            "/api-docs/**", "/webjars/**",
-            "/swagger-ui/**", "/doc/**"};
-        
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        // List of Swagger URLs, root page, Our public endpoints, images
+        final var AUTH_WHITELIST = new String[]{
+                "/api-docs/**", "/webjars/**", "/public/**",
+                "/swagger-ui/**", "/doc/**", "/", "/index.html",
+                "/assets/**"};
+
         http
-            // Enable CORS
-            .cors().and()
-            
-            //Disable CSRF
-            .csrf().disable()
-            
-            // Set session management to stateless
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            
-            // Set unauthorized requests exception handler
-            .exceptionHandling()
-            .authenticationEntryPoint(
-                (request, response, ex) -> {
-                    log.error("Unauthorized request - {}", ex.getMessage());
-                    response.sendError(SC_UNAUTHORIZED, ex.getMessage());
+                // Enable CORS
+                .cors()
+                .and()
+
+                //Disable CSRF
+                .csrf()
+                .disable()
+
+                // Set session management to stateless
+                .sessionManagement()
+                .sessionCreationPolicy(STATELESS)
+                .and()
+
+                // Set unauthorized requests exception handler
+                .exceptionHandling()
+                .authenticationEntryPoint(
+                        (request, response, ex) -> {
+                            log.error("Unauthorized request - {}", ex.getMessage());
+                            response.sendError(SC_UNAUTHORIZED, ex.getMessage());
+                        })
+                .and()
+                // Set permission to allow open db-console
+                .authorizeHttpRequests(auth ->
+                {
+                    try {
+                        auth.requestMatchers(antMatcher("/db-console/**"))
+                                .permitAll()
+                                .and()
+                                // This will allow frames with same origin which is much more safe
+                                .headers(headers ->
+                                        headers.frameOptions()
+                                                .sameOrigin()
+                                                .disable());
+                    } catch (Exception e) {
+                        log.error("Exception in headers - {}", e.getMessage());
+                    }
                 })
-            .and()
-            
-            
-            // Set H2 database console permission
-            .authorizeRequests()
-            .antMatchers("/db-console/**").permitAll()
-            .and()
-            // This will allow frames with same origin which is much more safe
-            .headers().frameOptions().disable()
-            .and()
-            
-            // Set permissions on endpoints
-            .authorizeRequests()
-            //Enable root
-            .antMatchers("/", "/index.html").permitAll()
-            //Enables images
-            .antMatchers("/assets/**").permitAll()
-            // Swagger endpoints must be publicly accessible
-            .antMatchers(swaggerAuthList).permitAll()
-            // Our public endpoints
-            .antMatchers("/public/**").permitAll()
-            //Our private endpoints
-            .anyRequest().authenticated()
-            .and()
-            
-            // Add JWT token filter
-            .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+                // Enable all whitelisted pages
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers(AUTH_WHITELIST)
+                                .permitAll())
+
+                // Only Admin Allowed to do the following
+                .authorizeHttpRequests(auth ->
+                        // Upload files and manage countries
+                        auth.requestMatchers("/upload/**", "/countries/**")
+                                .hasAuthority(Role.ADMIN).
+                                // Create cities
+                                requestMatchers(HttpMethod.POST, "/cities")
+                                .hasAuthority(Role.ADMIN))
+
+                //Our private endpoints
+                .authorizeHttpRequests(auth ->
+                        auth.anyRequest()
+                                .authenticated())
+
+                // Add JWT token filter
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
-    
+
     // Used by spring security if CORS is enabled.
     @Bean
     public CorsFilter corsFilter() {
@@ -155,15 +179,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
               read them. So we use here config.addExposedHeader() method.
          */
         config.addExposedHeader("Authorization");
-        
+
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
-    }
-    
-    // Expose authentication manager bean
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
     }
 }

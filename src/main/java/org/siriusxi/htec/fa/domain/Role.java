@@ -22,7 +22,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @ToString(exclude = {"rolePK"})
 public class Role implements GrantedAuthority {
     

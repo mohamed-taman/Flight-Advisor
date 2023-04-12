@@ -5,7 +5,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
-import org.siriusxi.htec.fa.infra.security.jwt.JwtTokenHelper;
 import org.siriusxi.htec.fa.repository.UserRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import static org.siriusxi.htec.fa.infra.security.jwt.JwtTokenHelper.*;
 import static org.springframework.util.StringUtils.hasText;
 
 @Component
@@ -48,9 +48,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         
         // Get user identity and set it on the spring security context
         var userDetails = userRepository
-                              .findByUsernameIgnoreCase(JwtTokenHelper.getUsername(token))
+                              .findByUsernameIgnoreCase(getUsername(token))
                               .orElse(null);
-        
+
         var authentication = new UsernamePasswordAuthenticationToken(
             userDetails, null,
             userDetails == null ? List.of() : userDetails.getAuthorities()
@@ -76,7 +76,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         if (hasText(header) && header.startsWith("Bearer ")) {
             // Get jwt token and validate
             token = header.split(" ")[1].trim();
-            if (JwtTokenHelper.validate(token))
+            if (validate(token))
                 return Optional.of(token);
         }
         

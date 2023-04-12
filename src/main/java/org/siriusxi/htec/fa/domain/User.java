@@ -46,46 +46,56 @@ import static jakarta.persistence.FetchType.LAZY;
     })
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 public class User implements UserDetails, Serializable {
     
     @Serial
     private static final long serialVersionUID = 5666668516577592568L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(nullable = false)
     private Integer id;
+
     @Basic(optional = false)
     @Column(name = "USER_UUID", nullable = false, updatable = false)
     @ToString.Exclude
     private String userUuid;
+
     @NonNull
     @Basic(optional = false)
     @Column(name = "FIRST_NAME", nullable = false, length = 100)
     private String firstName;
+
     @NonNull
     @Basic(optional = false)
     @Column(name = "LAST_NAME", nullable = false, length = 100)
     private String lastName;
+
     @NonNull
     @Basic(optional = false)
     @Column(nullable = false)
     @ToString.Exclude
     private String username;
+
     @NonNull
     @Basic(optional = false)
     @Column(nullable = false)
     @ToString.Exclude
     private String password;
+
     @OneToMany(cascade = ALL, mappedBy = "user", fetch = LAZY)
     @ToString.Exclude
     private List<Comment> comments;
-    @JoinColumn(name = "USER_ID", referencedColumnName = "ID",
-        nullable = false, insertable = false, updatable = false)
+
+
     @OneToMany(cascade = ALL, fetch = EAGER)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "ID",
+            nullable = false, insertable = false, updatable = false)
     private Set<Role> authorities = new HashSet<>();
+
     @ToString.Exclude
     private boolean enabled = true;
     
