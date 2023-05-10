@@ -26,7 +26,6 @@ logging.level:
             cache: info
             web: debug
         siriusxi:
-            htec:
-                fa: debug
+            fa: debug
     web: debug
     root: info
