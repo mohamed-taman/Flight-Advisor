@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.0-M2</version>
+        <version>3.1.0-RC2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>org.siriusxi.htec</groupId>
+    <groupId>org.siriusxi.fa</groupId>
     <artifactId>flight-advisor</artifactId>
-    <version>3.0</version>
+    <version>5.0</version>
     <name>Flight Advisor API</name>
     <description>Flight Advisor API Spring Boot based Application.</description>
     <packaging>jar</packaging>
@@ -58,10 +58,10 @@
     </licenses>
 
     <properties>
-        <maven.compiler.release>20</maven.compiler.release>
-        <maven.compiler.source>20</maven.compiler.source>
-        <maven.compiler.target>20</maven.compiler.target>
         <java.version>20</java.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -69,7 +69,7 @@
         <maven.surefire.plugin.version>3.0.0</maven.surefire.plugin.version>
         <maven.failsafe.plugin.version>3.0.0</maven.failsafe.plugin.version>
         <io.jsonwebtoken.version>0.11.5</io.jsonwebtoken.version>
-        <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+        <org.mapstruct.version>1.5.4.Final</org.mapstruct.version>
         <org.springdoc.version>2.1.0</org.springdoc.version>
         <opencsv.version>5.7.1</opencsv.version>
         <hipster-core.version>1.0.1</hipster-core.version>
@@ -114,6 +114,12 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${org.springdoc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -180,8 +186,7 @@
             <version>${org.mapstruct.version}</version>
         </dependency>
 
-        <!-- library for writing, reading, serializing, deserializing,
-             and/or parsing .csv files! -->
+        <!-- library for writing, reading, serializing, deserializing, and/or parsing .csv files! -->
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
