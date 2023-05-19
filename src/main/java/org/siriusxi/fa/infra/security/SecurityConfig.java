@@ -70,7 +70,7 @@ public class SecurityConfig {
         final var authWhitelist = new String[]{
                 "/api-docs/**", "/webjars/**", "/auth/refresh_token",
                 "/auth/signin", "/auth/signup","/swagger-ui/**",
-                "/doc/**", "/", "/index.html", "/assets/**"};
+                "/doc/**", "/", "/index.html", "/assets/**", "/error/**"};
 
         http
                 // Enable CORS
@@ -142,8 +142,8 @@ public class SecurityConfig {
               read them. So we use here config.addExposedHeader() method.
          */
         config.addExposedHeader("Authorization");
-
         source.registerCorsConfiguration("/**", config);
+
         return new CorsFilter(source);
     }
 }
