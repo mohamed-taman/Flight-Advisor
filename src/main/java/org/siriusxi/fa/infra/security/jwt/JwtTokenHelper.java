@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.log4j.Log4j2;
@@ -24,10 +23,10 @@ import static java.lang.String.format;
 
 @Log4j2
 public final class JwtTokenHelper {
-    
+
     private JwtTokenHelper() {
     }
-    
+
     /**
      * Generates a token fot the user.
      *
@@ -37,18 +36,19 @@ public final class JwtTokenHelper {
      */
     public static String generateJwtToken(int id, String username) {
         return Jwts
-                   .builder()
-                   .setId(String.valueOf(id))
-                   .setSubject(format("%d,%s", id, username))
-                   .setIssuer(JwtConfig.ISSUER)
-                   .setIssuedAt(new Date(System.currentTimeMillis()))
-                   .setExpiration(Date.from(ZonedDateTime.now()
-                                                .plusDays(JwtConfig.TOKEN_EXPIRY_DURATION)
-                                                .toInstant()))
-                   .signWith(JwtConfig.key(), JwtConfig.SIGNATURE_ALGORITHM)
-                   .compact();
+                .builder()
+                .id(String.valueOf(id))
+                .subject(format("%d,%s", id, username))
+                .audience().add("you").and()
+                .issuer(JwtConfig.ISSUER)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(Date.from(ZonedDateTime.now()
+                        .plusDays(JwtConfig.TOKEN_EXPIRY_DURATION)
+                        .toInstant()))
+                .signWith(JwtConfig.key())
+                .compact();
     }
-    
+
     /**
      * Extracts the User id claim from the JWT token
      *
@@ -57,10 +57,10 @@ public final class JwtTokenHelper {
      */
     public static int getUserIdFrom(String jwtToken) {
         return Integer.parseInt(getClaims(jwtToken)
-                                    .getSubject()
-                                    .split(",")[0]);
+                .getSubject()
+                .split(",")[0]);
     }
-    
+
     /**
      * Extracts the username claim from the JWT token
      *
@@ -69,10 +69,10 @@ public final class JwtTokenHelper {
      */
     public static String getUsernameFrom(String jwtToken) {
         return getClaims(jwtToken)
-                   .getSubject()
-                   .split(",")[1];
+                .getSubject()
+                .split(",")[1];
     }
-    
+
     /**
      * Extracts the expiration date claim from the JWT token
      *
@@ -81,9 +81,9 @@ public final class JwtTokenHelper {
      */
     public static Date getTokenExpiration(String token) {
         return getClaims(token)
-                   .getExpiration();
+                .getExpiration();
     }
-    
+
     /**
      * Extracts the claims from the JWT token
      *
@@ -91,14 +91,13 @@ public final class JwtTokenHelper {
      * @return the all claims contained in the token
      */
     private static Claims getClaims(String token) {
-        return Jwts
-                   .parserBuilder()
-                   .setSigningKey(JwtConfig.key())
-                   .build()
-                   .parseClaimsJws(token.replace(JwtConfig.TOKEN_PREFIX, ""))
-                   .getBody();
+        return Jwts.parser()
+                .verifyWith(JwtConfig.key())
+                .build()
+                .parseSignedClaims(token.replace(JwtConfig.TOKEN_PREFIX, ""))
+                .getPayload();
     }
-    
+
     /**
      * Extracts the claim from the JWT token
      *
@@ -122,48 +121,33 @@ public final class JwtTokenHelper {
         }
         return false;
     }
-    
-    /**
-     * Allows generating a real base64 encoded secret key.
-     */
-    public static String getRealBase64EncodedSecret() {
-        return Base64.getEncoder().encodeToString(getRealSecret());
-    }
-    
-    /**
-     * Allows generating a real secret key.
-     */
-    public static byte[] getRealSecret() {
-        return Keys.secretKeyFor(JwtConfig.SIGNATURE_ALGORITHM).getEncoded();
-    }
 
-    public static String tokenPrefix(){
+    public static String tokenPrefix() {
         return JwtConfig.TOKEN_PREFIX;
     }
 
-    public static int refreshTokenExpiration(){
+    public static int refreshTokenExpiration() {
         return JwtConfig.REFRESH_TOKEN_EXPIRATION;
     }
-    
+
     /**
      * jwt configurations.
      * TODO add all config in application.yaml
      */
     private static class JwtConfig {
-        static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
         // It should be kept encoded in an environment variable
         static final String SECRET =
-            """
-                5s2BCxpNxdI58mAaAllBr/psyu91aCusvXy+kew9ytxQ/zh\
-                RtvcZMxVAjmkq8pVkSMA81+9Y0D4W06qGre+hYg==""";
+                """
+                        5s2BCxpNxdI58mAaAllBr/psyu91aCusvXy+kew9ytxQ/zh\
+                        RtvcZMxVAjmkq8pVkSMA81+9Y0D4W06qGre+hYg==""";
         static final String TOKEN_PREFIX = "Bearer ";
-        static final String ISSUER = "siriusx.io";
+        static final String ISSUER = "tamanm.io";
         static final int TOKEN_EXPIRY_DURATION = 7; // In days
         static final int REFRESH_TOKEN_EXPIRATION = 14; // In days
-        
+
         private JwtConfig() {
         }
-        
+
         static SecretKey key() {
             return Keys.hmacShaKeyFor(Base64.getDecoder().decode(SECRET));
         }

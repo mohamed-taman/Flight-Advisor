@@ -22,6 +22,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -160,7 +161,7 @@ public class TravelService {
 
     private TripResponse newTripView(Airport src, Airport dest,
                                      List<AirportResponse> through,
-                                     double cost, double distance) {
+                                     BigDecimal cost, double distance) {
         return new TripResponse(
                 this.airportMapper.toTripView(src, 0), through,
                 this.airportMapper.toTripView(dest, 0),
@@ -203,7 +204,7 @@ public class TravelService {
                         graph
                                 .connect(route.source())
                                 .to(route.destination())
-                                .withEdge(route.price()));
+                                .withEdge(route.price().doubleValue()));
         return graph;
     }
 

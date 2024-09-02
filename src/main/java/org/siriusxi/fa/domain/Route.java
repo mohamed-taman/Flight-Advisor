@@ -16,6 +16,7 @@ import org.hibernate.Hibernate;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import static jakarta.persistence.FetchType.LAZY;
@@ -55,7 +56,7 @@ public class Route implements Serializable {
     @Max(value = 99999)
     @Min(value = 5)
     @Column(precision = 6, scale = 3)
-    private double price;
+    private BigDecimal price;
     
     @JoinColumn(name = "DESTINATION_AIRPORT_ID", referencedColumnName = "AIRPORT_ID")
     @ManyToOne(fetch = LAZY)

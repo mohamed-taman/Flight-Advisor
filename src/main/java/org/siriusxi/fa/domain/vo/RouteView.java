@@ -1,4 +1,6 @@
 package org.siriusxi.fa.domain.vo;
 
-public record RouteView(String source, String destination, double price) {
+import java.math.BigDecimal;
+
+public record RouteView(String source, String destination, BigDecimal price) {
 }

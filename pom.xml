@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.0</version>
+        <version>3.4.0-M1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>org.siriusxi.fa</groupId>
     <artifactId>flight-advisor</artifactId>
-    <version>5.0</version>
+    <version>6.0</version>
     <name>Flight Advisor API</name>
     <description>Flight Advisor API Spring Boot based Application.</description>
     <packaging>jar</packaging>
@@ -25,10 +25,10 @@
             <email>mohamed.taman@gmail.com</email>
             <roles>
                 <role>
-                    Sr. Enterprise Architect
+                    Solutions Architect
                 </role>
                 <role>
-                    Lead Software Architect
+                    Java Lead Software Architect
                 </role>
             </roles>
         </developer>
@@ -58,7 +58,7 @@
     </licenses>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>22</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -66,15 +66,15 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!--  Dependencies versions properties  -->
-        <maven.surefire.plugin.version>3.0.0</maven.surefire.plugin.version>
-        <maven.failsafe.plugin.version>3.0.0</maven.failsafe.plugin.version>
-        <io.jsonwebtoken.version>0.11.5</io.jsonwebtoken.version>
-        <org.mapstruct.version>1.5.4.Final</org.mapstruct.version>
-        <org.springdoc.version>2.1.0</org.springdoc.version>
-        <opencsv.version>5.7.1</opencsv.version>
+        <maven.surefire.plugin.version>3.5.0</maven.surefire.plugin.version>
+        <maven.failsafe.plugin.version>3.5.0</maven.failsafe.plugin.version>
+        <io.jsonwebtoken.version>0.12.6</io.jsonwebtoken.version>
+        <org.mapstruct.version>1.6.0</org.mapstruct.version>
+        <org.springdoc.version>2.6.0</org.springdoc.version>
+        <opencsv.version>5.9</opencsv.version>
         <hipster-core.version>1.0.1</hipster-core.version>
-        <datasource-proxy-sbs.version>1.8.1</datasource-proxy-sbs.version>
-        <commons-collections4.version>4.4</commons-collections4.version>
+        <datasource-proxy-sbs.version>1.9.1</datasource-proxy-sbs.version>
+        <commons-collections4.version>4.5.0-M2</commons-collections4.version>
     </properties>
 
     <dependencies>

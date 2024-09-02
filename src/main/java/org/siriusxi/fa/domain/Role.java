@@ -41,7 +41,7 @@ public class Role implements GrantedAuthority {
     private String authority;
     
     public Role(RolePK rolePK) {
-        setRolePK(rolePK);
+        this.setRolePK(rolePK);
         this.authority = rolePK.getAuthority();
     }
     

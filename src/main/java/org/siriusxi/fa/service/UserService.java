@@ -53,7 +53,7 @@ public class UserService implements UserDetailsService {
         // Update user to add authorities
         this.repository.save(user);
 
-        System.out.println("Saved User: "+ user.toString());
+        System.out.println("Saved User: "+ user);
 
         // Return user view
         return this.userMapper.toView(user);

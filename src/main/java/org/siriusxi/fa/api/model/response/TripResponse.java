@@ -3,6 +3,7 @@ package org.siriusxi.fa.api.model.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
@@ -16,7 +17,7 @@ public record TripResponse(
     @JsonProperty Distance distance) {
     
     public record Price(
-        @JsonProperty double total,
+        @JsonProperty BigDecimal total,
         @JsonProperty String currency) {
     }
     

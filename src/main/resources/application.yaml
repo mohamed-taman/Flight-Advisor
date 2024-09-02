@@ -35,10 +35,15 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: none
-    # The SQL dialect makes Hibernate generate better SQL for the chosen database
     properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        hibernate:
+          # The SQL dialect makes Hibernate generate better SQL for the chosen database
+          dialect: org.hibernate.dialect.H2Dialect
+          format_sql: true
+          use_sql_comments: true
+          # Generate statistics for Hibernate's performance monitoring
+          # This will provide additional information about your database usage.
+          # Uncomment the following line to generate statistics.
         generate_statistics: true
         # Switching on batch insert
         # Take the time to group inserts by entity, creating larger batches.

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +32,7 @@ public interface RouteRepository extends CrudRepository<Route, RoutePK> {
         FROM Route
         WHERE routePK IN (:routePKs)
         """)
-    double getTripCost(Iterable<RoutePK> routePKs);
+    BigDecimal getTripCost(Iterable<RoutePK> routePKs);
     
     List<Route> findAllByRoutePKIn(Collection<RoutePK> routePK);
     
